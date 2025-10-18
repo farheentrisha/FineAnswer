@@ -1,7 +1,47 @@
-import React from "react";
+import React, { useState } from "react";
+import axios from "axios";
 import "./RegisterPage.css";
 
 export default function RegisterPage() {
+  // Form state including phone
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    phone: "",
+    password: "",
+  });
+
+  // Message for success/error
+  const [message, setMessage] = useState(null);
+
+  // Update form state on input change
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  // Submit form data to backend
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    console.log("Submitting form data:", formData);
+
+    try {
+      const res = await axios.post("http://localhost:5000/api/auth/register", formData);
+      console.log("User registered:", res.data);
+
+      setMessage({ type: "success", text: "✅ Registration successful!" });
+
+      // Optionally, reset form
+      setFormData({ name: "", email: "", phone: "", password: "" });
+
+    } catch (error) {
+      console.log("Error response:", error.response);
+      setMessage({
+        type: "error",
+        text: error.response?.data?.message || "Registration failed",
+      });
+    }
+  };
+
   return (
     <div className="register-container">
       <div className="register-box">
@@ -11,15 +51,46 @@ export default function RegisterPage() {
             <h2>Create an Account</h2>
             <p className="subtext">Let’s get started with your 30-day free trial.</p>
             
-            <form>
+            <form onSubmit={handleSubmit} autoComplete="off">
               <div className="input-group">
-                <input type="text" placeholder="Full Name" required />
+                <input
+                  type="text"
+                  name="name"
+                  placeholder="Full Name"
+                  value={formData.name}
+                  onChange={handleChange}
+                  required
+                />
               </div>
               <div className="input-group">
-                <input type="email" placeholder="Email" required />
+                <input
+                  type="email"
+                  name="email"
+                  placeholder="Email"
+                  value={formData.email}
+                  onChange={handleChange}
+                  required
+                />
               </div>
               <div className="input-group">
-                <input type="password" placeholder="Password" required />
+                <input
+                  type="text"
+                  name="phone"
+                  placeholder="Phone Number"
+                  value={formData.phone}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
+              <div className="input-group">
+                <input
+                  type="password"
+                  name="password"
+                  placeholder="Password"
+                  value={formData.password}
+                  onChange={handleChange}
+                  required
+                />
               </div>
 
               <button type="submit" className="register-btn">
@@ -37,8 +108,15 @@ export default function RegisterPage() {
               </button>
 
               <p className="login-link">
-                Already have an account? <a href="#">Log in</a>
+                Already have an account? <a href="/login">Log in</a>
               </p>
+
+              {/* Success / Error message */}
+              {message && (
+                <p className={`message ${message.type === "success" ? "success-msg" : "error-msg"}`}>
+                  {message.text}
+                </p>
+              )}
             </form>
           </div>
         </div>

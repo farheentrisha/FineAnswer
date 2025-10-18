@@ -185,12 +185,10 @@ body {
   margin-bottom: 20px;
   width: 100%;
   max-width: 300px;
->>>>>>> ea4a13f (Initial commit)
 }
 
 .input-group input {
   width: 100%;
-<<<<<<< HEAD
   padding: 14px 16px;
   border: 1px solid transparent;
   border-radius: 10px;
@@ -225,7 +223,6 @@ body {
 .options {
   width: 100%;
   max-width: 300px;
->>>>>>> ea4a13f (Initial commit)
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -236,25 +233,21 @@ body {
 .options a {
   color: #0284c7;
   text-decoration: none;
-<<<<<<< HEAD
   font-weight: 500;
   transition: color 0.2s ease;
 }
 
 .options a:hover {
   color: #0369a1;
-=======
 }
 
 .options a:hover {
   text-decoration: underline;
->>>>>>> ea4a13f (Initial commit)
 }
 
 /* Button */
 .login-btn {
   width: 100%;
-<<<<<<< HEAD
   padding: 14px;
   border: none;
   border-radius: 10px;
@@ -273,7 +266,7 @@ body {
   background: linear-gradient(135deg, #0ea5e9, #0369a1);
 }
 
-=======
+.login-btn {
   max-width: 300px;
   padding: 12px;
   border: none;
@@ -288,4 +281,3 @@ body {
 .login-btn:hover {
   opacity: 0.9;
 }
->>>>>>> ea4a13f (Initial commit)

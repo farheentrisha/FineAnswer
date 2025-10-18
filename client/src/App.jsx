@@ -1,8 +1,19 @@
 import React from "react";
-import RegisterPage from "./RegisterPage"; // ← change this import
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import LandingPage from "./components/LandingPage";
+import LoginPage from "./LoginPage";
+import RegisterPage from "./RegisterPage";
 
 function App() {
-  return <RegisterPage />; // ← show RegisterPage instead of LoginPage
+  return (
+    <Router>
+      <Routes>
+        <Route path="/" element={<LandingPage />} />
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/register" element={<RegisterPage />} />
+      </Routes>
+    </Router>
+  );
 }
 
 export default App;

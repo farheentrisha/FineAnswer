@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 import React, { useState, useEffect } from "react";
 import "./LoginPage.css";
 
@@ -14,12 +13,11 @@ export default function LoginPage() {
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentImage((prev) => (prev + 1) % images.length);
-    }, 200); // change image every 5 seconds
+    }, 5000); // change image every 5 seconds
     return () => clearInterval(interval);
-  }, []);
+  }, [images.length]);
 
-
-    return (
+  return (
     <div className="login-container">
       <div className="login-box">
         {/* Left Side */}
@@ -32,34 +30,19 @@ export default function LoginPage() {
           <div className="overlay">
             <h1>Welcome to FineAnswer – Your Gateway to Studying Abroad!</h1>
             <p>
-              Explore top universities, scholarships, and programs worldwide. Begin your journey with expert guidance and personalized support
+              Explore top universities, scholarships, and programs worldwide.
+              Begin your journey with expert guidance and personalized support.
             </p>
           </div>
-=======
-import React from "react";
-import "./LoginPage.css"; // import the CSS file
-
-export default function LoginPage() {
-  return (
-    <div className="login-container">
-      <div className="login-box">
-        {/* Left Side */}
-        <div className="login-left">
-          <h1>Welcome to Our Website</h1>
-          <p>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed diam
-            nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat
-            volutpat.
-          </p>
->>>>>>> ea4a13f (Initial commit)
         </div>
 
         {/* Right Side */}
         <div className="login-right">
-<<<<<<< HEAD
           <div className="login-card animate-slide-up">
             <h2>User Login</h2>
-            <p className="login-subtext">Access your personalized study dashboard</p>
+            <p className="login-subtext">
+              Access your personalized study dashboard
+            </p>
             <form>
               <div className="input-group">
                 <input type="text" placeholder="Username" />
@@ -73,27 +56,11 @@ export default function LoginPage() {
                 </label>
                 <a href="#">Forgot password?</a>
               </div>
-              <button type="submit" className="login-btn">LOGIN</button>
+              <button type="submit" className="login-btn">
+                LOGIN
+              </button>
             </form>
           </div>
-=======
-          <h2>User Login</h2>
-          <form>
-            <div className="input-group">
-              <input type="text" placeholder="Username" />
-            </div>
-            <div className="input-group">
-              <input type="password" placeholder="Password" />
-            </div>
-            <div className="options">
-              <label>
-                <input type="checkbox" /> Remember
-              </label>
-              <a href="#">Forgot password?</a>
-            </div>
-            <button type="submit" className="login-btn">LOGIN</button>
-          </form>
->>>>>>> ea4a13f (Initial commit)
         </div>
       </div>
     </div>

@@ -1,0 +1,46 @@
+.landing-container {
+  height: 100vh;
+  background: linear-gradient(to right, #007bff, #00c6ff);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  flex-direction: column;
+  text-align: center;
+}
+
+.hero-section h1 {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+}
+
+.hero-section p {
+  font-size: 1.2rem;
+  margin-bottom: 2rem;
+}
+
+.btn-group {
+  display: flex;
+  gap: 1rem;
+}
+
+.btn {
+  padding: 10px 20px;
+  border-radius: 25px;
+  text-decoration: none;
+  font-weight: bold;
+  color: white;
+  transition: 0.3s;
+}
+
+.login-btn {
+  background: #1e90ff;
+}
+
+.register-btn {
+  background: #ff4081;
+}
+
+.btn:hover {
+  opacity: 0.85;
+}
