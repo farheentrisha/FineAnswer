@@ -197,3 +197,21 @@ body {
   font-size: 1.2rem;
   color: gold;
 }
+.success-msg {
+  color: #0f5132;
+  background-color: #d1e7dd;
+  border: 1px solid #badbcc;
+  padding: 10px;
+  border-radius: 5px;
+  margin-top: 10px;
+}
+
+.error-msg {
+  color: #842029;
+  background-color: #f8d7da;
+  border: 1px solid #f5c2c7;
+  padding: 10px;
+  border-radius: 5px;
+  margin-top: 10px;
+}
+

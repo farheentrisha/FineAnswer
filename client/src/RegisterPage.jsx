@@ -1,9 +1,11 @@
 import React, { useState } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom"; // ✅ import navigate
 import "./RegisterPage.css";
 
 export default function RegisterPage() {
-  // Form state including phone
+  const navigate = useNavigate(); // ✅ initialize navigation
+
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -11,7 +13,6 @@ export default function RegisterPage() {
     password: "",
   });
 
-  // Message for success/error
   const [message, setMessage] = useState(null);
 
   // Update form state on input change
@@ -28,9 +29,12 @@ export default function RegisterPage() {
       const res = await axios.post("http://localhost:5000/api/auth/register", formData);
       console.log("User registered:", res.data);
 
-      setMessage({ type: "success", text: "✅ Registration successful!" });
+      setMessage({ type: "success", text: "✅ Registration successful! Redirecting to login..." });
 
-      // Optionally, reset form
+      // ✅ Redirect to login after 1.5 seconds
+      setTimeout(() => navigate("/login"), 1500);
+
+      // Optional: reset form
       setFormData({ name: "", email: "", phone: "", password: "" });
 
     } catch (error) {
