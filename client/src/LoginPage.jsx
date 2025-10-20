@@ -118,6 +118,16 @@ export default function LoginPage() {
                 </p>
               )}
             </form>
+             <p className="signup-text">
+    Don’t have an account?{" "}
+    <span
+      className="signup-link"
+      onClick={() => navigate("/register")}
+      style={{ color: "#007bff", cursor: "pointer", textDecoration: "underline" }}
+    >
+      Join now
+    </span>
+  </p>
           </div>
         </div>
       </div>
