@@ -99,3 +99,6 @@
   .hero-grid { grid-template-columns: 1fr; }
   .area-copy, .area-event1, .area-event2, .area-tweet1, .area-tweet2, .area-cta { grid-column: 1; grid-row: auto; }
 }
+
+
+

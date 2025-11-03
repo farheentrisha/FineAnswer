@@ -38,9 +38,9 @@ const Hero = () => {
     </div>
 
     <div className="contacts">
-      <a href="mailto:studyabroad@fineanswer.com">studyabroad@fineanswer.com</a>
+      <a href="mailto:studyabroad@.com">studyabroad@.com</a>
       <span>•</span>
-      <a href="tel:+8801703081152">+8801703081152</a>
+      <a href="tel:+8801703081152">+8801703*****</a>
       <span>•</span>
 
       {/* Social Media Links */}
@@ -67,7 +67,7 @@ const Hero = () => {
           <div className="brand">
             <div className="logo-roll-container">
   <div className="roll-bg"></div>
-  <img src="./assets/fineanswer2.jpg.png" alt="FineAnswer Logo" className="logo-img" />
+  <img src="./assets/fineanswer2.jpg.png" alt="yourLogo" className="logo-img" />
 </div>
 
             

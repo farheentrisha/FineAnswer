@@ -1,0 +1,49 @@
+.hero {
+  width: 100vw;                 /* use full viewport width */
+  height: 100vh;                /* full height */
+  margin: 0;                    /* remove margins */
+  background-image: url("../assets/hero-bg3.jpg");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  position: relative;
+  overflow: hidden;             /* avoid scrollbars */
+}
+
+
+.overlay {
+  background: rgba(47, 65, 84, 0.6);
+  height: 100%;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.hero-content {
+  color: white;
+  text-align: center;
+}
+
+.hero-content h1 {
+  font-size: 3rem;
+  letter-spacing: 1px;
+}
+
+.quote-btn {
+  margin-top: 1rem;
+  background: white;
+  color: #007bff;
+  border: none;
+  padding: 0.7rem 2rem;
+  border-radius: 25px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.quote-btn:hover {
+  background: linear-gradient(90deg, #0099ff, #00ccff);
+  color: white;
+  transform: scale(1.05);
+  box-shadow: 0 4px 12px rgba(0, 153, 255, 0.4);
+}
