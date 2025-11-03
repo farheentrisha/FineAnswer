@@ -4,6 +4,8 @@ import "./landing.css";
 import uni1 from "../images/uni1.jpg";
 import uni2 from "../images/uni2.jpg";
 import uni3 from "../images/uni3.jpg";
+import { FaGlobe, FaLaptopCode, FaChalkboardTeacher, FaUserGraduate } from "react-icons/fa";
+
 
 export default function LandingPage() {
   const navigate = useNavigate();
@@ -128,24 +130,40 @@ export default function LandingPage() {
       </section>
 
       {/* STATISTICS SECTION */}
-      <section className="statistics" ref={statsRef}>
-        <div className="stat">
-          <h2>{students}+</h2>
-          <p>Students Passed</p>
-        </div>
-        <div className="stat">
-          <h2>{countries}</h2>
-          <p>Countries</p>
-        </div>
-        <div className="stat">
-          <h2>{partners}+</h2>
-          <p>Partner Institutions</p>
-        </div>
-        <div className="stat">
-          <h2>{satisfaction}%</h2>
-          <p>Satisfaction Rate</p>
-        </div>
-      </section>
+<section className="statistics" ref={statsRef}>
+  <div className="stat-card">
+    <div className="stat-icon">
+      <FaGlobe />
+    </div>
+    <h2>{countries}+</h2>
+    <p>Years of Language Education Experience</p>
+  </div>
+
+  <div className="stat-card">
+    <div className="stat-icon">
+      <FaLaptopCode />
+    </div>
+    <h2>{partners}+</h2>
+    <p>Innovative Foreign Online Courses</p>
+  </div>
+
+  <div className="stat-card">
+    <div className="stat-icon">
+      <FaChalkboardTeacher />
+    </div>
+    <h2>{students}+</h2>
+    <p>Qualified Teachers and Language Experts</p>
+  </div>
+
+  <div className="stat-card">
+    <div className="stat-icon">
+      <FaUserGraduate />
+    </div>
+    <h2>{satisfaction}+</h2>
+    <p>Learners Enrolled in Edexcel Courses</p>
+  </div>
+</section>
+
 
       {/* SERVICES SECTION */}
       <section className="services">

@@ -253,23 +253,54 @@ nav a:hover::after {
 
 .statistics {
   display: flex;
-  justify-content: space-around;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: stretch;
+  gap: 1.5rem;
+  padding: 80px 5%;
+  background: #f8faff;
+}
+
+.stat-card {
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 2rem 1.5rem;
+  width: 230px;
   text-align: center;
-  padding: 80px 20px;
-  background: #f5f5f5;
-  color: #333;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+  transition: all 0.3s ease;
+  border: 1px solid #e8ebf0;
 }
 
-.stat h2 {
-  font-size: 3rem;
-  margin: 0;
+.stat-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 10px 25px rgba(0, 119, 255, 0.15);
+}
+
+.stat-icon {
+  font-size: 2.5rem;
   color: #0077ff;
+  margin-bottom: 1rem;
 }
 
-.stat p {
-  margin-top: 10px;
-  font-size: 1.1rem;
+.stat-card h2 {
+  font-size: 2.2rem;
+  color: #0077ff;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
 }
+
+.stat-card p {
+  font-size: 0.95rem;
+  color: #555;
+  line-height: 1.4;
+}
+
+.stat-card:hover .stat-icon {
+  transform: scale(1.1);
+  transition: 0.3s ease;
+}
+
 
 
 /* SERVICES */
