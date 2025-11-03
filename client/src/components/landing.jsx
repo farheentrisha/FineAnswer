@@ -177,6 +177,36 @@ export default function LandingPage() {
         </div>
       </section>
 
+      {/* OUR SPECIALIZATION SECTION */}
+<section className="specialization">
+  <h2>Our Specializations</h2>
+  <p>We provide expert guidance and end-to-end support for top study destinations.</p>
+
+  <div className="specialization-grid">
+    <div className="specialization-card ireland">
+      <div className="overlay"></div>
+      <h3>Ireland</h3>
+      <p>Experience world-class education and career opportunities in Europe’s tech hub.</p>
+      <button onClick={() => navigate("/countries/ireland")}>Explore</button>
+    </div>
+
+    <div className="specialization-card uk">
+      <div className="overlay"></div>
+      <h3>United Kingdom</h3>
+      <p>Study in globally reputed institutions with centuries of academic excellence.</p>
+      <button onClick={() => navigate("/countries/uk")}>Explore</button>
+    </div>
+
+    <div className="specialization-card australia">
+      <div className="overlay"></div>
+      <h3>Australia</h3>
+      <p>Enjoy diverse culture and top-tier universities with post-study work benefits.</p>
+      <button onClick={() => navigate("/countries/australia")}>Explore</button>
+    </div>
+  </div>
+</section>
+
+
       {/* FOOTER */}
       <footer>
         <p>© 2025 FineAnswer Study Abroad Consultancy. All rights reserved.</p>
