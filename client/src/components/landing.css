@@ -559,3 +559,101 @@ footer {
     opacity: 1;
   }
 }
+/* Modern popup styling */
+.popup-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(6px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+  animation: fadeIn 0.3s ease;
+}
+
+.modern-popup {
+  background: linear-gradient(135deg, #ffffff 0%, #f9f9ff 100%);
+  border-radius: 20px;
+  padding: 40px 35px;
+  width: 380px;
+  text-align: center;
+  position: relative;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+  animation: slideUp 0.4s ease;
+}
+
+.popup-close {
+  position: absolute;
+  top: 15px;
+  right: 20px;
+  font-size: 24px;
+  background: none;
+  border: none;
+  color: #555;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.popup-close:hover {
+  color: #000;
+}
+
+.modern-popup h2 {
+  color: #1e1e2f;
+  font-size: 1.5rem;
+  margin-bottom: 10px;
+  font-weight: 600;
+}
+
+.modern-popup p {
+  color: #555;
+  font-size: 0.95rem;
+  line-height: 1.5;
+  margin-bottom: 25px;
+}
+
+.modern-popup-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+}
+
+.modern-btn {
+  background: #292f66;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.modern-btn:hover {
+  background: #1f2554;
+  transform: translateY(-2px);
+}
+
+.modern-btn-alt {
+  background: #fff;
+  color: #292f66;
+  border: 1px solid #292f66;
+}
+
+.modern-btn-alt:hover {
+  background: #f3f3ff;
+}
+
+/* Animations */
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+

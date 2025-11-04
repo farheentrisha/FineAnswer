@@ -192,7 +192,7 @@ export default function LandingPage() {
             <div className="overlay"></div>
             <h3>United Kingdom</h3>
             <p>Study in globally reputed institutions with centuries of academic excellence.</p>
-            <button onClick={() => navigate("/countries/uk")}>Explore</button>
+            <button onClick={() => navigate("/uk")}>Explore</button>
           </div>
           <div className="specialization-card australia">
             <div className="overlay"></div>
@@ -208,27 +208,27 @@ export default function LandingPage() {
         <p>© 2025 FineAnswer Study Abroad Consultancy. All rights reserved.</p>
       </footer>
 
-      {/* POPUP MODAL */}
-      {showPopup && (
-        <div className="popup-overlay">
-          <div className="popup-content">
-            <button className="popup-close-btn" onClick={() => setShowPopup(false)}>×</button>
-            <h2>Unlock More Opportunities!</h2>
-            <p>
-              Login or Register now to access personalized guidance, scholarships, and priority
-              support from our expert team.
-            </p>
-            <div className="popup-buttons">
-              <button onClick={() => navigate("/login")} className="popup-btn">
-                Login
-              </button>
-              <button onClick={() => navigate("/register")} className="popup-btn">
-                Register
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+ {showPopup && (
+  <div className="popup-overlay">
+    <div className="modern-popup">
+      <button className="popup-close" onClick={() => setShowPopup(false)}>×</button>
+      <h2>Unlock More Opportunities!</h2>
+      <p>
+        Login or Register now to access personalized guidance, scholarships,
+        and priority support from our expert team.
+      </p>
+      <div className="modern-popup-buttons">
+        <button onClick={() => navigate("/login")} className="modern-btn">
+          Login
+        </button>
+        <button onClick={() => navigate("/register")} className="modern-btn modern-btn-alt">
+          Register
+        </button>
+      </div>
+    </div>
+  </div>
+)}
+
     </div>
   );
 }
