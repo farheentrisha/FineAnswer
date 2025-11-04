@@ -4,23 +4,30 @@ import "./landing.css";
 import uni1 from "../images/uni1.jpg";
 import uni2 from "../images/uni2.jpg";
 import uni3 from "../images/uni3.jpg";
-import { FaGlobe, FaLaptopCode, FaChalkboardTeacher, FaUserGraduate } from "react-icons/fa";
-
+import {
+  FaGlobe,
+  FaLaptopCode,
+  FaChalkboardTeacher,
+  FaUserGraduate,
+} from "react-icons/fa";
 
 export default function LandingPage() {
   const navigate = useNavigate();
   const images = [uni1, uni2, uni3];
   const [currentImage, setCurrentImage] = useState(0);
 
-  // For statistics animation
+  // Stats animation states
   const statsRef = useRef(null);
   const [statsVisible, setStatsVisible] = useState(false);
-
   const [students, setStudents] = useState(0);
   const [countries, setCountries] = useState(0);
   const [partners, setPartners] = useState(0);
   const [satisfaction, setSatisfaction] = useState(0);
 
+  // Popup state
+  const [showPopup, setShowPopup] = useState(false);
+
+  // Image slider
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentImage((prev) => (prev + 1) % images.length);
@@ -28,53 +35,57 @@ export default function LandingPage() {
     return () => clearInterval(interval);
   }, []);
 
-  // Count up animation
+  // Count-up animation
   useEffect(() => {
     if (!statsVisible) return;
 
-    const duration = 2000; // 2 seconds
+    const duration = 2000;
     const start = Date.now();
-
     const target = { students: 500, countries: 4, partners: 16, satisfaction: 98 };
 
     const animate = () => {
       const now = Date.now();
       const progress = Math.min((now - start) / duration, 1);
-
       setStudents(Math.floor(target.students * progress));
       setCountries(Math.floor(target.countries * progress));
       setPartners(Math.floor(target.partners * progress));
       setSatisfaction(Math.floor(target.satisfaction * progress));
-
       if (progress < 1) requestAnimationFrame(animate);
     };
-
     animate();
   }, [statsVisible]);
 
-  // Detect when statistics section is visible
+  // Detect stats section visibility
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
         if (entries[0].isIntersecting) {
           setStatsVisible(true);
-          observer.disconnect(); // Only trigger once
+          observer.disconnect();
         }
       },
       { threshold: 0.5 }
     );
-
     if (statsRef.current) observer.observe(statsRef.current);
-
     return () => observer.disconnect();
   }, []);
 
+  // Input focus effect
   useEffect(() => {
     const inputs = document.querySelectorAll(".search-bar input, .search-bar select");
     inputs.forEach((el) => {
       el.addEventListener("focus", () => (el.style.boxShadow = "0 0 10px rgba(0,119,255,0.5)"));
       el.addEventListener("blur", () => (el.style.boxShadow = "none"));
     });
+  }, []);
+
+  // Show popup after 10 seconds (every visit)
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setShowPopup(true);
+    }, 10000);
+
+    return () => clearTimeout(timer);
   }, []);
 
   return (
@@ -130,40 +141,28 @@ export default function LandingPage() {
       </section>
 
       {/* STATISTICS SECTION */}
-<section className="statistics" ref={statsRef}>
-  <div className="stat-card">
-    <div className="stat-icon">
-      <FaGlobe />
-    </div>
-    <h2>{countries}+</h2>
-    <p>Years of Language Education Experience</p>
-  </div>
-
-  <div className="stat-card">
-    <div className="stat-icon">
-      <FaLaptopCode />
-    </div>
-    <h2>{partners}+</h2>
-    <p>Innovative Foreign Online Courses</p>
-  </div>
-
-  <div className="stat-card">
-    <div className="stat-icon">
-      <FaChalkboardTeacher />
-    </div>
-    <h2>{students}+</h2>
-    <p>Qualified Teachers and Language Experts</p>
-  </div>
-
-  <div className="stat-card">
-    <div className="stat-icon">
-      <FaUserGraduate />
-    </div>
-    <h2>{satisfaction}+</h2>
-    <p>Learners Enrolled in Edexcel Courses</p>
-  </div>
-</section>
-
+      <section className="statistics" ref={statsRef}>
+        <div className="stat-card">
+          <div className="stat-icon"><FaGlobe /></div>
+          <h2>{countries}+</h2>
+          <p>Years of Language Education Experience</p>
+        </div>
+        <div className="stat-card">
+          <div className="stat-icon"><FaLaptopCode /></div>
+          <h2>{partners}+</h2>
+          <p>Innovative Foreign Online Courses</p>
+        </div>
+        <div className="stat-card">
+          <div className="stat-icon"><FaChalkboardTeacher /></div>
+          <h2>{students}+</h2>
+          <p>Qualified Teachers and Language Experts</p>
+        </div>
+        <div className="stat-card">
+          <div className="stat-icon"><FaUserGraduate /></div>
+          <h2>{satisfaction}+</h2>
+          <p>Learners Enrolled in Edexcel Courses</p>
+        </div>
+      </section>
 
       {/* SERVICES SECTION */}
       <section className="services">
@@ -177,40 +176,59 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* OUR SPECIALIZATION SECTION */}
-<section className="specialization">
-  <h2>Our Specializations</h2>
-  <p>We provide expert guidance and end-to-end support for top study destinations.</p>
+      {/* SPECIALIZATION SECTION */}
+      <section className="specialization">
+        <h2>Our Specializations</h2>
+        <p>We provide expert guidance and end-to-end support for top study destinations.</p>
 
-  <div className="specialization-grid">
-    <div className="specialization-card ireland">
-      <div className="overlay"></div>
-      <h3>Ireland</h3>
-      <p>Experience world-class education and career opportunities in Europe’s tech hub.</p>
-      <button onClick={() => navigate("/countries/ireland")}>Explore</button>
-    </div>
-
-    <div className="specialization-card uk">
-      <div className="overlay"></div>
-      <h3>United Kingdom</h3>
-      <p>Study in globally reputed institutions with centuries of academic excellence.</p>
-      <button onClick={() => navigate("/countries/uk")}>Explore</button>
-    </div>
-
-    <div className="specialization-card australia">
-      <div className="overlay"></div>
-      <h3>Australia</h3>
-      <p>Enjoy diverse culture and top-tier universities with post-study work benefits.</p>
-      <button onClick={() => navigate("/countries/australia")}>Explore</button>
-    </div>
-  </div>
-</section>
-
+        <div className="specialization-grid">
+          <div className="specialization-card ireland">
+            <div className="overlay"></div>
+            <h3>Ireland</h3>
+            <p>Experience world-class education and career opportunities in Europe’s tech hub.</p>
+            <button onClick={() => navigate("/countries/ireland")}>Explore</button>
+          </div>
+          <div className="specialization-card uk">
+            <div className="overlay"></div>
+            <h3>United Kingdom</h3>
+            <p>Study in globally reputed institutions with centuries of academic excellence.</p>
+            <button onClick={() => navigate("/countries/uk")}>Explore</button>
+          </div>
+          <div className="specialization-card australia">
+            <div className="overlay"></div>
+            <h3>Australia</h3>
+            <p>Enjoy diverse culture and top-tier universities with post-study work benefits.</p>
+            <button onClick={() => navigate("/australia")}>Explore</button>
+          </div>
+        </div>
+      </section>
 
       {/* FOOTER */}
       <footer>
         <p>© 2025 FineAnswer Study Abroad Consultancy. All rights reserved.</p>
       </footer>
+
+      {/* POPUP MODAL */}
+      {showPopup && (
+        <div className="popup-overlay">
+          <div className="popup-content">
+            <button className="popup-close-btn" onClick={() => setShowPopup(false)}>×</button>
+            <h2>Unlock More Opportunities!</h2>
+            <p>
+              Login or Register now to access personalized guidance, scholarships, and priority
+              support from our expert team.
+            </p>
+            <div className="popup-buttons">
+              <button onClick={() => navigate("/login")} className="popup-btn">
+                Login
+              </button>
+              <button onClick={() => navigate("/register")} className="popup-btn">
+                Register
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
