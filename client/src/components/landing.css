@@ -656,4 +656,24 @@ footer {
     transform: translateY(0);
   }
 }
+.map-section {
+  text-align: center;
+  padding: 60px 20px;
+  background: #f9fafc;
+}
+
+.map-section h2 {
+  font-size: 2rem;
+  margin-bottom: 25px;
+  color: #003366;
+  font-weight: 600;
+}
+
+.map-container {
+  max-width: 1000px;
+  margin: 0 auto;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
 
