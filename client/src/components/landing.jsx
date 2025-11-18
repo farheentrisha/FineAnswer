@@ -219,6 +219,84 @@ export default function LandingPage() {
     ></iframe>
   </div>
 </section>
+{/* LOGIN & CONTACT SECTION */}
+<section className="login-contact-section">
+  <div className="login-contact-container">
+    {/* Left Side – Login Form */}
+    <div className="login-box">
+      <h3>Login to your account</h3>
+      <form>
+        <div className="form-group">
+          <label>Email</label>
+          <input type="email" placeholder="Enter your email" required />
+        </div>
+        <div className="form-group">
+          <label>Password</label>
+          <input type="password" placeholder="Enter your password" required />
+        </div>
+        <div className="form-options">
+          <label>
+            <input type="checkbox" /> Remember me
+          </label>
+          <a href="#">Forgot Password?</a>
+        </div>
+        <button type="submit" className="btn-primary">Login</button>
+      </form>
+    </div>
+
+    {/* Right Side – Contact Info */}
+    <div className="contact-box">
+      <h3>Don't hesitate to contact us</h3>
+      <p>
+        Reach out anytime for admission guidance, support, or partnership inquiries.  
+        We’re here to help you achieve your academic goals.
+      </p>
+
+      <div className="contact-info">
+        <div className="contact-item">
+          <span>📍</span>
+          <div>
+            <h4>Office</h4>
+            <p>Co-Desk (Beside Aarong Banani), Road 11, Banani, Dhaka 1213</p>
+          </div>
+        </div>
+
+        <div className="contact-item">
+          <span>📞</span>
+          <div>
+            <h4>Phone</h4>
+            <p>+880 1711 444 909</p>
+          </div>
+        </div>
+
+        <div className="contact-item">
+          <span>✉️</span>
+          <div>
+            <h4>Email</h4>
+            <p>info@fineanswer.com</p>
+          </div>
+        </div>
+
+        <div className="contact-item">
+          <span>🕒</span>
+          <div>
+            <h4>Work Hours</h4>
+            <p>Sun - Thu: 10 AM – 6 PM</p>
+          </div>
+        </div>
+      </div>
+
+      <div className="social-links">
+        <p>Follow us:</p>
+        <div>
+          <a href="#"><i className="fab fa-facebook"></i></a>
+          <a href="#"><i className="fab fa-linkedin"></i></a>
+          <a href="#"><i className="fab fa-instagram"></i></a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
 
 
       {/* FOOTER */}
