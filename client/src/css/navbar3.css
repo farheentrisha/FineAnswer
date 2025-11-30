@@ -1,0 +1,79 @@
+.minimal-navbar {
+  width: 100%;
+  padding: 20px 0;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 100;
+
+  /* TRUE TRANSPARENCY */
+  background: transparent !important;
+  backdrop-filter: none !important;
+
+  /* REMOVE ALL LINES / BORDERS */
+  border: none !important;
+  border-bottom: none !important;
+  outline: none !important;
+  box-shadow: none !important;
+
+  /* Some browsers add a default bottom line → remove completely */
+  border-bottom: 0px solid transparent !important;
+}
+
+
+/* Layout */
+.nav-inner {
+  width: 92%;
+  max-width: 1300px;
+  margin: auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* Logo */
+.nav-logo {
+  font-size: 28px;
+  font-weight: 700;
+  font-family: "Poppins", sans-serif;
+  color: white;  /* visible on dark hero image */
+}
+
+/* Right menu */
+.nav-menu {
+  display: flex;
+  align-items: center;
+}
+
+.nav-menu a {
+  margin-left: 28px;
+  font-size: 16px;
+  font-weight: 500;
+  font-family: "Poppins", sans-serif;
+  text-decoration: none;
+  color: white;
+  transition: 0.3s ease;
+}
+
+.nav-menu a:hover {
+  color: #ffd250;
+}
+
+/* Join Button */
+.nav-btn {
+  margin-left: 32px;
+  padding: 8px 22px;
+  border: 1.5px solid #ffd250;
+  background: transparent; /* no fill */
+  color: #ffd250;
+  border-radius: 22px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.3s ease;
+}
+
+.nav-btn:hover {
+  background: #ffd250;
+  color: #003b31;
+}

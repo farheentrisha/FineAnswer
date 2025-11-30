@@ -1,135 +1,317 @@
-import React from 'react';
-import './LandingPage.css';
+import React, { useEffect, useState, useRef } from "react";
+import { useNavigate } from "react-router-dom";
+import "./LandingPage.css";
+import uni1 from "./images/uni1.jpg";
+import uni2 from "./images/uni2.jpg";
+import uni3 from "./images/uni3.jpg";
+import {
+  FaGlobe,
+  FaLaptopCode,
+  FaChalkboardTeacher,
+  FaUserGraduate,
+} from "react-icons/fa";
 
-const LandingPage = () => {
+export default function LandingPage() {
+  const navigate = useNavigate();
+  const images = [uni1, uni2, uni3];
+  const [currentImage, setCurrentImage] = useState(0);
+
+  // Stats animation states
+  const statsRef = useRef(null);
+  const [statsVisible, setStatsVisible] = useState(false);
+  const [students, setStudents] = useState(0);
+  const [countries, setCountries] = useState(0);
+  const [partners, setPartners] = useState(0);
+  const [satisfaction, setSatisfaction] = useState(0);
+
+  // Popup state
+  const [showPopup, setShowPopup] = useState(false);
+
+  // Image slider
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentImage((prev) => (prev + 1) % images.length);
+    }, 5000);
+    return () => clearInterval(interval);
+  }, []);
+
+  // Count-up animation
+  useEffect(() => {
+    if (!statsVisible) return;
+
+    const duration = 2000;
+    const start = Date.now();
+    const target = { students: 500, countries: 4, partners: 16, satisfaction: 98 };
+
+    const animate = () => {
+      const now = Date.now();
+      const progress = Math.min((now - start) / duration, 1);
+      setStudents(Math.floor(target.students * progress));
+      setCountries(Math.floor(target.countries * progress));
+      setPartners(Math.floor(target.partners * progress));
+      setSatisfaction(Math.floor(target.satisfaction * progress));
+      if (progress < 1) requestAnimationFrame(animate);
+    };
+    animate();
+  }, [statsVisible]);
+
+  // Detect stats section visibility
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting) {
+          setStatsVisible(true);
+          observer.disconnect();
+        }
+      },
+      { threshold: 0.5 }
+    );
+    if (statsRef.current) observer.observe(statsRef.current);
+    return () => observer.disconnect();
+  }, []);
+
+  // Input focus effect
+  useEffect(() => {
+    const inputs = document.querySelectorAll(".search-bar input, .search-bar select");
+    inputs.forEach((el) => {
+      el.addEventListener("focus", () => (el.style.boxShadow = "0 0 10px rgba(0,119,255,0.5)"));
+      el.addEventListener("blur", () => (el.style.boxShadow = "none"));
+    });
+  }, []);
+
+  // Show popup after 10 seconds (every visit)
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setShowPopup(true);
+    }, 10000);
+
+    return () => clearTimeout(timer);
+  }, []);
+
   return (
-    <div className="landing-page">
-      {/* Hero Section */}
-      <header className="hero">
-        <nav className="navbar">
-          <div className="logo">FineAnswer</div>
-          <div className="nav-links">
-            <a href="#features">Features</a>
-            <a href="#how-it-works">How It Works</a>
-            <a href="#pricing">Pricing</a>
-            <a href="/login" className="login-btn">Log In</a>
-            <a href="/register" className="signup-btn">Sign Up</a>
-          </div>
-        </nav>
-        
-        <div className="hero-content">
-          <h1>AI-Powered Q&A Platform</h1>
-          <p>Get accurate, instant answers to all your questions with our advanced AI technology.</p>
-          <div className="cta-buttons">
-            <a href="/register" className="primary-btn">Get Started for Free</a>
-            <a href="#demo" className="secondary-btn">Watch Demo</a>
-          </div>
-          <div className="trusted-by">
-            <span>Trusted by 10,000+ users worldwide</span>
-          </div>
-        </div>
-      </header>
+    <div className="LandingPage">
+      
 
-      {/* Features Section */}
-      <section id="features" className="features">
-        <div className="section-header">
-          <h2>Why Choose FineAnswer?</h2>
-          <p>Experience the power of AI in answering your questions accurately and efficiently.</p>
+{/* HERO SECTION */}
+<section className="hero-section">
+  {images.map((img, index) => (
+    <div
+      key={index}
+      className={`hero-bg ${index === currentImage ? "active" : ""}`}
+      style={{ backgroundImage: `url(${img})` }}
+    />
+  ))}
+
+  <div className="hero-gradient"></div>
+
+  <div className="hero-inner">
+    <h1>Study Abroad with Confidence</h1>
+    <p>
+      Find your dream university with FineAnswer. We guide you from choosing a country 
+      to landing on campus.
+    </p>
+
+    <div className="hero-search-card">
+      <input type="text" placeholder="Search Program or Course" />
+      <select>
+        <option>All Countries</option>
+        <option>USA</option>
+        <option>UK</option>
+        <option>Canada</option>
+        <option>Australia</option>
+      </select>
+      <button>🔍</button>
+    </div>
+  </div>
+</section>
+
+
+      {/* STATISTICS SECTION */}
+      <section className="statistics" ref={statsRef}>
+        <div className="stat-card">
+          <div className="stat-icon"><FaGlobe /></div>
+          <h2>{countries}+</h2>
+          <p>Years of Language Education Experience</p>
         </div>
-        
-        <div className="features-grid">
-          <div className="feature-card">
-            <div className="feature-icon">
-              🚀
-            </div>
-            <h3>Lightning Fast</h3>
-            <p>Get instant answers to your questions without any delays.</p>
+        <div className="stat-card">
+          <div className="stat-icon"><FaLaptopCode /></div>
+          <h2>{partners}+</h2>
+          <p>Innovative Foreign Online Courses</p>
+        </div>
+        <div className="stat-card">
+          <div className="stat-icon"><FaChalkboardTeacher /></div>
+          <h2>{students}+</h2>
+          <p>Qualified Teachers and Language Experts</p>
+        </div>
+        <div className="stat-card">
+          <div className="stat-icon"><FaUserGraduate /></div>
+          <h2>{satisfaction}+</h2>
+          <p>Learners Enrolled in Edexcel Courses</p>
+        </div>
+      </section>
+
+      {/* SERVICES SECTION */}
+      <section className="services">
+        <h2>Our Services</h2>
+        <div className="service-grid">
+          <div className="service-card">🎓 Admission Support</div>
+          <div className="service-card">✈️ Visa Guidance</div>
+          <div className="service-card">💰 Scholarship Advice</div>
+          <div className="service-card">📚 IELTS Preparation</div>
+          <div className="service-card">🧭 Career Counseling</div>
+        </div>
+      </section>
+
+      {/* SPECIALIZATION SECTION */}
+      <section className="specialization">
+        <h2>Our Specializations</h2>
+        <p>We provide expert guidance and end-to-end support for top study destinations.</p>
+
+        <div className="specialization-grid">
+          <div className="specialization-card ireland">
+            <div className="overlay"></div>
+            <h3>Ireland</h3>
+            <p>Experience world-class education and career opportunities in Europe’s tech hub.</p>
+            <button onClick={() => navigate("/countries/ireland")}>Explore</button>
           </div>
-          
-          <div className="feature-card">
-            <div className="feature-icon">
-              🔒
-            </div>
-            <h3>Secure & Private</h3>
-            <p>Your data is encrypted and protected with enterprise-grade security.</p>
+          <div className="specialization-card uk">
+            <div className="overlay"></div>
+            <h3>United Kingdom</h3>
+            <p>Study in globally reputed institutions with centuries of academic excellence.</p>
+            <button onClick={() => navigate("/uk")}>Explore</button>
           </div>
-          
-          <div className="feature-card">
-            <div className="feature-icon">
-              📊
-            </div>
-            <h3>Smart Analytics</h3>
-            <p>Track your question history and improve your knowledge base.</p>
+          <div className="specialization-card australia">
+            <div className="overlay"></div>
+            <h3>Australia</h3>
+            <p>Enjoy diverse culture and top-tier universities with post-study work benefits.</p>
+            <button onClick={() => navigate("/australia")}>Explore</button>
           </div>
         </div>
       </section>
 
-      {/* How It Works Section */}
-      <section id="how-it-works" className="how-it-works">
-        <div className="section-header">
-          <h2>How It Works</h2>
-          <p>Get started in just a few simple steps</p>
+      {/* MAP SECTION */}
+<section className="map-section">
+  <h2>Our Location</h2>
+  <div className="map-container">
+    <iframe
+      title="FineAnswer Office Location"
+      src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3651.943502239492!2d90.40158827461542!3d23.750912778686275!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3755c7b34277af61%3A0x3263d373deea33c4!2sCo-Desk!5e0!3m2!1sen!2sbd!4v1731336400000!5m2!1sen!2sbd"
+      width="100%"
+      height="400"
+      style={{ border: 0 }}
+      allowFullScreen=""
+      loading="lazy"
+      referrerPolicy="no-referrer-when-downgrade"
+    ></iframe>
+  </div>
+</section>
+{/* LOGIN & CONTACT SECTION */}
+<section className="login-contact-section">
+  <div className="login-contact-container">
+    {/* Left Side – Login Form */}
+    <div className="login-box">
+      <h3>Login to your account</h3>
+      <form>
+        <div className="form-group">
+          <label>Email</label>
+          <input type="email" placeholder="Enter your email" required />
         </div>
-        
-        <div className="steps">
-          <div className="step">
-            <div className="step-number">1</div>
-            <h3>Create an Account</h3>
-            <p>Sign up for free and verify your email address.</p>
-          </div>
-          
-          <div className="step">
-            <div className="step-number">2</div>
-            <h3>Ask Your Question</h3>
-            <p>Type your question in simple, natural language.</p>
-          </div>
-          
-          <div className="step">
-            <div className="step-number">3</div>
-            <h3>Get Instant Answers</h3>
-            <p>Receive accurate, well-researched answers immediately.</p>
-          </div>
+        <div className="form-group">
+          <label>Password</label>
+          <input type="password" placeholder="Enter your password" required />
         </div>
-      </section>
+        <div className="form-options">
+          <label>
+            <input type="checkbox" /> Remember me
+          </label>
+          <a href="#">Forgot Password?</a>
+        </div>
+        <button type="submit" className="btn-primary">Login</button>
+      </form>
+    </div>
 
-      {/* CTA Section */}
-      <section className="cta-section">
-        <h2>Ready to Get Started?</h2>
-        <p>Join thousands of users who trust FineAnswer for accurate information.</p>
-        <a href="/register" className="primary-btn">Start Your Free Trial</a>
-      </section>
+    {/* Right Side – Contact Info */}
+    <div className="contact-box">
+      <h3>Don't hesitate to contact us</h3>
+      <p>
+        Reach out anytime for admission guidance, support, or partnership inquiries.  
+        We’re here to help you achieve your academic goals.
+      </p>
 
-      {/* Footer */}
-      <footer className="footer">
-        <div className="footer-content">
-          <div className="footer-logo">FineAnswer</div>
-          <div className="footer-links">
-            <div className="footer-column">
-              <h4>Product</h4>
-              <a href="#features">Features</a>
-              <a href="#pricing">Pricing</a>
-              <a href="#demo">Demo</a>
-            </div>
-            <div className="footer-column">
-              <h4>Company</h4>
-              <a href="#about">About Us</a>
-              <a href="#careers">Careers</a>
-              <a href="#blog">Blog</a>
-            </div>
-            <div className="footer-column">
-              <h4>Support</h4>
-              <a href="#help">Help Center</a>
-              <a href="#contact">Contact Us</a>
-              <a href="#privacy">Privacy Policy</a>
-            </div>
+      <div className="contact-info">
+        <div className="contact-item">
+          <span>📍</span>
+          <div>
+            <h4>Office</h4>
+            <p>Co-Desk (Beside Aarong Banani), Road 11, Banani, Dhaka 1213</p>
           </div>
         </div>
-        <div className="footer-bottom">
-          <p>&copy; {new Date().getFullYear()} FineAnswer. All rights reserved.</p>
+
+        <div className="contact-item">
+          <span>📞</span>
+          <div>
+            <h4>Phone</h4>
+            <p>+880 1711 444 909</p>
+          </div>
         </div>
+
+        <div className="contact-item">
+          <span>✉️</span>
+          <div>
+            <h4>Email</h4>
+            <p>info@fineanswer.com</p>
+          </div>
+        </div>
+
+        <div className="contact-item">
+          <span>🕒</span>
+          <div>
+            <h4>Work Hours</h4>
+            <p>Sun - Thu: 10 AM – 6 PM</p>
+          </div>
+        </div>
+      </div>
+
+      <div className="social-links">
+        <p>Follow us:</p>
+        <div>
+          <a href="#"><i className="fab fa-facebook"></i></a>
+          <a href="#"><i className="fab fa-linkedin"></i></a>
+          <a href="#"><i className="fab fa-instagram"></i></a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+      {/* FOOTER */}
+      <footer>
+        <p>© 2025 FineAnswer Study Abroad Consultancy. All rights reserved.</p>
       </footer>
+
+ {showPopup && (
+  <div className="popup-overlay">
+    <div className="modern-popup">
+      <button className="popup-close" onClick={() => setShowPopup(false)}>×</button>
+      <h2>Unlock More Opportunities!</h2>
+      <p>
+        Login or Register now to access personalized guidance, scholarships,
+        and priority support from our expert team.
+      </p>
+      <div className="modern-popup-buttons">
+        <button onClick={() => navigate("/login")} className="modern-btn">
+          Login
+        </button>
+        <button onClick={() => navigate("/register")} className="modern-btn modern-btn-alt">
+          Register
+        </button>
+      </div>
+    </div>
+  </div>
+)}
+
+
     </div>
   );
-};
-
-export default LandingPage;
+}
