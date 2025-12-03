@@ -93,37 +93,61 @@ export default function LandingPage() {
       
 
 {/* HERO SECTION */}
-<section className="hero-section">
-  {images.map((img, index) => (
-    <div
-      key={index}
-      className={`hero-bg ${index === currentImage ? "active" : ""}`}
-      style={{ backgroundImage: `url(${img})` }}
-    />
-  ))}
+{/* HERO SECTION */}
+<section className="hero-section-new">
 
-  <div className="hero-gradient"></div>
+  {/* Background Image */}
+  <div
+    className="hero-static-bg"
+    style={{ backgroundImage: `url(${images[currentImage]})` }}
+  ></div>
 
-  <div className="hero-inner">
-    <h1>Study Abroad with Confidence</h1>
-    <p>
-      Find your dream university with FineAnswer. We guide you from choosing a country 
-      to landing on campus.
+  {/* Dark + Purple Gradient Overlay */}
+  <div className="hero-overlay-gradient"></div>
+
+  {/* Main Content */}
+  <div className="hero-content-wrapper">
+
+    <h1 className="hero-title">
+      Discover Your <span>Next Adventure</span>
+    </h1>
+
+    <p className="hero-subtitle">
+      Find your dream university with FineAnswer. From choosing a country  
+      to landing on campus — we guide you every step of the way.
     </p>
 
-    <div className="hero-search-card">
-      <input type="text" placeholder="Search Program or Course" />
-      <select>
-        <option>All Countries</option>
-        <option>USA</option>
-        <option>UK</option>
-        <option>Canada</option>
-        <option>Australia</option>
-      </select>
-      <button>🔍</button>
+    {/* Search Bar Glass Box */}
+    <div className="hero-search-wrapper-new">
+      <div className="hero-search-box-new">
+
+        <div className="search-item-new">
+          <span className="search-label">Program</span>
+          <span className="search-value">Search Program</span>
+        </div>
+
+        <div className="divider"></div>
+
+        <div className="search-item-new">
+          <span className="search-label">Country</span>
+          <span className="search-value">Choose Country</span>
+        </div>
+
+        <div className="divider"></div>
+
+        <div className="search-item-new">
+          <span className="search-label">Intake</span>
+          <span className="search-value">Select Intake</span>
+        </div>
+
+        <button className="search-btn-new">Search</button>
+
+      </div>
     </div>
+
   </div>
 </section>
+
 
 
       {/* STATISTICS SECTION */}
@@ -314,4 +338,14 @@ export default function LandingPage() {
 
     </div>
   );
+
+  window.addEventListener("scroll", () => {
+  const header = document.querySelector("header");
+  if (window.scrollY > 20) {
+    header.classList.add("scrolled");
+  } else {
+    header.classList.remove("scrolled");
+  }
+});
+
 }
