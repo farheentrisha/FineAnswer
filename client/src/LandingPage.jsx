@@ -92,18 +92,23 @@ export default function LandingPage() {
     <div className="LandingPage">
       
 
-{/* HERO SECTION */}
+
 {/* HERO SECTION */}
 <section className="hero-section-new">
 
-  {/* Background Image */}
-  <div
-    className="hero-static-bg"
-    style={{ backgroundImage: `url(${images[currentImage]})` }}
-  ></div>
+  <div className="hero-background">
+  {images.map((img, index) => (
+    <div
+      key={index}
+      className={`hero-bg-slide ${index === currentImage ? "active" : ""}`}
+      style={{ backgroundImage: `url(${img})` }}
+    ></div>
+  ))}
+</div>
+
 
   {/* Dark + Purple Gradient Overlay */}
-  <div className="hero-overlay-gradient"></div>
+  <div className="hero-overlay"></div>
 
   {/* Main Content */}
   <div className="hero-content-wrapper">
@@ -144,14 +149,70 @@ export default function LandingPage() {
 
       </div>
     </div>
+    {/* CTA BUTTONS */}
+<div className="hero-cta-buttons">
+  <button className="cta-apply" onClick={() => navigate("/apply")}>
+    Apply Now
+  </button>
+
+  <button className="cta-consult" onClick={() => navigate("/consultation")}>
+    Book Consultation
+  </button>
+</div>
+
+
 
   </div>
 </section>
+
+{/* ABOUT + STATS SECTION (Like Example Image) */}
+<section className="about-stats-section">
+
+  <div className="about-left">
+    <h2>ABOUT US</h2>
+    <p>
+      We help students discover global academic opportunities with seamless 
+      guidance, expert mentoring, and complete end-to-end support.
+      From choosing a country to landing on campus — we’re with you every step.
+    </p>
+
+    <div className="about-buttons">
+      <button className="btn-primary">Learn More</button>
+      <button className="btn-outline">Watch Video ▶</button>
+    </div>
+  </div>
+
+  <div className="about-right">
+    <div className="stat-box">
+      <h3>{students}+</h3>
+      <p>Happy Students</p>
+    </div>
+
+    <div className="stat-box">
+      <h3>{countries}+</h3>
+      <p>Countries Served</p>
+    </div>
+
+    <div className="stat-box">
+      <h3>{partners}+</h3>
+      <p>Partner Institutions</p>
+    </div>
+
+    <div className="stat-box">
+      <h3>{satisfaction}%</h3>
+      <p>Student Satisfaction</p>
+    </div>
+  </div>
+
+</section>
+
+
 
 
 
       {/* STATISTICS SECTION */}
       <section className="statistics" ref={statsRef}>
+        
         <div className="stat-card">
           <div className="stat-icon"><FaGlobe /></div>
           <h2>{countries}+</h2>
