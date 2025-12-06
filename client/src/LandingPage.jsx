@@ -210,31 +210,7 @@ export default function LandingPage() {
 
 
 
-      {/* STATISTICS SECTION */}
-      <section className="statistics" ref={statsRef}>
-        
-        <div className="stat-card">
-          <div className="stat-icon"><FaGlobe /></div>
-          <h2>{countries}+</h2>
-          <p>Years of Language Education Experience</p>
-        </div>
-        <div className="stat-card">
-          <div className="stat-icon"><FaLaptopCode /></div>
-          <h2>{partners}+</h2>
-          <p>Innovative Foreign Online Courses</p>
-        </div>
-        <div className="stat-card">
-          <div className="stat-icon"><FaChalkboardTeacher /></div>
-          <h2>{students}+</h2>
-          <p>Qualified Teachers and Language Experts</p>
-        </div>
-        <div className="stat-card">
-          <div className="stat-icon"><FaUserGraduate /></div>
-          <h2>{satisfaction}+</h2>
-          <p>Learners Enrolled in Edexcel Courses</p>
-        </div>
-      </section>
-
+      
       {/* SERVICES SECTION */}
       <section className="services">
         <h2>Our Services</h2>
