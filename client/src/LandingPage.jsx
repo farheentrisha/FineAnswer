@@ -1,5 +1,7 @@
 import React, { useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
+import RoadmapSection from "./components/RoadmapSection";
+
 import "./LandingPage.css";
 import uni1 from "./images/uni1.jpg";
 import uni2 from "./images/uni2.jpg";
@@ -212,16 +214,10 @@ export default function LandingPage() {
 
       
       {/* SERVICES SECTION */}
-      <section className="services">
-        <h2>Our Services</h2>
-        <div className="service-grid">
-          <div className="service-card">🎓 Admission Support</div>
-          <div className="service-card">✈️ Visa Guidance</div>
-          <div className="service-card">💰 Scholarship Advice</div>
-          <div className="service-card">📚 IELTS Preparation</div>
-          <div className="service-card">🧭 Career Counseling</div>
-        </div>
-      </section>
+      
+        <RoadmapSection />
+       
+      
 
       {/* SPECIALIZATION SECTION */}
       <section className="specialization">
