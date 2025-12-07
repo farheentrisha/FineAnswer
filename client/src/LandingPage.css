@@ -370,6 +370,130 @@ body {
   }
 }
 
+/* ============================================
+   MODERN TIMELINE SERVICES SECTION
+============================================= */
+
+/* ================================
+   LIGHT THEME SERVICES TIMELINE
+================================ */
+
+.services-modern-light {
+  padding: 110px 50px;
+  background: #ffffff;
+  position: relative;
+}
+
+.services-title-light {
+  text-align: center;
+  font-size: 2.7rem;
+  font-weight: 700;
+  margin-bottom: 70px;
+  color: #3d2f7b;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+/* Vertical Timeline Line */
+.timeline-line-light {
+  position: absolute;
+  width: 3px;
+  height: 70%;
+  left: 50%;
+  top: 18rem;
+  transform: translateX(-50%);
+  background: linear-gradient(to bottom, #b18cff, #7b5cff);
+  opacity: 0.3;
+}
+
+.services-timeline-light {
+  position: relative;
+  width: 100%;
+}
+
+/* Cards wrapper */
+.service-item-light {
+  width: 100%;
+  display: flex;
+  margin: 45px 0;
+  opacity: 0;
+  animation: fadeUp 0.9s ease forwards;
+}
+
+.service-item-light.left {
+  justify-content: flex-start;
+  animation-delay: 0.15s;
+  padding-left: 52%;
+}
+
+.service-item-light.right {
+  justify-content: flex-end;
+  animation-delay: 0.25s;
+  padding-right: 52%;
+}
+
+/* Soft, Glassy Light Card */
+.service-card-light {
+  width: 360px;
+  padding: 25px;
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(10px);
+  border: 1px solid #e8e7ff;
+  box-shadow: 0px 12px 25px rgba(130, 110, 255, 0.13);
+  transition: all 0.35s ease;
+  cursor: pointer;
+}
+
+/* Hover Animation */
+.service-card-light:hover {
+  transform: translateY(-8px);
+  box-shadow: 0px 18px 30px rgba(110, 85, 255, 0.18);
+  background: rgba(255, 255, 255, 0.9);
+  border-color: #c9b3ff;
+}
+
+.service-card-light h3 {
+  font-size: 1.25rem;
+  margin-bottom: 8px;
+  color: #7b5cff;
+}
+
+.service-card-light p {
+  color: #4e4e60;
+  line-height: 1.55;
+  font-size: 0.95rem;
+}
+
+/* Animation */
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+  .service-item-light,
+  .service-item-light.left,
+  .service-item-light.right {
+    width: 100%;
+    justify-content: center;
+    text-align: center;
+  }
+
+  .timeline-line-light {
+    display: none;
+  }
+}
+
+
+
 
 
 /* =========================================================

@@ -1,7 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import RoadmapSection from "./components/RoadmapSection";
-
+import SuccessStories from "./components/SuccessStories";
 import "./LandingPage.css";
 import uni1 from "./images/uni1.jpg";
 import uni2 from "./images/uni2.jpg";
@@ -168,7 +167,8 @@ export default function LandingPage() {
 </section>
 
 {/* ABOUT + STATS SECTION (Like Example Image) */}
-<section className="about-stats-section">
+<section className="about-stats-section" ref={statsRef}>
+
 
   <div className="about-left">
     <h2>ABOUT US</h2>
@@ -212,39 +212,58 @@ export default function LandingPage() {
 
 
 
-      
-      {/* SERVICES SECTION */}
-      
-        <RoadmapSection />
-       
-      
+  <section className="services-modern-light">
+  <h2 className="services-title-light">Our Services</h2>
 
-      {/* SPECIALIZATION SECTION */}
-      <section className="specialization">
-        <h2>Our Specializations</h2>
-        <p>We provide expert guidance and end-to-end support for top study destinations.</p>
+  <div className="timeline-line-light"></div>
 
-        <div className="specialization-grid">
-          <div className="specialization-card ireland">
-            <div className="overlay"></div>
-            <h3>Ireland</h3>
-            <p>Experience world-class education and career opportunities in Europe’s tech hub.</p>
-            <button onClick={() => navigate("/countries/ireland")}>Explore</button>
-          </div>
-          <div className="specialization-card uk">
-            <div className="overlay"></div>
-            <h3>United Kingdom</h3>
-            <p>Study in globally reputed institutions with centuries of academic excellence.</p>
-            <button onClick={() => navigate("/uk")}>Explore</button>
-          </div>
-          <div className="specialization-card australia">
-            <div className="overlay"></div>
-            <h3>Australia</h3>
-            <p>Enjoy diverse culture and top-tier universities with post-study work benefits.</p>
-            <button onClick={() => navigate("/australia")}>Explore</button>
-          </div>
-        </div>
-      </section>
+  <div className="services-timeline-light">
+
+    {/* Service 1 */}
+    <div className="service-item-light left">
+      <div className="service-card-light">
+        <h3>🎓 Admission Support</h3>
+        <p>Personalized university selection and full application assistance.</p>
+      </div>
+    </div>
+
+    {/* Service 2 */}
+    <div className="service-item-light right">
+      <div className="service-card-light">
+        <h3>✈️ Visa Guidance</h3>
+        <p>Step-by-step visa process including document preparation.</p>
+      </div>
+    </div>
+
+    {/* Service 3 */}
+    <div className="service-item-light left">
+      <div className="service-card-light">
+        <h3>💰 Scholarship Assistance</h3>
+        <p>Find and apply for scholarships best suited for your profile.</p>
+      </div>
+    </div>
+
+    {/* Service 4 */}
+    <div className="service-item-light right">
+      <div className="service-card-light">
+        <h3>📚 IELTS Preparation</h3>
+        <p>Score higher with our skill-based IELTS coaching program.</p>
+      </div>
+    </div>
+
+    {/* Service 5 */}
+    <div className="service-item-light left">
+      <div className="service-card-light">
+        <h3>🧭 Career Counseling</h3>
+        <p>Choose the right academic path for long-term success.</p>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+
+<SuccessStories />
 
       {/* MAP SECTION */}
 <section className="map-section">
