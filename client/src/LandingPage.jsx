@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import SuccessStories from "./components/SuccessStories";
+import ContactSection from "./components/ContactSection";
 import "./LandingPage.css";
 import uni1 from "./images/uni1.jpg";
 import uni2 from "./images/uni2.jpg";
@@ -264,101 +265,8 @@ export default function LandingPage() {
 
 
 <SuccessStories />
-
-      {/* MAP SECTION */}
-<section className="map-section">
-  <h2>Our Location</h2>
-  <div className="map-container">
-    <iframe
-      title="FineAnswer Office Location"
-      src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3651.943502239492!2d90.40158827461542!3d23.750912778686275!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3755c7b34277af61%3A0x3263d373deea33c4!2sCo-Desk!5e0!3m2!1sen!2sbd!4v1731336400000!5m2!1sen!2sbd"
-      width="100%"
-      height="400"
-      style={{ border: 0 }}
-      allowFullScreen=""
-      loading="lazy"
-      referrerPolicy="no-referrer-when-downgrade"
-    ></iframe>
-  </div>
-</section>
-{/* LOGIN & CONTACT SECTION */}
-<section className="login-contact-section">
-  <div className="login-contact-container">
-    {/* Left Side – Login Form */}
-    <div className="login-box">
-      <h3>Login to your account</h3>
-      <form>
-        <div className="form-group">
-          <label>Email</label>
-          <input type="email" placeholder="Enter your email" required />
-        </div>
-        <div className="form-group">
-          <label>Password</label>
-          <input type="password" placeholder="Enter your password" required />
-        </div>
-        <div className="form-options">
-          <label>
-            <input type="checkbox" /> Remember me
-          </label>
-          <a href="#">Forgot Password?</a>
-        </div>
-        <button type="submit" className="btn-primary">Login</button>
-      </form>
-    </div>
-
-    {/* Right Side – Contact Info */}
-    <div className="contact-box">
-      <h3>Don't hesitate to contact us</h3>
-      <p>
-        Reach out anytime for admission guidance, support, or partnership inquiries.  
-        We’re here to help you achieve your academic goals.
-      </p>
-
-      <div className="contact-info">
-        <div className="contact-item">
-          <span>📍</span>
-          <div>
-            <h4>Office</h4>
-            <p>Co-Desk (Beside Aarong Banani), Road 11, Banani, Dhaka 1213</p>
-          </div>
-        </div>
-
-        <div className="contact-item">
-          <span>📞</span>
-          <div>
-            <h4>Phone</h4>
-            <p>+880 1711 444 909</p>
-          </div>
-        </div>
-
-        <div className="contact-item">
-          <span>✉️</span>
-          <div>
-            <h4>Email</h4>
-            <p>info@fineanswer.com</p>
-          </div>
-        </div>
-
-        <div className="contact-item">
-          <span>🕒</span>
-          <div>
-            <h4>Work Hours</h4>
-            <p>Sun - Thu: 10 AM – 6 PM</p>
-          </div>
-        </div>
-      </div>
-
-      <div className="social-links">
-        <p>Follow us:</p>
-        <div>
-          <a href="#"><i className="fab fa-facebook"></i></a>
-          <a href="#"><i className="fab fa-linkedin"></i></a>
-          <a href="#"><i className="fab fa-instagram"></i></a>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
+<ContactSection />
+    
 
 
       {/* FOOTER */}
