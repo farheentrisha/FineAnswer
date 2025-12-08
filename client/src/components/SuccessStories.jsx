@@ -17,11 +17,10 @@ const originalCards = [
   { name: "Elena Basu", role: "HR Specialist", img: uni6 },
 ];
 
-// Duplicate cards to create infinite loop effect
 const cards = [...originalCards, ...originalCards, ...originalCards];
 
 export default function SuccessStories() {
-  const mid = originalCards.length; // start at the middle block
+  const mid = originalCards.length;
   const [active, setActive] = useState(mid);
 
   const autoSlideRef = useRef(null);
@@ -36,7 +35,7 @@ export default function SuccessStories() {
     return () => clearInterval(autoSlideRef.current);
   }, []);
 
-  // RESET to middle block to keep infinite loop seamless
+  // RESET LOOP
   useEffect(() => {
     if (active >= cards.length - mid) {
       setActive(mid);
@@ -61,41 +60,58 @@ export default function SuccessStories() {
     }
   };
 
+  // BUTTON HANDLERS
+  const prevSlide = () => setActive((prev) => prev - 1);
+  const nextSlide = () => setActive((prev) => prev + 1);
+
   return (
     <div className="success-wrapper">
       <h2 className="success-title">Success Stories</h2>
       <p className="success-sub">People who transformed their career with us</p>
 
-      <div
-        className="carousel"
-        onTouchStart={onTouchStart}
-        onTouchMove={onTouchMove}
-      >
-        {cards.map((c, i) => {
-          const offset = i - active;
-          const scale = 1 - Math.min(Math.abs(offset) * 0.15, 0.6);
-          const blur = Math.min(Math.abs(offset) * 2, 6);
-          const opacity = Math.abs(offset) > 4 ? 0 : 1;
+      <div className="carousel-container">
+        {/* LEFT BUTTON */}
+        <button className="nav2-btn left-btn" onClick={prevSlide}>
+          ❮
+        </button>
 
-          return (
-            <div
-              className="card-container"
-              key={i}
-              style={{
-                transform: `translateX(${offset * 220}px) scale(${scale})`,
-                filter: `blur(${blur}px)`,
-                opacity,
-                zIndex: 100 - Math.abs(offset),
-              }}
-            >
-              <div className="card">
-                <img src={c.img} alt="" />
-                <h3>{c.name}</h3>
-                <p>{c.role}</p>
+        {/* CAROUSEL */}
+        <div
+          className="carousel"
+          onTouchStart={onTouchStart}
+          onTouchMove={onTouchMove}
+        >
+          {cards.map((c, i) => {
+            const offset = i - active;
+            const scale = 1 - Math.min(Math.abs(offset) * 0.15, 0.6);
+            const blur = Math.min(Math.abs(offset) * 2, 6);
+            const opacity = Math.abs(offset) > 4 ? 0 : 1;
+
+            return (
+              <div
+                className="card-container"
+                key={i}
+                style={{
+                  transform: `translateX(${offset * 220}px) scale(${scale})`,
+                  filter: `blur(${blur}px)`,
+                  opacity,
+                  zIndex: 100 - Math.abs(offset),
+                }}
+              >
+                <div className="card">
+                  <img src={c.img} alt="" />
+                  <h3>{c.name}</h3>
+                  <p>{c.role}</p>
+                </div>
               </div>
-            </div>
-          );
-        })}
+            );
+          })}
+        </div>
+
+        {/* RIGHT BUTTON */}
+        <button className="nav2-btn right-btn" onClick={nextSlide}>
+          ❯
+        </button>
       </div>
     </div>
   );

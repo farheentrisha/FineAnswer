@@ -26,7 +26,7 @@
 
 .card-container {
   position: absolute;
-  left: 50%;
+  left: 35%;
   top: 0;
   transform-origin: center;
   transition: all 0.45s ease;
@@ -34,7 +34,7 @@
 
 .card {
   width: 270px;
-  height: 330px;
+  height: 360px;
   border-radius: 20px;
   background: white;
   padding: 15px;
@@ -58,4 +58,49 @@
 
 .card p {
   color: #777;
+}
+/* WRAPPER */
+/* WRAPPER */
+.carousel-container {
+  position: relative;
+  max-width: 950px;
+  margin: 0 auto;
+  height: 360px;            /* REQUIRED — now buttons have an area to appear */
+}
+
+/* BUTTONS */
+.nav2-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: white;
+  border: 2px solid rgba(0, 0, 0, 0.18);
+  color: #000;
+  font-size: 22px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: 0.25s ease;
+  z-index: 9999;            /* IMPORTANT — ensures visibility */
+}
+
+/* LEFT BUTTON */
+.left-btn {
+  left: -60px;              /* Move left outside card area */
+}
+
+/* RIGHT BUTTON */
+.right-btn {
+  right: -60px;             /* Move right outside card area */
+}
+
+.nav2-btn:hover {
+  border-color: rgba(0, 0, 0, 0.4);
+  background: rgba(0, 0, 0, 0.08);
+  transform: translateY(-50%) scale(1.1);
 }
