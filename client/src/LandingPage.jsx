@@ -2,6 +2,7 @@ import React, { useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import SuccessStories from "./components/SuccessStories";
 import ContactSection from "./components/ContactSection";
+import Services from "./components/Services";
 
 import "./LandingPage.css";
 import uni1 from "./images/uni1.jpg";
@@ -212,59 +213,7 @@ export default function LandingPage() {
 
 
 
-
-
-  <section className="services-modern-light">
-  <h2 className="services-title-light">Our Services</h2>
-
-  <div className="timeline-line-light"></div>
-
-  <div className="services-timeline-light">
-
-    {/* Service 1 */}
-    <div className="service-item-light left">
-      <div className="service-card-light">
-        <h3>🎓 Admission Support</h3>
-        <p>Personalized university selection and full application assistance.</p>
-      </div>
-    </div>
-
-    {/* Service 2 */}
-    <div className="service-item-light right">
-      <div className="service-card-light">
-        <h3>✈️ Visa Guidance</h3>
-        <p>Step-by-step visa process including document preparation.</p>
-      </div>
-    </div>
-
-    {/* Service 3 */}
-    <div className="service-item-light left">
-      <div className="service-card-light">
-        <h3>💰 Scholarship Assistance</h3>
-        <p>Find and apply for scholarships best suited for your profile.</p>
-      </div>
-    </div>
-
-    {/* Service 4 */}
-    <div className="service-item-light right">
-      <div className="service-card-light">
-        <h3>📚 IELTS Preparation</h3>
-        <p>Score higher with our skill-based IELTS coaching program.</p>
-      </div>
-    </div>
-
-    {/* Service 5 */}
-    <div className="service-item-light left">
-      <div className="service-card-light">
-        <h3>🧭 Career Counseling</h3>
-        <p>Choose the right academic path for long-term success.</p>
-      </div>
-    </div>
-
-  </div>
-</section>
-
-
+<Services />
 <SuccessStories />
 <ContactSection />
 
