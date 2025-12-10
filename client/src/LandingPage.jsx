@@ -4,7 +4,9 @@ import SuccessStories from "./components/SuccessStories";
 import ContactSection from "./components/ContactSection";
 import Services from "./components/Services";
 import CountrySlider from "./components/CountrySlider";
+import Navbar3 from "./components/navbar3";
 import CEOQuote from "./components/CEOQuote";
+import useFadeIn from "./hooks/useFadeIn";
 
 import "./LandingPage.css";
 import uni1 from "./images/uni1.jpg";
@@ -18,6 +20,12 @@ import {
 } from "react-icons/fa";
 
 export default function LandingPage() {
+  const [aboutRef, aboutVisible] = useFadeIn();
+  const [servicesRef, servicesVisible] = useFadeIn();
+  const [storiesRef, storiesVisible] = useFadeIn();
+  const [countryRef, countryVisible] = useFadeIn();
+  const [ceoRef, ceoVisible] = useFadeIn();
+  const [contactRef, contactVisible] = useFadeIn();
   const navigate = useNavigate();
   const images = [uni1, uni2, uni3];
   const [currentImage, setCurrentImage] = useState(0);
@@ -111,10 +119,11 @@ export default function LandingPage() {
   return (
     <div className="LandingPage">
       
+  <Navbar3 />
 
 
 {/* HERO SECTION */}
-<section className="hero-section-new">
+<section className="hero-section-new" >
 
   <div className="hero-background">
   {images.map((img, index) => (
@@ -229,12 +238,25 @@ export default function LandingPage() {
 
 
 
-<Services />
-<SuccessStories />
-<CountrySlider />
-<CEOQuote />
+<div ref={servicesRef} className={`fade-section ${servicesVisible ? "show" : ""}`}>
+  <Services />
+</div>
 
-<ContactSection />
+<div ref={storiesRef} className={`fade-section ${storiesVisible ? "show" : ""}`}>
+  <SuccessStories />
+</div>
+
+<div ref={countryRef} className={`fade-section ${countryVisible ? "show" : ""}`}>
+  <CountrySlider />
+</div>
+
+<div ref={ceoRef} className={`fade-section ${ceoVisible ? "show" : ""}`}>
+  <CEOQuote />
+</div>
+
+<div ref={contactRef} className={`fade-section ${contactVisible ? "show" : ""}`}>
+  <ContactSection />
+</div>
 
 
 

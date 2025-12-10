@@ -707,3 +707,15 @@ footer {
   border-radius: 12px;
   box-shadow: 0 4px 15px rgba(0,0,0,0.1);
 }
+
+.fade-section {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: all 0.8s ease-out;
+}
+
+.fade-section.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+

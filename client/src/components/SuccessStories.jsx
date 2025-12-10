@@ -65,8 +65,8 @@ export default function SuccessStories() {
   const nextSlide = () => setActive((prev) => prev + 1);
 
   return (
-    <div className="success-wrapper">
-      <h2 className="success-title">Success Stories</h2>
+    <div className="success-wrapper" >
+      <h2 className="success-title">We have stroies to inspire you</h2>
       <p className="success-sub">People who transformed their career with us</p>
 
       <div className="carousel-container">

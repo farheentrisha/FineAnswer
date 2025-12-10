@@ -5,7 +5,7 @@ import AustraliaPage from "./AustraliaPage";
 import UKPage from "./UKPage";
 import Login from "./LoginPage";
 import Register from "./RegisterPage";
-import Navbar3 from "./components/navbar3";
+
 import "./App.css";
 
 import { gsap } from "gsap";
@@ -30,7 +30,7 @@ export default function App() {
 
   return (
     <Router>
-      <Navbar3 />
+      
 
       <Routes>
         <Route path="/" element={<LandingPage />} />
