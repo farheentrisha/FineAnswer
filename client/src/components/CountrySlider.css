@@ -1,119 +1,87 @@
-.country-slider-wrapper {
-  margin: 60px auto;
+.countries-section {
+  padding: 60px 80px;
   text-align: center;
+  background: #f7f9fc; /* matches your soft background */
 }
 
-.cs-title {
-  font-size: 2.3rem;
-  font-weight: 700;
-}
-
-.cs-sub {
-  color: #666;
+.countries-section h2 {
+  font-size: 32px;
+  font-weight: 600;
   margin-bottom: 40px;
-  font-size: 1rem;
 }
 
-/* SLIDER */
-.slideC {
-  position: relative;
-  display: flex;
-  justify-content: center;
-  transform-style: preserve-3d;
-  transition: 0.4s ease;
+.countries-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 28px;
 }
 
-.slide {
-  width: 320px;
-  height: 360px;
-  border-radius: 22px;
-  padding: 22px;
-  color: white;
-  position: absolute;
-  transition: all 0.45s ease;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+.country-card {
+  background: white;
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: 0 15px 35px rgba(0,0,0,0.06);
+  transition: 0.35s ease;
+  cursor: pointer;
 }
 
-.slide:hover {
-  transform: translateY(-14px) scale(1.05);
-  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.35);
+.country-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 25px 55px rgba(0,0,0,0.12);
 }
 
-/* CONTENT */
-.sliderContent {
-  text-align: center;
-}
-
-.flag-img {
-  width: 70px;
-  height: 50px;
+.country-card img {
+  width: 100%;
+  height: 220px;
   object-fit: cover;
-  border-radius: 6px;
+}
+
+.card-content {
+  padding: 22px;
+}
+
+.card-content h3 {
+  font-size: 20px;
   margin-bottom: 10px;
 }
 
-.slide h3 {
-  margin: 10px 0;
-  font-size: 1.4rem;
+.card-content p {
+  font-size: 14px;
+  color: #666;
+  line-height: 1.6;
+  margin-bottom: 20px;
 }
 
-.slide p {
-  line-height: 1.5;
-}
-
-/* DETAILS BUTTON */
-.details-btn {
-  margin-top: 20px;
-  background: #fff;
-  color: #333;
+/* BUTTON */
+.card-content button {
   padding: 10px 22px;
-  border-radius: 30px;
-  border: none;
-  font-weight: 600;
-  opacity: 0;
-  transform: translateY(10px);
-  transition: 0.3s ease;
-}
-
-.slide:hover .details-btn {
-  opacity: 1;
-  transform: translateY(0px);
-}
-
-/* ARROWS */
-.btns {
-  margin-top: 40px;
-}
-
-.btn {
+  border: 2px solid #4f5fb3;
+  background: transparent;
+  color: #4f5fb3;
+  font-size: 14px;
+  border-radius: 8px;
   cursor: pointer;
-  margin: 0 18px;
-  font-size: 28px;
-  color: #333;
-  transition: 0.3s;
+  transition: 0.3s ease;
+  font-weight: 500;
 }
 
-.btn:hover {
-  transform: scale(1.3);
+.card-content button span {
+  font-size: 16px;
+  font-weight: bold;
 }
 
-/* MOBILE RESPONSIVE */
-@media (max-width: 768px) {
-  .slideC {
-    transform: scale(0.85);
-  }
-  .slide {
-    width: 260px;
-    height: 330px;
+.card-content button:hover {
+  background: #4f5fb3;
+  color: #fff;
+}
+@media (max-width: 900px) {
+  .countries-grid {
+    grid-template-columns: repeat(2, 1fr);
   }
 }
 
-@media (max-width: 480px) {
-  .slideC {
-    transform: scale(0.75);
-  }
-  .slide {
-    width: 220px;
-    height: 300px;
+@media (max-width: 600px) {
+  .countries-grid {
+    grid-template-columns: 1fr;
   }
 }

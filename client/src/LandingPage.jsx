@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import SuccessStories from "./components/SuccessStories";
 import ContactSection from "./components/ContactSection";
 import Services from "./components/Services";
+import CountrySlider from "./components/CountrySlider";
 
 import "./LandingPage.css";
 import uni1 from "./images/uni1.jpg";
@@ -91,6 +92,20 @@ export default function LandingPage() {
 
     return () => clearTimeout(timer);
   }, []);
+
+  useEffect(() => {
+  const handleScroll = () => {
+    const header = document.querySelector("header");
+    if (header) {
+      if (window.scrollY > 20) header.classList.add("scrolled");
+      else header.classList.remove("scrolled");
+    }
+  };
+
+  window.addEventListener("scroll", handleScroll);
+  return () => window.removeEventListener("scroll", handleScroll);
+}, []);
+
 
   return (
     <div className="LandingPage">
@@ -215,9 +230,12 @@ export default function LandingPage() {
 
 <Services />
 <SuccessStories />
+<CountrySlider />
+
 <ContactSection />
 
-    
+
+
 
 
 
@@ -253,13 +271,5 @@ export default function LandingPage() {
     </div>
   );
 
-  window.addEventListener("scroll", () => {
-  const header = document.querySelector("header");
-  if (window.scrollY > 20) {
-    header.classList.add("scrolled");
-  } else {
-    header.classList.remove("scrolled");
-  }
-});
 
 }
