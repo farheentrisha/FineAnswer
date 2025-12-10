@@ -1,11 +1,15 @@
 /* =========================================================
    GLOBAL STYLES
 ========================================================= */
+
+@import url('https://fonts.googleapis.com/css2?family=Mulish:wght@400;500;600;700&family=Volkhov:wght@700&display=swap');
+
+
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family: "Poppins", sans-serif;
+  font-family: "Mulish", sans-serif;
 }
 
 body {
@@ -100,7 +104,7 @@ body {
 }
 
 .hero-title span {
-  color: #a259ff;
+  color: #FFDA32;
 }
 
 .hero-subtitle {
@@ -161,7 +165,7 @@ body {
 
 /* SEARCH BUTTON */
 .search-btn-new {
-  background: #a259ff;
+  background:  #7bbcb0;
   color: #fff;
   padding: 14px 28px;
   border-radius: 12px;
@@ -173,7 +177,7 @@ body {
 }
 
 .search-btn-new:hover {
-  background: #8b3eff;
+  background: #7bbcb0;
   transform: translateY(-2px);
 }
 
@@ -200,14 +204,14 @@ body {
 
 /* Purple Apply Now */
 .cta-apply {
-  background: linear-gradient(90deg, #a259ff, #8b3eff);
+  background: linear-gradient(90deg, #8ed4c7, #7bbcb0);
   color: #fff;
   box-shadow: 0 4px 12px rgba(162, 89, 255, 0.35);
 }
 
 .cta-apply:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 16px rgba(162, 89, 255, 0.45);
+  box-shadow: 0 8px 16px #9adfd2;
 }
 
 /* Glass Book Consultation */
@@ -276,7 +280,7 @@ body {
 
 .about-buttons .btn-primary {
   padding: 12px 26px;
-  background: linear-gradient(90deg,#a259ff,#8b3eff);
+  background: linear-gradient(90deg,#8ed4c7,#7bbcb0);
   color: #fff;
   border: none;
   border-radius: 12px;
@@ -293,16 +297,16 @@ body {
 .about-buttons .btn-outline {
   padding: 12px 26px;
   border-radius: 12px;
-  border: 2px solid #8b3eff;
+  border: 2px solid #7bbcb0;
   background: transparent;
-  color: #8b3eff;
+  color: #7bbcb0;
   font-weight: 600;
   cursor: pointer;
   transition: 0.3s ease;
 }
 
 .about-buttons .btn-outline:hover {
-  background: #8b3eff;
+  background: #7bbcb0;
   color: #fff;
 }
 
@@ -323,7 +327,7 @@ body {
   text-align: center;
   box-shadow: 0 8px 20px rgba(0,0,0,0.08);
   transition: 0.3s ease;
-  border-left: 5px solid #a259ff;
+  border-left: 5px solid #7bbfb3;
   animation: fadeUp 0.7s ease forwards;
   opacity: 0;
 }
@@ -341,7 +345,7 @@ body {
 .stat-box h3 {
   font-size: 40px;
   font-weight: 700;
-  color: #8b3eff;
+  color: #13253F;
 }
 
 .stat-box p {

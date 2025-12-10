@@ -1,6 +1,12 @@
+@import url('https://fonts.googleapis.com/css2?family=Mulish:wght@400;500;600;700&display=swap');
+
+
+
+
 .minimal-navbar {
   width: 100%;
   padding: 20px 0;
+  
   position: absolute;
   top: 0;
   left: 0;
@@ -48,15 +54,34 @@
 .nav-menu a {
   margin-left: 28px;
   font-size: 16px;
-  font-weight: 500;
-  font-family: "Poppins", sans-serif;
+   font-weight: 600; /* Mulish Semibold */
+  font-family: "Mulish", sans-serif;
   text-decoration: none;
   color: white;
   transition: 0.3s ease;
+   position: relative;
+  display: inline-block; /* ← FIX: keeps underline under text only */
+  padding-bottom: 4px;
 }
 
+.nav-menu a::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  height: 2px;
+  width: 0%;
+  background: #ffd250;
+  transition: width 0.35s ease;
+}
+
+.nav-menu a:hover::after {
+  width: 100%;
+}
+
+/* Keep text color white (you said no color change) */
 .nav-menu a:hover {
-  color: #ffd250;
+  color: white;
 }
 
 /* Join Button */

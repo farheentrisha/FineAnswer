@@ -2,6 +2,7 @@ import React, { useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import SuccessStories from "./components/SuccessStories";
 import ContactSection from "./components/ContactSection";
+
 import "./LandingPage.css";
 import uni1 from "./images/uni1.jpg";
 import uni2 from "./images/uni2.jpg";
@@ -266,7 +267,11 @@ export default function LandingPage() {
 
 <SuccessStories />
 <ContactSection />
+
     
+
+
+
 
 
       {/* FOOTER */}

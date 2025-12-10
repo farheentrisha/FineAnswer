@@ -21,7 +21,7 @@
 }
 
 .contact-tag {
-  color: #e74c3c;
+  color: #13253F;
   font-size: 14px;
   font-weight: 600;
   letter-spacing: 1px;
@@ -65,9 +65,9 @@
 }
 
 .social-icons span:hover {
-  background: #e74c3c;
+  background: #FFDA32;
   color: white;
-  border-color: #e74c3c;
+  border-color: #FFDA32;
 }
 
 /* RIGHT FORM CARD */
@@ -111,7 +111,7 @@
 
 .contact-form input:focus,
 .contact-form textarea:focus {
-  border-color: #e74c3c;
+  border-color: #FFDA32;
   background: white;
   box-shadow: 0 0 0 3px rgba(231, 76, 60, 0.2);
 }
@@ -119,7 +119,7 @@
 /* SEND BUTTON */
 .send-btn {
   width: 100%;
-  background: #e74c3c;
+  background: #FFDA32;
   color: white;
   padding: 13px;
   border: none;
@@ -131,7 +131,7 @@
 }
 
 .send-btn:hover {
-  background: #cf3c2e;
+  background: #FFDA32;
 }
 
 /* RESPONSIVE */
