@@ -1,30 +1,36 @@
 import React from "react";
 import "./CountrySlider.css";
+import ukImg from "../images/uk.jpg";
+import irelandImg from "../images/ireland.jpg";
+import ausImg from "../images/aus.jpg";
+
+
+
 import { useNavigate } from "react-router-dom";
 
 const CountrySlider = () => {
   const navigate = useNavigate();
 
-  const countries = [
-    {
-      name: "United Kingdom",
-      desc: "We support leading organizations across the UK with consulting, training, and business solutions.",
-      img: "/images/uk.jpg", // replace with real image
-      link: "/country/uk",
-    },
-    {
-      name: "Ireland",
-      desc: "Providing strategic support and digital transformation solutions across Ireland.",
-      img: "/images/ireland.jpg",
-      link: "/country/ireland",
-    },
-    {
-      name: "Australia",
-      desc: "Helping Australian businesses grow with modern consulting and innovative services.",
-      img: "/images/australia.jpg",
-      link: "/country/australia",
-    },
-  ];
+const countries = [
+  {
+    name: "United Kingdom",
+    desc: "We support leading organizations across the UK with consulting, training, and business solutions.",
+    img: ukImg,
+    link: "/country/uk",
+  },
+  {
+    name: "Ireland",
+    desc: "Providing strategic support and digital transformation solutions across Ireland.",
+    img: irelandImg,
+    link: "/country/ireland",
+  },
+  {
+    name: "Australia",
+    desc: "Helping Australian businesses grow with modern consulting and innovative services.",
+    img: ausImg,
+    link: "/country/australia",
+  },
+];
 
   return (
     <section className="countries-section">
