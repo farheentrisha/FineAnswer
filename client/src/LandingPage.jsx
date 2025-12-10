@@ -4,6 +4,7 @@ import SuccessStories from "./components/SuccessStories";
 import ContactSection from "./components/ContactSection";
 import Services from "./components/Services";
 import CountrySlider from "./components/CountrySlider";
+import CEOQuote from "./components/CEOQuote";
 
 import "./LandingPage.css";
 import uni1 from "./images/uni1.jpg";
@@ -231,6 +232,7 @@ export default function LandingPage() {
 <Services />
 <SuccessStories />
 <CountrySlider />
+<CEOQuote />
 
 <ContactSection />
 
