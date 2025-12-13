@@ -5,7 +5,7 @@ import AustraliaPage from "./AustraliaPage";
 import UKPage from "./UKPage";
 import Login from "./LoginPage";
 import Register from "./RegisterPage";
-
+import Dashboard from "./pages/Dashboard";
 import "./App.css";
 
 import { gsap } from "gsap";
@@ -33,6 +33,8 @@ export default function App() {
       
 
       <Routes>
+        
+      <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/" element={<LandingPage />} />
         <Route path="/australia" element={<AustraliaPage />} />
         <Route path="/uk" element={<UKPage />} />

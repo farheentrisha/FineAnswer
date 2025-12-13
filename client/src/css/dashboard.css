@@ -1,0 +1,168 @@
+:root {
+  --primary: #4c5c9e;
+  --bg: #f0f5fa;
+  --accent: #fa9e00;
+  --white: #ffffff;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  font-family: "Inter", sans-serif;
+}
+
+.dashboard-layout {
+  display: flex;
+}
+
+/* Sidebar */
+.sidebar {
+  width: 240px;
+  background: var(--white);
+  padding: 20px;
+  height: 100vh;
+}
+
+.logo {
+  color: var(--primary);
+  margin-bottom: 30px;
+}
+
+.sidebar nav a {
+  display: block;
+  padding: 10px;
+  color: #444;
+  cursor: pointer;
+}
+
+.sidebar nav a.active {
+  background: var(--primary);
+  color: white;
+  border-radius: 8px;
+}
+
+.sidebar-cta {
+  margin-top: 40px;
+}
+
+.sidebar-cta button {
+  width: 100%;
+  padding: 10px;
+  background: var(--primary);
+  color: white;
+  border: none;
+  border-radius: 8px;
+}
+
+/* Main */
+.dashboard-main {
+  flex: 1;
+  padding: 30px;
+}
+
+.welcome-text {
+  margin-top: 10px;
+}
+
+.sub-text {
+  color: #666;
+}
+
+/* Topbar */
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.topbar input {
+  width: 60%;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+}
+
+.topbar-right {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.avatar {
+  background: var(--primary);
+  color: white;
+  padding: 8px;
+  border-radius: 50%;
+}
+
+/* Progress */
+.progress-card {
+  background: var(--white);
+  padding: 20px;
+  border-radius: 12px;
+  margin: 25px 0;
+}
+
+.progress-steps {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 15px;
+}
+
+.step {
+  text-align: center;
+}
+
+.circle {
+  width: 16px;
+  height: 16px;
+  background: #ccc;
+  border-radius: 50%;
+  margin: auto;
+}
+
+.step.done .circle {
+  background: #28c76f;
+}
+
+.step.active .circle {
+  background: var(--primary);
+}
+
+/* Grid */
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 20px;
+}
+
+/* Eligibility */
+.eligibility-card {
+  background: linear-gradient(135deg, var(--primary), #6f7fd9);
+  color: white;
+  padding: 25px;
+  border-radius: 16px;
+}
+
+.eligibility-card ul {
+  list-style: none;
+  padding: 0;
+}
+
+/* Documents */
+.document-card {
+  background: var(--white);
+  padding: 20px;
+  border-radius: 16px;
+}
+
+.doc-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 0;
+}
+
+.required {
+  color: var(--accent);
+  font-weight: 600;
+}
