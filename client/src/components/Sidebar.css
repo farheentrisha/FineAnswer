@@ -1,0 +1,35 @@
+.sidebar nav a {
+  display: block;
+  padding: 10px 14px;
+  border-radius: 8px;
+  color: #2d2d2d;
+  text-decoration: none;
+  margin-bottom: 6px;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+/* Hover effect */
+.sidebar nav a:hover {
+  background-color: #f0f5fa;
+  color: #4c5c9e;
+  transform: translateX(4px);
+}
+
+/* Active item */
+.sidebar nav a.active {
+  background-color: #4c5c9e;
+  color: #ffffff;
+  font-weight: 600;
+}
+
+/* Button hover */
+.sidebar-cta button {
+  transition: all 0.25s ease;
+}
+
+.sidebar-cta button:hover {
+  background-color: #fa9e00;
+  color: #ffffff;
+  transform: translateY(-2px);
+}

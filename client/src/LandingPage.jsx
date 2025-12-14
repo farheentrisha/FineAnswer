@@ -143,7 +143,7 @@ export default function LandingPage() {
   <div className="hero-content-wrapper">
 
     <h1 className="hero-title">
-      Discover Your <span>Next Adventure</span>
+      Guiding you to <span>World-Class Education</span>
     </h1>
 
     <p className="hero-subtitle">
