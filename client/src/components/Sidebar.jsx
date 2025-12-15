@@ -1,25 +1,52 @@
-import React from 'react';
-import './Sidebar.css';
+import React from "react";
+import {
+  FaHome,
+  FaFileAlt,
+  FaUniversity,
+  FaFolderOpen,
+  FaCalendarAlt,
+  FaVideo,
+  FaEnvelope,
+  FaUser,
+  FaSignOutAlt,
+} from "react-icons/fa";
+import "./Sidebar.css";
+
 export default function Sidebar() {
   return (
     <aside className="sidebar">
-      <h3 className="logo">StudyGlobal</h3>
+      {/* Logo */}
+      <div className="sidebar-logo">
+        <div className="logo-icon">✈️</div>
+        <div>
+          <h3>StudyGlobal</h3>
+        </div>
+      </div>
 
-      <nav>
-        <a className="active">Dashboard</a>
-        <a>My Applications</a>
-        <a>Universities</a>
-        <a>Documents</a>
-        <a>Deadlines</a>
-        <a>Sessions</a>
-        <a>Messages</a>
-        <a>Profile</a>
+      {/* Navigation */}
+      <nav className="sidebar-nav">
+        <a className="active"><FaHome /> Dashboard</a>
+        <a><FaFileAlt /> My Applications</a>
+        <a><FaUniversity /> Universities</a>
+        <a><FaFolderOpen /> Documents</a>
+        <a><FaCalendarAlt /> Deadlines</a>
+        <a><FaVideo /> Sessions</a>
+        <a><FaEnvelope /> Messages</a>
+        <a><FaUser /> Profile</a>
       </nav>
 
+      {/* CTA */}
       <div className="sidebar-cta">
-        <p>Need Guidance?</p>
+        <div className="cta-icon">🎖️</div>
+        <p className="cta-title">Need Guidance?</p>
+        <p className="cta-sub">Expert counselors available</p>
         <button>Book 1:1 Session</button>
       </div>
+
+      {/* Logout */}
+      <button className="logout-btn">
+        <FaSignOutAlt /> Logout
+      </button>
     </aside>
   );
 }

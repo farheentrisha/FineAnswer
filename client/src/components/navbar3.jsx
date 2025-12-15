@@ -10,7 +10,7 @@ export default function Navbar() {
       <div className="nav-inner">
 
         {/* Left Logo */}
-        <div className="nav-logo">FineAnswer</div>
+        <div className="nav-logo">Logo</div>
 
         {/* Right Menu */}
         <nav className="nav-menu">

@@ -1,35 +1,128 @@
-.sidebar nav a {
-  display: block;
-  padding: 10px 14px;
-  border-radius: 8px;
+.sidebar {
+  width: 260px;
+  height: 100vh;
+  background: #ffffff;
+  border-right: 1px solid #eef1f6;
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Logo */
+.sidebar-logo {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  margin-bottom: 30px;
+}
+
+.logo-icon {
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  background: #5b6bbf;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.sidebar-logo h3 {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.sidebar-logo span {
+  font-size: 12px;
+  color: #8a8fa3;
+}
+
+/* Navigation */
+.sidebar-nav {
+  flex: 1;
+}
+
+.sidebar-nav a {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 14px;
+  border-radius: 12px;
   color: #2d2d2d;
+  font-size: 14px;
   text-decoration: none;
   margin-bottom: 6px;
   cursor: pointer;
   transition: all 0.25s ease;
 }
 
-/* Hover effect */
-.sidebar nav a:hover {
-  background-color: #f0f5fa;
-  color: #4c5c9e;
-  transform: translateX(4px);
+.sidebar-nav a:hover {
+  background-color: #f1f4ff;
+  color: #5b6bbf;
 }
 
-/* Active item */
-.sidebar nav a.active {
-  background-color: #4c5c9e;
+.sidebar-nav a.active {
+  background-color: #5b6bbf;
   color: #ffffff;
   font-weight: 600;
 }
 
-/* Button hover */
+/* CTA Card */
+.sidebar-cta {
+  background: #f6f9ff;
+  border-radius: 14px;
+  padding: 16px;
+  text-align: center;
+  margin-bottom: 16px;
+}
+
+.cta-icon {
+  font-size: 22px;
+  margin-bottom: 6px;
+}
+
+.cta-title {
+  font-weight: 600;
+  margin: 4px 0;
+}
+
+.cta-sub {
+  font-size: 12px;
+  color: #6b7280;
+  margin-bottom: 10px;
+}
+
 .sidebar-cta button {
-  transition: all 0.25s ease;
+  width: 100%;
+  padding: 10px;
+  border-radius: 10px;
+  border: none;
+  background: #5b6bbf;
+  color: #fff;
+  font-weight: 500;
+  cursor: pointer;
+  transition: 0.25s;
 }
 
 .sidebar-cta button:hover {
-  background-color: #fa9e00;
-  color: #ffffff;
-  transform: translateY(-2px);
+  background: #4756a6;
+}
+
+/* Logout */
+.logout-btn {
+  background: transparent;
+  border: 1px solid #e5e7eb;
+  padding: 10px;
+  border-radius: 10px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  justify-content: center;
+  transition: 0.25s;
+}
+
+.logout-btn:hover {
+  background: #f3f4f6;
 }
