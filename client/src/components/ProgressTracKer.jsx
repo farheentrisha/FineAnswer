@@ -1,3 +1,6 @@
+import { FaCheck, FaClock, FaExclamation } from "react-icons/fa";
+import "./ProgressTracker.css";
+
 const steps = [
   "Eligibility",
   "Shortlisting",
@@ -7,18 +10,38 @@ const steps = [
   "Visa",
 ];
 
-export default function ProgressTracker() {
+export default function ProgressTracker({ currentStep = 2 }) {
   return (
-    <div className="progress-card">
-      <h4>Application Progress Tracker</h4>
+    <div className="tracker-wrapper">
+      <div className="tracker-header">
+        📈 Application Progress Tracker
+      </div>
 
-      <div className="progress-steps">
-        {steps.map((step, index) => (
-          <div key={index} className={`step ${index < 2 ? "done" : index === 2 ? "active" : ""}`}>
-            <div className="circle" />
-            <span>{step}</span>
-          </div>
-        ))}
+      <div className="tracker-body">
+        {steps.map((step, index) => {
+          const status =
+            index < currentStep
+              ? "done"
+              : index === currentStep
+              ? "active"
+              : "pending";
+
+          return (
+            <div key={index} className={`tracker-step ${status}`}>
+              <div className="circle">
+                {status === "done" && <FaCheck />}
+                {status === "active" && <FaClock />}
+                {status === "pending" && <FaExclamation />}
+              </div>
+
+              {index !== steps.length - 1 && (
+                <div className="connector" />
+              )}
+
+              <span>{step}</span>
+            </div>
+          );
+        })}
       </div>
     </div>
   );

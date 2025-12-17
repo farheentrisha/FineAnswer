@@ -46,8 +46,8 @@
 .sidebar-nav a {
   display: flex;
   align-items: center;
-  gap: 12px;
-  padding: 12px 14px;
+  gap: 15px;
+  padding: 16px 14px;
   border-radius: 12px;
   color: #2d2d2d;
   font-size: 14px;
@@ -66,6 +66,9 @@
   background-color: #5b6bbf;
   color: #ffffff;
   font-weight: 600;
+}
+.sidebar-nav a span {
+  margin-left: 10px;  /* 👈 extra spacing after icon */
 }
 
 /* CTA Card */
@@ -113,6 +116,7 @@
 .logout-btn {
   background: transparent;
   border: 1px solid #e5e7eb;
+  margin-top: auto;
   padding: 10px;
   border-radius: 10px;
   cursor: pointer;

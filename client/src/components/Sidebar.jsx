@@ -25,14 +25,13 @@ export default function Sidebar() {
 
       {/* Navigation */}
       <nav className="sidebar-nav">
-        <a className="active"><FaHome /> Dashboard</a>
-        <a><FaFileAlt /> My Applications</a>
-        <a><FaUniversity /> Universities</a>
-        <a><FaFolderOpen /> Documents</a>
-        <a><FaCalendarAlt /> Deadlines</a>
-        <a><FaVideo /> Sessions</a>
-        <a><FaEnvelope /> Messages</a>
-        <a><FaUser /> Profile</a>
+        <a className="active"><FaHome /> <span>Dashboard</span></a>
+        <a><FaFileAlt /> <span>My Applications</span></a>
+        <a><FaUniversity /> <span>Universities</span></a>
+        <a><FaFolderOpen /> <span>Documents</span></a>
+        <a><FaVideo /> <span>Sessions</span></a>
+        <a><FaEnvelope /> <span>Messages</span></a>
+        <a><FaUser /> <span>Profile</span></a>
       </nav>
 
       {/* CTA */}
