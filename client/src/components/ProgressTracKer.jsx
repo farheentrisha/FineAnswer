@@ -1,47 +1,49 @@
-import { FaCheck, FaClock, FaExclamation } from "react-icons/fa";
+import { useState } from "react";
+import { visaTimeline } from "./visaSteps";
 import "./ProgressTracker.css";
 
-const steps = [
-  "Eligibility",
-  "Shortlisting",
-  "Documents",
-  "Application",
-  "Offer",
-  "Visa",
-];
+export default function VisaTimeline() {
+  const [open, setOpen] = useState(null);
 
-export default function ProgressTracker({ currentStep = 2 }) {
   return (
-    <div className="tracker-wrapper">
-      <div className="tracker-header">
-        📈 Application Progress Tracker
-      </div>
+    <div className="visa-wrapper">
+      <h3 className="visa-header">Visa Process</h3>
 
-      <div className="tracker-body">
-        {steps.map((step, index) => {
-          const status =
-            index < currentStep
-              ? "done"
-              : index === currentStep
-              ? "active"
-              : "pending";
+      <div className="timeline">
+        {visaTimeline.map((step, index) => (
+          <div key={step.id} className={`timeline-item ${step.side}`}>
+            
+            {/* Card */}
+            <div className={`content ${step.final ? "final" : ""}`}>
+              <span className="date">{step.date}</span>
+              <h4>{step.title}</h4>
 
-          return (
-            <div key={index} className={`tracker-step ${status}`}>
-              <div className="circle">
-                {status === "done" && <FaCheck />}
-                {status === "active" && <FaClock />}
-                {status === "pending" && <FaExclamation />}
-              </div>
+              {/* Dropdown */}
+              {step.type === "dropdown" && (
+                <div className="dropdown">
+                  <button onClick={() => setOpen(open === index ? null : index)}>
+                    View University Offers ▾
+                  </button>
 
-              {index !== steps.length - 1 && (
-                <div className="connector" />
+                  {open === index && (
+                    <div className="dropdown-menu">
+                      {step.options.map((opt, i) => (
+                        <div key={i} className="dropdown-item">
+                          <strong>{opt.university}</strong>
+                          <p>{opt.status}</p>
+                          <span>{opt.date}</span>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
               )}
-
-              <span>{step}</span>
             </div>
-          );
-        })}
+
+            {/* Dot */}
+            <span className={`dot ${step.final ? "success" : ""}`} />
+          </div>
+        ))}
       </div>
     </div>
   );

@@ -13,17 +13,14 @@ export default function Dashboard() {
       <div className="dashboard-main">
         <Topbar />
 
-        <h2 className="welcome-text">
-          Welcome back, Sarah! 👋
-        </h2>
+        <h2 className="welcome-text">Welcome back, Sarah! 👋</h2>
         <p className="sub-text">
           Track your study abroad journey and manage your applications
         </p>
 
-        <ProgressTracker />
-
+        {/* 👇 SIDE BY SIDE */}
         <div className="dashboard-grid">
-          <EligibilityCard />
+          <ProgressTracker />
           <DocumentChecklist />
         </div>
       </div>

@@ -1,6 +1,6 @@
 import React from "react";
 import "./CEOQuote.css";
-import ceoImage from "../images/uk.jpg";
+import ceoImage from "../images/arif.jpg";
 
 export default function CEOQuote() {
   return (

@@ -14,14 +14,15 @@ body {
 .dashboard-layout {
   display: flex;
 }
-
-/* Sidebar */
-.sidebar {
-  width: 240px;
-  background: var(--white);
-  padding: 20px;
-  height: 100vh;
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: fr 1fr; /* timeline wider */
+  gap: 24px;
+  align-items: start;
+  margin-top: 28px;
 }
+
+
 
 .logo {
   color: var(--primary);

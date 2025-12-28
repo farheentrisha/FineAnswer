@@ -1,0 +1,127 @@
+.admin-layout {
+  display: flex;
+  height: 100vh;
+  background: #f6f8fc;
+  font-family: "Poppins", sans-serif;
+}
+
+.admin-sidebar {
+  width: 260px;
+  background: #5b6bbf;
+  color: #fff;
+  padding: 20px;
+}
+
+.logo {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 30px;
+}
+
+.menu-title {
+  margin: 20px 0 8px;
+  font-size: 12px;
+  opacity: 0.7;
+}
+
+.admin-sidebar a {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px;
+  border-radius: 8px;
+  margin-bottom: 6px;
+  cursor: pointer;
+}
+
+.admin-sidebar a.active,
+.admin-sidebar a:hover {
+  background: rgba(255,255,255,0.15);
+}
+
+.badge {
+  background: orange;
+  border-radius: 20px;
+  padding: 2px 8px;
+  font-size: 12px;
+}
+
+.admin-main {
+  flex: 1;
+}
+
+.admin-topbar {
+  background: #fff;
+  padding: 20px 30px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.admin-content {
+  padding: 30px;
+}
+
+.card {
+  background: #fff;
+  border-radius: 14px;
+  padding: 20px;
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+}
+
+.primary-btn {
+  background: #5b6bbf;
+  color: #fff;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 8px;
+}
+
+.filters {
+  display: flex;
+  gap: 12px;
+  margin: 20px 0;
+}
+
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.data-table th,
+.data-table td {
+  padding: 14px;
+  border-bottom: 1px solid #eee;
+}
+
+.student {
+  display: flex;
+  gap: 10px;
+}
+
+.avatar-circle {
+  background: #5b6bbf;
+  color: #fff;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+}
+
+.status.active {
+  background: #d1fae5;
+  color: #065f46;
+  padding: 6px 12px;
+  border-radius: 20px;
+}
+
+.status.inactive {
+  background: #fee2e2;
+  color: #991b1b;
+  padding: 6px 12px;
+  border-radius: 20px;
+}
