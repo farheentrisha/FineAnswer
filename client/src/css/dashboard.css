@@ -13,7 +13,13 @@ body {
 
 .dashboard-layout {
   display: flex;
+  height: 100vh;
+  overflow: hidden; /* stop body scroll */
 }
+
+/* Fixed sidebar */
+
+
 .dashboard-grid {
   display: grid;
   grid-template-columns: fr 1fr; /* timeline wider */
@@ -22,12 +28,25 @@ body {
   margin-top: 28px;
 }
 
+.sidebar {
+  width: 260px;
+  height: 100vh;
+  position: fixed;
+  left: 0;
+  top: 0;
+  background: #ffffff;
+  border-right: 1px solid #eef1f6;
+  z-index: 50;
+}
+
+
 
 
 .logo {
   color: var(--primary);
   margin-bottom: 30px;
 }
+
 
 .sidebar nav a {
   display: block;
@@ -56,9 +75,14 @@ body {
 }
 
 /* Main */
+/* Main content */
 .dashboard-main {
+  margin-left: 260px; /* same as sidebar width */
   flex: 1;
-  padding: 30px;
+  height: 100vh;
+  overflow-y: auto; /* ONLY this scrolls */
+  background: #f6f8fc;
+  padding: 20px 24px;
 }
 
 .welcome-text {
