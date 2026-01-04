@@ -1,5 +1,4 @@
 import ProgressTracker from "../components/ProgressTracker";
-import EligibilityCard from "../components/EligibilityCard";
 import DocumentChecklist from "./DocumentChecklist";
 
 export default function DashboardHome() {

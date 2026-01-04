@@ -31,7 +31,7 @@ export default function Sidebar() {
           <FaUniversity /> <span>Universities</span>
         </NavLink>
 
-        <NavLink to="/documents">
+        <NavLink to="/dashboard/documentchecklist">
           <FaFolderOpen /> <span>Documents</span>
         </NavLink>
 
