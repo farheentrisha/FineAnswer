@@ -5,8 +5,10 @@ import AustraliaPage from "./AustraliaPage";
 import UKPage from "./UKPage";
 import Login from "./LoginPage";
 import Register from "./RegisterPage";
-import Dashboard from "./pages/Dashboard";
+import DashboardLayout from "./pages/DashboardLayout";
+import DashboardHome from "./pages/DashboardHome";
 import Universities from "./pages/Universities";
+
 import "./App.css";
 
 import { gsap } from "gsap";
@@ -32,17 +34,19 @@ export default function App() {
   return (
     <Router>
       <Routes>
-        {/* Public pages */}
-        <Route path="/" element={<LandingPage />} />
-        <Route path="/australia" element={<AustraliaPage />} />
-        <Route path="/uk" element={<UKPage />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
+  {/* Public */}
+  <Route path="/" element={<LandingPage />} />
+  <Route path="/australia" element={<AustraliaPage />} />
+  <Route path="/uk" element={<UKPage />} />
+  <Route path="/login" element={<Login />} />
+  <Route path="/register" element={<Register />} />
 
-        {/* Dashboard pages */}
-        <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/dashboard/universities" element={<Universities />} />
-      </Routes>
+  {/* Dashboard (layout-based routing) */}
+  <Route path="/dashboard" element={<DashboardLayout />}>
+    <Route index element={<DashboardHome />} />
+    <Route path="universities" element={<Universities />} />
+  </Route>
+</Routes>
     </Router>
   );
 }

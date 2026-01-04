@@ -11,6 +11,7 @@ import {
 } from "react-icons/fa";
 import "./Sidebar.css";
 
+
 export default function Sidebar() {
   return (
     <aside className="sidebar">
@@ -22,7 +23,7 @@ export default function Sidebar() {
 
       {/* Navigation */}
       <nav className="sidebar-nav">
-        <NavLink to="/" end>
+        <NavLink to="/dashboard" end>
           <FaHome /> <span>Dashboard</span>
         </NavLink>
 
