@@ -35,7 +35,7 @@ export default function Sidebar() {
           <FaFolderOpen /> <span>Documents</span>
         </NavLink>
 
-        <NavLink to="/sessions">
+        <NavLink to="/dashboard/sessions">
           <FaVideo /> <span>Sessions</span>
         </NavLink>
 

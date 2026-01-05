@@ -9,6 +9,7 @@ import DashboardLayout from "./pages/DashboardLayout";
 import DashboardHome from "./pages/DashboardHome";
 import Universities from "./pages/Universities";
 import DocumentChecklist from "./pages/DocumentChecklist";
+import Sessions from "./pages/Sessions";
 
 import "./App.css";
 
@@ -47,6 +48,7 @@ export default function App() {
     <Route index element={<DashboardHome />} />
     <Route path="universities" element={<Universities />} />
      <Route path="documentchecklist" element={<DocumentChecklist />} />
+     <Route path="sessions" element={<Sessions />} />
   </Route>
 </Routes>
     </Router>

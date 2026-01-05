@@ -1,76 +1,88 @@
-.document-card {
-  background: #ffffff;
-  padding: 20px;
-  border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+.doc-wrapper {
+  width: 420px;
+  background: #fff;
+  border-radius: 14px;
+  padding: 18px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
 }
 
-.document-card h3 {
-  margin-bottom: 16px;
-  font-size: 18px;
+.doc-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
   font-weight: 600;
+  color: #2f3ea8;
+  margin-bottom: 12px;
 }
 
-.document-row {
+.doc-list {
+  border-top: 1px solid #eee;
+  padding-top: 12px;
+}
+
+.doc-item {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 12px 0;
-  border-bottom: 1px solid #eee;
+  padding: 12px 14px;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  margin-bottom: 10px;
 }
 
-.document-row:last-child {
-  border-bottom: none;
-}
-
-.doc-info {
+.doc-left {
   display: flex;
-  gap: 10px;
+  gap: 12px;
   align-items: center;
 }
 
 .doc-name {
+  font-size: 14px;
   font-weight: 500;
 }
 
-.required-tag {
-  font-size: 12px;
-  color: #d32f2f;
-  background: #fdecea;
-  padding: 2px 8px;
-  border-radius: 6px;
-}
-
-.doc-actions {
-  display: flex;
-  align-items: center;
-  gap: 12px;
+.required {
+  font-size: px;
+  color: #e53935;
 }
 
 .icon {
+  font-size: 12px;
+}
+
+.icon.done {
+  color: #2ecc71;
+}
+
+.icon.pending {
+  color: #b0b0b0;
+}
+
+.icon.progress {
+  color: #f39c12;
+}
+
+.upload-icon {
   font-size: 18px;
-}
-
-.icon.success {
-  color: #2e7d32;
-}
-
-.icon.warning {
-  color: #ed6c02;
-}
-
-.upload-btn {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  padding: 6px 12px;
-  border: 1px solid #ccc;
-  background: #f9f9f9;
-  border-radius: 8px;
+  color: #8b8b8b;
   cursor: pointer;
-  font-size: 13px;
 }
 
-.upload-btn:hover {
-  background: #eee;
+.upload-icon:hover {
+  color: #4f5bd5;
+}
+
+.upload-btn-main {
+  width: 100%;
+  margin-top: 14px;
+  padding: 12px;
+  border: none;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #4f5bd5, #6c7cff);
+  color: white;
+  font-size: 14px;
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  cursor: pointer;
 }
