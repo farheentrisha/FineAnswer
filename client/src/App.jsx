@@ -3,6 +3,8 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import LandingPage from "./LandingPage";
 import AustraliaPage from "./AustraliaPage";
 import UKPage from "./UKPage";
+import IrelandPage from "./IrelandPage";
+
 import Login from "./LoginPage";
 import Register from "./RegisterPage";
 import DashboardLayout from "./pages/DashboardLayout";
@@ -42,6 +44,7 @@ export default function App() {
   <Route path="/" element={<LandingPage />} />
   <Route path="/australia" element={<AustraliaPage />} />
   <Route path="/uk" element={<UKPage />} />
+  <Route path="/ireland" element={<IrelandPage />} />
   <Route path="/login" element={<Login />} />
   <Route path="/register" element={<Register />} />
 

@@ -1,4 +1,5 @@
 import "./contact.css";
+import { FaFacebookF, FaLinkedinIn, FaInstagram, FaYoutube } from "react-icons/fa";
 
 export default function ContactSection() {
   return (
@@ -17,42 +18,57 @@ export default function ContactSection() {
           </p>
 
           <div className="contact-info">
-            <p>📍 House 34, Road 10, Dhaka, Bangladesh</p>
-            <p>📞 +880 1521-650-398</p>
-            <p>📧 hello@studyabroad.com</p>
+            <p>📍 House 76/A, Road 11, Banani, Dhaka 1213, Bangladesh</p>
+            <p>📞 +880 1725-982743</p>
+            <p>📧 studyabroad@fineanswer.net</p>
           </div>
 
           <div className="social-icons">
-            <span>F</span>
-            <span>T</span>
-            <span>I</span>
-            <span>L</span>
-          </div>
+  <a href="https://www.facebook.com/FineanswerStudyAbroad" target="_blank">
+    <FaFacebookF />
+  </a>
+  <a href="https://www.linkedin.com/company/fineanswerstudyabroad/?originalSubdomain=bd" target="_blank">
+    <FaLinkedinIn />
+  </a>
+  <a href="https://www.instagram.com/fineanswer_study_abroad/" target="_blank">
+    <FaInstagram />
+  </a>
+  <a href="https://www.youtube.com/@FineAnswerStudyAbroad/videos" target="_blank">
+    <FaYoutube />
+  </a>
+</div>
+
         </div>
 
         {/* RIGHT FORM CARD */}
-        <div className="contact-card">
-          <h3 className="form-title">Write Us a Message</h3>
+<div className="contact-card">
+  <h3 className="form-title">Book a Free Consultation</h3>
 
-          <form className="contact-form">
-            <div className="form-group">
-              <label>Name</label>
-              <input type="text" placeholder="Your Name" />
-            </div>
+  <form className="contact-form">
+    <div className="form-group">
+      <label>Full Name</label>
+      <input type="text" placeholder="Your Full Name" />
+    </div>
 
-            <div className="form-group">
-              <label>Email</label>
-              <input type="email" placeholder="Your Email" />
-            </div>
+    <div className="form-group">
+      <label>Phone Number</label>
+      <input type="tel" placeholder="+880 1XXXXXXXXX" />
+    </div>
 
-            <div className="form-group">
-              <label>Message</label>
-              <textarea rows="4" placeholder="Your Question"></textarea>
-            </div>
+    <div className="form-group">
+      <label>Appointment Date</label>
+      <input type="date" />
+    </div>
 
-            <button className="send-btn">Send Message</button>
-          </form>
-        </div>
+    <div className="form-group">
+      <label>Your Message</label>
+      <textarea rows="4" placeholder="Write your questions or requirements"></textarea>
+    </div>
+
+    <button className="send-btn">Book Appointment</button>
+  </form>
+</div>
+
 
       </div>
     </section>

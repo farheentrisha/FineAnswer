@@ -74,6 +74,7 @@
   background: #4f5fb3;
   color: #fff;
 }
+
 @media (max-width: 900px) {
   .countries-grid {
     grid-template-columns: repeat(2, 1fr);

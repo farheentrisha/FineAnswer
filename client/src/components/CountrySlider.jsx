@@ -12,26 +12,25 @@ const CountrySlider = () => {
   const navigate = useNavigate();
 
 const countries = [
-  {
-    name: "United Kingdom",
-    desc: "We support leading organizations across the UK with consulting, training, and business solutions.",
-    img: ukImg,
-    link: "/country/uk",
-  },
-  {
-    name: "Ireland",
-    desc: "Providing strategic support and digital transformation solutions across Ireland.",
-    img: irelandImg,
-    link: "/country/ireland",
-  },
-  {
-    name: "Australia",
-    desc: "Helping Australian businesses grow with modern consulting and innovative services.",
-    img: ausImg,
-    link: "/country/australia",
-  },
-];
-
+    {
+      name: "United Kingdom",
+      desc: "Expert guidance for UK universities, applications, and student visa support.",
+      img: ukImg,
+      link: "/uk",
+    },
+    {
+      name: "Ireland",
+      desc: "Comprehensive counseling for Irish universities and study visa processing.",
+      img: irelandImg,
+      link: "/ireland", // ⚠️ only works if route exists
+    },
+    {
+      name: "Australia",
+      desc: "End-to-end support for studying in Australia including admissions and visas.",
+      img: ausImg,
+      link: "/australia",
+    },
+  ];
   return (
     <section className="countries-section">
       <h2>Countries We Are Operating In</h2>

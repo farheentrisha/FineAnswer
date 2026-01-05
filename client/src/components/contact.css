@@ -129,6 +129,24 @@
   margin-top: 5px;
   transition: 0.3s;
 }
+.contact-form select,
+.contact-form input,
+.contact-form textarea {
+  width: 100%;
+  padding: 12px 14px;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  font-family: inherit;
+}
+
+.contact-form select {
+  background-color: #fff;
+  cursor: pointer;
+}
+
+.send-btn {
+  margin-top: 10px;
+}
 
 .send-btn:hover {
   background: #FFDA32;

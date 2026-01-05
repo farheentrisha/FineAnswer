@@ -1,43 +1,43 @@
 import React from "react";
 import "./Services.css";
 import {
-  FaUsers,
-  FaChartBar,
-  FaUserTie,
-  FaBullhorn,
-  FaCertificate,
+  FaGlobe,
+  FaUniversity,
+  FaFileAlt,
+  FaPassport,
+  FaPlaneDeparture,
 } from "react-icons/fa";
 
 const Services = () => {
   const cards = [
     {
-      icon: <FaUsers />,
-      title: "Strategy & Innovation",
-      text: "Find another value to dependent in the workplace with our HR talent facility programs.",
+      icon: <FaGlobe />,
+      title: "Study Abroad Counseling",
+      text: "Personalized guidance to help students choose the right country, university, and course based on their academic background and career goals.",
       color: "#6C63FF",
     },
     {
-      icon: <FaChartBar />,
-      title: "Advanced Analytics",
-      text: "Get real-time data & actionable insights to strengthen business outcomes.",
+      icon: <FaUniversity />,
+      title: "University & Course Selection",
+      text: "Expert support in shortlisting globally recognized universities and programs across the UK, Ireland, Australia, and other destinations.",
       color: "#4CC9F0",
     },
     {
-      icon: <FaUserTie />,
-      title: "HR & Talent",
-      text: "We help you improve recruitment strategies & develop top-tier professionals.",
+      icon: <FaFileAlt />,
+      title: "Application & Documentation",
+      text: "End-to-end assistance with applications, SOPs, LORs, transcripts, and all required academic documentation.",
       color: "#FF6B6B",
     },
     {
-      icon: <FaBullhorn />,
-      title: "Sales & Marketing",
-      text: "Find smart ways to expand customer reach with business-first strategies.",
+      icon: <FaPassport />,
+      title: "Visa Guidance & Interview Prep",
+      text: "Accurate visa processing support with mock interviews and document verification to maximize approval success.",
       color: "#FFD93D",
     },
     {
-      icon: <FaCertificate />,
-      title: "Training & Certification",
-      text: "Upskill your employees with real industry-relevant training modules.",
+      icon: <FaPlaneDeparture />,
+      title: "Pre-Departure & Settlement Support",
+      text: "Complete pre-departure briefing including accommodation, travel, banking, and post-arrival assistance.",
       color: "#90BE6D",
     },
   ];

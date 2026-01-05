@@ -16,10 +16,7 @@ export default function CEOQuote() {
         <div className="quote-icon-left">“</div>
 
         <p className="ceo-quote-text">
-          “We were looking for a platform that was essentially a CRM for
-          influencer management that also allowed us to aggregate our campaign
-          analytics and access the insights we need to properly evaluate
-          influencers.”
+          Don’t just dream of studying abroad—make it happen. With our guidance, expert advice, and personalized strategies, we open doors to universities and opportunities around the world.
         </p>
 
         <div className="quote-icon-right">”</div>
