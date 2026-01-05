@@ -131,11 +131,10 @@ export default function RegisterPage() {
             <div className="testimonial-bg"></div>
             <div className="testimonial-content">
               <p>
-                “We use FineAnswer to kickstart every new project and it saves
-                us weeks of work. Can’t recommend it enough!”
+                “Studying abroad can be overwhelming—but you don’t have to do it alone. We provide step-by-step guidance, from choosing the right country to securing admission, so your journey is stress-free and successful”
               </p>
-              <h4>Amélie Laurent</h4>
-              <span>Founder, Skyplus</span>
+              <h4>Arif Bhuiyan</h4>
+              <span>Founder and CEO</span>
               <div className="stars">★★★★★</div>
             </div>
           </div>

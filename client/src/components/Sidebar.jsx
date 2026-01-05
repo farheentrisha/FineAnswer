@@ -18,7 +18,7 @@ export default function Sidebar() {
       {/* Logo */}
       <div className="sidebar-logo">
         <div className="logo-icon">✈️</div>
-        <h3>StudyGlobal</h3>
+        <h3>FineAnswer</h3>
       </div>
 
       {/* Navigation */}

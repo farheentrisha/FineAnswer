@@ -7,7 +7,7 @@ export default function VisaTimeline() {
 
   return (
     <div className="visa-wrapper">
-      <h3 className="visa-header">Visa Process</h3>
+      <h3 className="visa-header">Study Abroad Progress trackerd</h3>
 
       <div className="timeline">
         {visaTimeline.map((step, index) => (
