@@ -10,6 +10,7 @@ import DashboardHome from "./pages/DashboardHome";
 import Universities from "./pages/Universities";
 import DocumentChecklist from "./pages/DocumentChecklist";
 import Sessions from "./pages/Sessions";
+import Profile from "./pages/Profile";
 
 import "./App.css";
 
@@ -49,6 +50,7 @@ export default function App() {
     <Route path="universities" element={<Universities />} />
      <Route path="documentchecklist" element={<DocumentChecklist />} />
      <Route path="sessions" element={<Sessions />} />
+    <Route path="profile" element={<Profile />} />
   </Route>
 </Routes>
     </Router>

@@ -43,7 +43,7 @@ export default function Sidebar() {
           <FaEnvelope /> <span>Messages</span>
         </NavLink>
 
-        <NavLink to="/profile">
+        <NavLink to="/dashboard/profile">
           <FaUser /> <span>Profile</span>
         </NavLink>
       </nav>
