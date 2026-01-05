@@ -11,6 +11,7 @@ import Universities from "./pages/Universities";
 import DocumentChecklist from "./pages/DocumentChecklist";
 import Sessions from "./pages/Sessions";
 import Profile from "./pages/Profile";
+import Messages from "./pages/Messages";
 
 import "./App.css";
 
@@ -51,6 +52,7 @@ export default function App() {
      <Route path="documentchecklist" element={<DocumentChecklist />} />
      <Route path="sessions" element={<Sessions />} />
     <Route path="profile" element={<Profile />} />
+    <Route path="messages" element={<Messages />} />
   </Route>
 </Routes>
     </Router>

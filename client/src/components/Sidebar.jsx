@@ -39,7 +39,7 @@ export default function Sidebar() {
           <FaVideo /> <span>Sessions</span>
         </NavLink>
 
-        <NavLink to="/messages">
+        <NavLink to="/dashboard/messages">
           <FaEnvelope /> <span>Messages</span>
         </NavLink>
 
