@@ -79,6 +79,7 @@ export default function LoginPage() {
         <div className="login-right">
           <div className="login-card animate-slide-up">
             <h2>User Login</h2>
+            <h3>Cheking that the login page is working from my branch (Git chck)</h3>
             <p className="login-subtext">Access your personalized study dashboard</p>
             <form onSubmit={handleSubmit} autoComplete="off">
               <div className="input-group">

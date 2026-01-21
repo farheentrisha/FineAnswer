@@ -1,4 +1,4 @@
-import ProgressTracker from "../components/ProgressTracker";
+import ProgressTracker from "../components/ProgressTracker.jsx";
 import DocumentChecklist from "./DocumentChecklist";
 
 export default function DashboardHome() {

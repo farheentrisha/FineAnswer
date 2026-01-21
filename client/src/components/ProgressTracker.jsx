@@ -1,8 +1,8 @@
 import { useState } from "react";
-import { visaTimeline } from "./visaSteps";
 import "./ProgressTracker.css";
+import { visaTimeline } from "./visaSteps";
 
-export default function VisaTimeline() {
+export default function ProgressTracker() {
   const [open, setOpen] = useState(null);
 
   return (

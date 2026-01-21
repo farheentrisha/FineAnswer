@@ -5,7 +5,7 @@ export default function Sidebar() {
     <aside className="admin-sidebar">
       <div className="logo">
         <span>🛡️</span>
-        <div>
+      <div>
           <h3>Admin Panel</h3>
           <p>StudyGlobal</p>
         </div>
