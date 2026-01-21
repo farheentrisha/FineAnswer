@@ -5,7 +5,7 @@ import {
   FaCloudUploadAlt,
   FaFileAlt,
 } from "react-icons/fa";
-import "../css/DocumentChecklist.css";
+import "../css/documentChecklist.css";
 
 const documents = [
   { name: "Statement of Purpose", required: true, status: "done" },
