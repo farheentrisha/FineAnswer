@@ -40,9 +40,59 @@ const ContextProvider = ({ children }) => {
 
 
   // Logout Function
-  const logOut = () => {
-    setLoading(true);
-    return signOut(auth);
+  const logOut = async () => {
+    try {
+      setLoading(true);
+      // Sign out from Firebase
+      await signOut(auth);
+      // Clear localStorage
+      localStorage.removeItem("token");
+      localStorage.removeItem("user");
+      localStorage.removeItem("Access-Token");
+      setUser(null);
+      setLoading(false);
+    } catch (error) {
+      console.error("Logout error:", error);
+      setLoading(false);
+    }
+  };
+
+  // Get Current User from Backend
+  const getCurrentUser = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      if (!token) {
+        setUser(null);
+        setLoading(false);
+        return null;
+      }
+
+      const response = await fetch("http://localhost:5000/api/auth/me", {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      const result = await response.json();
+
+      if (!response.ok) {
+        // Token invalid, clear it
+        localStorage.removeItem("token");
+        localStorage.removeItem("user");
+        setUser(null);
+        setLoading(false);
+        return null;
+      }
+
+      const { data } = result;
+      setUser(data);
+      localStorage.setItem("user", JSON.stringify(data));
+      setLoading(false);
+      return data;
+    } catch (error) {
+      console.error("Get current user error:", error);
+      setUser(null);
+      setLoading(false);
+      return null;
+    }
   };
 
   //   Update Profile
@@ -53,31 +103,32 @@ const ContextProvider = ({ children }) => {
     });
   };
 
-  // State Management
+  // State Management - Get current user from backend on mount
   useEffect(() => {
-    onAuthStateChanged(auth, (currentUser) => {
-      console.log("Current User==>", currentUser);
-      if (currentUser) {
-        // get Access token
-        // TODO: Uncomment when useAxiosPublic hook is created
-        // const userData = {
-        //   email: currentUser.email,
-        // };
-        // axiosPublic.post("/jwt", userData).then((res) => {
-        //   if (res.data.token) {
-        //     localStorage.setItem("Access-Token", res.data.token);
-        //     setUser(currentUser);
-        //     setLoading(false);
-        //   }
-        // });
-        setUser(currentUser);
-        setLoading(false);
+    const fetchUser = async () => {
+      const token = localStorage.getItem("token");
+      if (token) {
+        // If token exists, get user from backend
+        await getCurrentUser();
       } else {
-        localStorage.removeItem("Access-Token");
-        setUser(null);
         setLoading(false);
       }
+    };
+
+    fetchUser();
+
+    // Also listen to Firebase auth state changes (for Google login)
+    const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
+      if (currentUser) {
+        // If Firebase user exists but no backend token, try to get user from backend
+        const token = localStorage.getItem("token");
+        if (token) {
+          await getCurrentUser();
+        }
+      }
     });
+
+    return () => unsubscribe();
   }, []);
 
   const authInfo = {
@@ -88,6 +139,7 @@ const ContextProvider = ({ children }) => {
     loading,
     googleSignIn,
     updateUserProfile,
+    getCurrentUser,
     setLoading,
   };
   return (

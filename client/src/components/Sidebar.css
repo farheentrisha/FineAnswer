@@ -117,7 +117,7 @@
   background: transparent;
   border: 1px solid #e5e7eb;
   margin-top: auto;
-  padding: 10px;
+  padding: 12px 16px;
   border-radius: 10px;
   cursor: pointer;
   display: flex;
@@ -125,8 +125,18 @@
   gap: 10px;
   justify-content: center;
   transition: 0.25s;
+  color: #2d2d2d;
+  font-size: 14px;
+  font-weight: 500;
+  width: 100%;
 }
 
 .logout-btn:hover {
-  background: #f3f4f6;
+  background: #fee2e2;
+  border-color: #ef4444;
+  color: #dc2626;
+}
+
+.logout-btn svg {
+  font-size: 16px;
 }

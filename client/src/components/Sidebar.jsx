@@ -1,4 +1,5 @@
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
+import { useContext } from "react";
 import {
   FaHome,
   FaFileAlt,
@@ -9,16 +10,24 @@ import {
   FaUser,
   FaSignOutAlt,
 } from "react-icons/fa";
+import { AuthContext } from "../pages/Provider/ContextProvider";
 import "./Sidebar.css";
 
 
 export default function Sidebar() {
+  const { logOut } = useContext(AuthContext);
+  const navigate = useNavigate();
+
+  const handleLogout = async () => {
+    await logOut();
+    navigate("/login");
+  };
   return (
     <aside className="sidebar">
       {/* Logo */}
       <div className="sidebar-logo">
         <div className="logo-icon">✈️</div>
-        <h3>FineAnswer</h3>
+        <h3> <a href="/"> FineAnswer </a></h3>
       </div>
 
       {/* Navigation */}
@@ -49,7 +58,7 @@ export default function Sidebar() {
       </nav>
 
       {/* Logout */}
-      <button className="logout-btn">
+      <button className="logout-btn" onClick={handleLogout}>
         <FaSignOutAlt /> Logout
       </button>
     </aside>
