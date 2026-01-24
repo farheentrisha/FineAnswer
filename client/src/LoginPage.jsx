@@ -1,4 +1,3 @@
-import axios from "axios";
 import React, { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom"; // for redirect
 import "./LoginPage.css";
@@ -33,28 +32,39 @@ export default function LoginPage() {
   };
 
   
-  // Handle form submission
+  // Handle form submission (Email/Password Login)
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Logging in:", formData);
+    setMessage(null);
 
     try {
-      const res = await axios.post("http://localhost:5000/api/auth/login", formData);
-      console.log("Login successful:", res.data);
+      const response = await fetch("http://localhost:5000/api/auth/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: formData.email, password: formData.password }),
+      });
+
+      const result = await response.json();
+
+      if (!response.ok) {
+        throw new Error(result.message || "Login failed");
+      }
+
+      const { token, data } = result;
+      
+      // Store token in localStorage
+      localStorage.setItem("token", token);
+      localStorage.setItem("user", JSON.stringify(data));
 
       setMessage({ type: "success", text: "✅ Login successful!" });
 
-      // Save JWT token to localStorage
-      localStorage.setItem("token", res.data.token);
-      localStorage.setItem("user", JSON.stringify(res.data));
-
-      // Redirect to dashboard or landing page after 1s
+      // Redirect to dashboard after 1s
       setTimeout(() => navigate("/dashboard"), 1000);
     } catch (error) {
-      console.log("Login error:", error.response);
+      console.error("Login error:", error);
       setMessage({
         type: "error",
-        text: error.response?.data?.message || "Login failed",
+        text: error.message || "Login failed. Please check your credentials.",
       });
     }
   };
@@ -68,69 +78,34 @@ export default function LoginPage() {
       const result = await googleSignIn();
       console.log("Google Firebase auth successful:", result.user);
 
-      const userData = {
-        email: result.user.email,
-        name: result.user.displayName || result.user.email.split("@")[0],
-        phone: null, // Google login doesn't provide phone, can be updated later
-        password: null, // Google users don't use password
-        authProvider: "google", // Flag to indicate this is a Google OAuth user
-      };
+      // Step 2: Send to backend /api/auth/google endpoint
+      const response = await fetch("http://localhost:5000/api/auth/google", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          email: result.user.email,
+          googleId: result.user.uid,
+          name: result.user.displayName || result.user.email.split("@")[0],
+          picture: result.user.photoURL,
+        }),
+      });
 
-      // Step 2: Create or verify user in backend database
-      try {
-        const backendRes = await axios.post("http://localhost:5000/api/users", userData);
-        console.log("User created/verified in database:", backendRes.data);
+      const apiResult = await response.json();
 
-        // Save user info and token to localStorage
-        if (backendRes.data.token) {
-          localStorage.setItem("token", backendRes.data.token);
-        }
-        localStorage.setItem("user", JSON.stringify({
-          ...backendRes.data,
-          photo: result.user.photoURL,
-        }));
-
-        setMessage({ type: "success", text: "✅ Google login successful!" });
-        
-        // Redirect to dashboard after 1s
-        setTimeout(() => navigate("/dashboard"), 1000);
-      } catch (backendError) {
-        // If user already exists (409 Conflict or 400 Bad Request), that's okay
-        // The user is already in the database, proceed with login
-        if (backendError.response?.status === 409 || 
-            backendError.response?.status === 400 ||
-            backendError.response?.data?.message?.toLowerCase().includes("already exists") ||
-            backendError.response?.data?.message?.toLowerCase().includes("user exists")) {
-          
-          console.log("User already exists in database, proceeding with login...");
-          
-          // Save Firebase user info and proceed
-          localStorage.setItem("user", JSON.stringify({
-            email: result.user.email,
-            name: result.user.displayName || result.user.email.split("@")[0],
-            photo: result.user.photoURL,
-          }));
-
-          setMessage({ type: "success", text: "✅ Google login successful!" });
-          setTimeout(() => navigate("/dashboard"), 1000);
-        } else {
-          // For other errors, show the error but still allow Firebase login
-          console.error("Backend error:", backendError.response?.data || backendError.message);
-          
-          // Still save Firebase user info so they can use the app
-          localStorage.setItem("user", JSON.stringify({
-            email: result.user.email,
-            name: result.user.displayName || result.user.email.split("@")[0],
-            photo: result.user.photoURL,
-          }));
-
-          setMessage({ 
-            type: "success", 
-            text: "✅ Google login successful! (Note: Some features may be limited)" 
-          });
-          setTimeout(() => navigate("/dashboard"), 1000);
-        }
+      if (!response.ok) {
+        throw new Error(apiResult.message || "Google login failed");
       }
+
+      const { token, data } = apiResult;
+
+      // Store token in localStorage
+      localStorage.setItem("token", token);
+      localStorage.setItem("user", JSON.stringify(data));
+
+      setMessage({ type: "success", text: "✅ Google login successful!" });
+
+      // Redirect to dashboard after 1s
+      setTimeout(() => navigate("/dashboard"), 1000);
     } catch (error) {
       console.error("Google login error:", error);
       

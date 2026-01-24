@@ -1,8 +1,9 @@
-import axios from "axios";
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import "./RegisterPage.css";
 
 export default function RegisterPage() { 
+  const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
     name: "",
@@ -15,32 +16,74 @@ export default function RegisterPage() {
 
   // Update form state on input change
   const handleChange = (e) => {
-    
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
   // Submit form data to backend
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Submitting form data:", formData);
+    setMessage(null);
 
     try {
-      const res = await axios.post("http://localhost:5000/api/users", formData);
-      console.log("User registered:", res.data);
+      const response = await fetch("http://localhost:5000/api/users", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      });
 
-      setMessage({ type: "success", text: "✅ Registration successful! Redirecting to login..." });
+      const result = await response.json();
 
-      // ✅ Redirect to login after 1.5 seconds
-      // setTimeout(() => navigate("/login"), 1500);  
+      if (!response.ok) {
+        // Check if user already exists
+        if (response.status === 409 || response.status === 400) {
+          const errorMessage = result.message || result.error || "User already exists";
+          
+          // Check if error message indicates duplicate user
+          if (
+            errorMessage.toLowerCase().includes("already exists") ||
+            errorMessage.toLowerCase().includes("user exists") ||
+            errorMessage.toLowerCase().includes("email already") ||
+            errorMessage.toLowerCase().includes("duplicate")
+          ) {
+            setMessage({
+              type: "error",
+              text: "❌ This email is already registered. Please log in instead.",
+            });
+            return;
+          }
+        }
+        
+        throw new Error(result.message || result.error || "Registration failed");
+      }
 
-      // Optional: reset form
+      // Registration successful
+      console.log("User registered:", result);
+
+      // If backend returns token and data (like login), store them
+      if (result.token && result.data) {
+        localStorage.setItem("token", result.token);
+        localStorage.setItem("user", JSON.stringify(result.data));
+      } else if (result.data) {
+        // If only data is returned, store it
+        localStorage.setItem("user", JSON.stringify(result.data));
+      }
+
+      setMessage({ 
+        type: "success", 
+        text: "✅ Registration successful! Redirecting to dashboard..." 
+      });
+
+      // Reset form
       setFormData({ name: "", email: "", phone: "", password: "" });
 
+      // Redirect to dashboard after 1.5 seconds
+      setTimeout(() => navigate("/dashboard"), 1500);
+
     } catch (error) {
-      console.log("Error response:", error.response);
+      console.error("Registration error:", error);
       setMessage({
         type: "error",
-        text: error.response?.data?.message || "Registration failed",
+        text: error.message || "Registration failed. Please try again.",
       });
     }
   };

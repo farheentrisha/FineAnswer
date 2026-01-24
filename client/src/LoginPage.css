@@ -100,6 +100,7 @@ html, body, #root {
   display: flex;
   flex-direction: column;
   align-items: center;
+  margin-bottom: 0;
 }
 
 
@@ -312,43 +313,73 @@ html, body, #root {
 /* Divider */
 .divider {
   text-align: center;
-  margin: 15px 0;
+  margin: 20px 0 15px 0;
   color: #64748b;
   font-size: 0.9rem;
   width: 100%;
   max-width: 300px;
+  position: relative;
+}
+
+.divider::before,
+.divider::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  width: 40%;
+  height: 1px;
+  background: #e5e7eb;
+}
+
+.divider::before {
+  left: 0;
+}
+
+.divider::after {
+  right: 0;
 }
 
 /* Google Button */
 .google-btn {
   width: 100%;
   max-width: 300px;
+  margin: 0 auto;
   margin-top: 10px;
-  padding: 12px;
-  border: 1px solid #cbd5e1;
+  padding: 14px 16px;
+  border: 2px solid #cbd5e1;
   border-radius: 10px;
-  background: white;
+  background: #ffffff;
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 10px;
   font-weight: 500;
-  color: #1e293b;
+  color: #1e293b !important;
   cursor: pointer;
   transition: all 0.3s ease;
   font-size: 0.95rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  position: relative;
+  z-index: 1;
 }
 
 .google-btn img {
   width: 20px;
   height: 20px;
+  display: block;
 }
 
 .google-btn:hover {
   background: #f0f9ff;
   border-color: #38bdf8;
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(56, 189, 248, 0.2);
+  box-shadow: 0 4px 12px rgba(56, 189, 248, 0.3);
+  color: #0369a1;
+}
+
+.google-btn:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 4px rgba(56, 189, 248, 0.2);
 }
 
 .success-msg {
