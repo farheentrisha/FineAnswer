@@ -30,6 +30,7 @@ export default function LoginPage() {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
+  
   // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -73,7 +74,7 @@ export default function LoginPage() {
               Begin your journey with expert guidance and personalized support.
             </p>
           </div>
-        </div>
+        </div>  
 
         {/* Right Side */}
         <div className="login-right">

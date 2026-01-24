@@ -200,6 +200,7 @@ html, body, #root {
   border: 1px solid transparent;
   border-radius: 10px;
   background: rgba(240, 249, 255, 0.85);
+  color: #1e293b;
   transition: all 0.3s ease;
   font-size: 0.95rem;
   outline: none;
@@ -209,6 +210,7 @@ html, body, #root {
   background: white;
   border-color: #38bdf8;
   box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.4);
+  color: #1e293b;
 }
 
 /* Options */
@@ -223,6 +225,12 @@ html, body, #root {
 .input-group input:focus {
   border-color: #38bdf8;
   box-shadow: 0 0 0 2px rgba(56, 189, 248, 0.3);
+  color: #1e293b;
+}
+
+.input-group input::placeholder {
+  color: #94a3b8;
+  opacity: 0.8;
 }
 
 /* Options (Remember/Forgot) */
