@@ -45,9 +45,8 @@ const ContextProvider = ({ children }) => {
       setLoading(true);
       // Sign out from Firebase
       await signOut(auth);
-      // Clear localStorage
+      // Clear token from localStorage
       localStorage.removeItem("token");
-      localStorage.removeItem("user");
       localStorage.removeItem("Access-Token");
       setUser(null);
       setLoading(false);
@@ -71,12 +70,23 @@ const ContextProvider = ({ children }) => {
         headers: { Authorization: `Bearer ${token}` },
       });
 
+      // Check if response is JSON
+      const contentType = response.headers.get("content-type");
+      if (!contentType || !contentType.includes("application/json")) {
+        const text = await response.text();
+        console.error("Non-JSON response from /api/auth/me:", text);
+        // If backend returns HTML, clear token and return null
+        localStorage.removeItem("token");
+        setUser(null);
+        setLoading(false);
+        return null;
+      }
+
       const result = await response.json();
 
       if (!response.ok) {
         // Token invalid, clear it
         localStorage.removeItem("token");
-        localStorage.removeItem("user");
         setUser(null);
         setLoading(false);
         return null;
@@ -84,11 +94,15 @@ const ContextProvider = ({ children }) => {
 
       const { data } = result;
       setUser(data);
-      localStorage.setItem("user", JSON.stringify(data));
+      // Don't store user data in localStorage - always fetch from backend
       setLoading(false);
       return data;
     } catch (error) {
       console.error("Get current user error:", error);
+      // If it's a JSON parse error, clear token
+      if (error instanceof SyntaxError) {
+        localStorage.removeItem("token");
+      }
       setUser(null);
       setLoading(false);
       return null;

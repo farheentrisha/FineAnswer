@@ -10,22 +10,12 @@ export default function DashboardHome() {
   const [userData, setUserData] = useState(null);
 
   useEffect(() => {
-    // Get user from localStorage first (for quick display)
-    const storedUser = localStorage.getItem("user");
-    if (storedUser) {
-      try {
-        setUserData(JSON.parse(storedUser));
-      } catch (error) {
-        console.error("Error parsing user data:", error);
-      }
-    }
-
-    // Then fetch fresh user data from backend
+    // Always fetch fresh user data from backend (no localStorage)
     const fetchUser = async () => {
       const currentUser = await getCurrentUser();
       if (currentUser) {
         setUserData(currentUser);
-      } else if (!storedUser) {
+      } else {
         // No user found, redirect to login
         navigate("/login");
       }
@@ -44,7 +34,8 @@ export default function DashboardHome() {
   }
 
   // Get user name (handle different possible field names)
-  const userName = userData?.name || userData?.displayName || userData?.email?.split("@")[0] || "User";
+  // Use user from context or userData state
+  const userName = user?.name || userData?.name || user?.displayName || userData?.displayName || user?.email?.split("@")[0] || userData?.email?.split("@")[0] || "User";
 
   return (
     <>
@@ -54,7 +45,7 @@ export default function DashboardHome() {
       </p>
 
       {/* User Details Section */}
-      {userData && (
+      {(userData || user) && (
         <div className="user-details-card" style={{
           background: "white",
           padding: "20px",
@@ -64,24 +55,24 @@ export default function DashboardHome() {
         }}>
           <h3 style={{ marginBottom: "12px", color: "#0369a1" }}>Your Profile</h3>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: "16px" }}>
-            {userData.email && (
+            {(userData?.email || user?.email) && (
               <div>
                 <strong style={{ color: "#64748b", fontSize: "0.9rem" }}>Email:</strong>
-                <p style={{ margin: "4px 0 0 0", color: "#1e293b" }}>{userData.email}</p>
+                <p style={{ margin: "4px 0 0 0", color: "#1e293b" }}>{userData?.email || user?.email}</p>
               </div>
             )}
-            {userData.phone && (
+            {(userData?.phone || user?.phone) && (
               <div>
                 <strong style={{ color: "#64748b", fontSize: "0.9rem" }}>Phone:</strong>
-                <p style={{ margin: "4px 0 0 0", color: "#1e293b" }}>{userData.phone}</p>
+                <p style={{ margin: "4px 0 0 0", color: "#1e293b" }}>{userData?.phone || user?.phone}</p>
               </div>
             )}
-            {userData.picture && (
+            {(userData?.picture || user?.picture) && (
               <div>
                 <strong style={{ color: "#64748b", fontSize: "0.9rem" }}>Profile Picture:</strong>
                 <div style={{ marginTop: "8px" }}>
                   <img 
-                    src={userData.picture} 
+                    src={userData?.picture || user?.picture} 
                     alt="Profile" 
                     style={{ 
                       width: "60px", 
