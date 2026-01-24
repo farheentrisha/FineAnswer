@@ -1,10 +1,8 @@
-import React, { useState } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import React, { useState } from "react";
 import "./RegisterPage.css";
 
-export default function RegisterPage() {
-  const navigate = useNavigate(); 
+export default function RegisterPage() { 
 
   const [formData, setFormData] = useState({
     name: "",
@@ -100,16 +98,6 @@ export default function RegisterPage() {
 
               <button type="submit" className="register-btn">
                 Create Account
-              </button>
-
-              <div className="divider">or</div>
-
-              <button type="button" className="google-btn">
-                <img
-                  src="https://www.svgrepo.com/show/355037/google.svg"
-                  alt="Google"
-                />
-                Sign up with Google
               </button>
 
               <p className="login-link">

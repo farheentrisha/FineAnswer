@@ -309,6 +309,47 @@ html, body, #root {
   opacity: 0.9;
 }
 
+/* Divider */
+.divider {
+  text-align: center;
+  margin: 15px 0;
+  color: #64748b;
+  font-size: 0.9rem;
+  width: 100%;
+  max-width: 300px;
+}
+
+/* Google Button */
+.google-btn {
+  width: 100%;
+  max-width: 300px;
+  margin-top: 10px;
+  padding: 12px;
+  border: 1px solid #cbd5e1;
+  border-radius: 10px;
+  background: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  font-weight: 500;
+  color: #1e293b;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 0.95rem;
+}
+
+.google-btn img {
+  width: 20px;
+  height: 20px;
+}
+
+.google-btn:hover {
+  background: #f0f9ff;
+  border-color: #38bdf8;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(56, 189, 248, 0.2);
+}
 
 .success-msg {
   color: #0f5132;
