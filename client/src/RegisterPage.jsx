@@ -1,10 +1,8 @@
-import React, { useState } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom"; // ✅ import navigate
+import React, { useState } from "react";
 import "./RegisterPage.css";
 
-export default function RegisterPage() {
-  const navigate = useNavigate(); // ✅ initialize navigation
+export default function RegisterPage() { 
 
   const [formData, setFormData] = useState({
     name: "",
@@ -17,6 +15,7 @@ export default function RegisterPage() {
 
   // Update form state on input change
   const handleChange = (e) => {
+    
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
@@ -26,13 +25,13 @@ export default function RegisterPage() {
     console.log("Submitting form data:", formData);
 
     try {
-      const res = await axios.post("http://localhost:5000/api/auth/register", formData);
+      const res = await axios.post("http://localhost:5000/api/users", formData);
       console.log("User registered:", res.data);
 
       setMessage({ type: "success", text: "✅ Registration successful! Redirecting to login..." });
 
       // ✅ Redirect to login after 1.5 seconds
-      setTimeout(() => navigate("/login"), 1500);
+      // setTimeout(() => navigate("/login"), 1500);  
 
       // Optional: reset form
       setFormData({ name: "", email: "", phone: "", password: "" });
@@ -99,16 +98,6 @@ export default function RegisterPage() {
 
               <button type="submit" className="register-btn">
                 Create Account
-              </button>
-
-              <div className="divider">or</div>
-
-              <button type="button" className="google-btn">
-                <img
-                  src="https://www.svgrepo.com/show/355037/google.svg"
-                  alt="Google"
-                />
-                Sign up with Google
               </button>
 
               <p className="login-link">
