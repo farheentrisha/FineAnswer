@@ -31,6 +31,14 @@ export default function RegisterPage() {
         body: JSON.stringify(formData),
       });
 
+      // Check if response is JSON
+      const contentType = response.headers.get("content-type");
+      if (!contentType || !contentType.includes("application/json")) {
+        const text = await response.text();
+        console.error("Non-JSON response:", text);
+        throw new Error("Server returned an invalid response. Please check if the backend is running.");
+      }
+
       const result = await response.json();
 
       if (!response.ok) {
@@ -59,14 +67,12 @@ export default function RegisterPage() {
       // Registration successful
       console.log("User registered:", result);
 
-      // If backend returns token and data (like login), store them
-      if (result.token && result.data) {
+      // Store only token in localStorage - user data comes from backend
+      if (result.token) {
         localStorage.setItem("token", result.token);
-        localStorage.setItem("user", JSON.stringify(result.data));
-      } else if (result.data) {
-        // If only data is returned, store it
-        localStorage.setItem("user", JSON.stringify(result.data));
       }
+      
+      // User data will be fetched fresh from backend via getCurrentUser in context
 
       setMessage({ 
         type: "success", 
@@ -81,10 +87,24 @@ export default function RegisterPage() {
 
     } catch (error) {
       console.error("Registration error:", error);
-      setMessage({
-        type: "error",
-        text: error.message || "Registration failed. Please try again.",
-      });
+      
+      // Handle JSON parsing errors
+      if (error instanceof SyntaxError) {
+        setMessage({
+          type: "error",
+          text: "Server error: Invalid response format. Please check if the backend server is running.",
+        });
+      } else if (error.message.includes("Failed to fetch") || error.message.includes("NetworkError")) {
+        setMessage({
+          type: "error",
+          text: "Cannot connect to server. Please check if the backend is running on http://localhost:5000",
+        });
+      } else {
+        setMessage({
+          type: "error",
+          text: error.message || "Registration failed. Please try again.",
+        });
+      }
     }
   };
 

@@ -44,17 +44,26 @@ export default function LoginPage() {
         body: JSON.stringify({ email: formData.email, password: formData.password }),
       });
 
+      // Check if response is JSON
+      const contentType = response.headers.get("content-type");
+      if (!contentType || !contentType.includes("application/json")) {
+        const text = await response.text();
+        console.error("Non-JSON response:", text);
+        throw new Error("Server returned an invalid response. Please check if the backend is running.");
+      }
+
       const result = await response.json();
 
       if (!response.ok) {
         throw new Error(result.message || "Login failed");
       }
 
-      const { token, data } = result;
+      const { token } = result;
       
-      // Store token in localStorage
+      // Store only token in localStorage - user data comes from backend
       localStorage.setItem("token", token);
-      localStorage.setItem("user", JSON.stringify(data));
+      
+      // User data will be fetched fresh from backend via getCurrentUser in context
 
       setMessage({ type: "success", text: "✅ Login successful!" });
 
@@ -62,10 +71,24 @@ export default function LoginPage() {
       setTimeout(() => navigate("/dashboard"), 1000);
     } catch (error) {
       console.error("Login error:", error);
-      setMessage({
-        type: "error",
-        text: error.message || "Login failed. Please check your credentials.",
-      });
+      
+      // Handle JSON parsing errors
+      if (error instanceof SyntaxError) {
+        setMessage({
+          type: "error",
+          text: "Server error: Invalid response format. Please check if the backend server is running.",
+        });
+      } else if (error.message.includes("Failed to fetch") || error.message.includes("NetworkError")) {
+        setMessage({
+          type: "error",
+          text: "Cannot connect to server. Please check if the backend is running on http://localhost:5000",
+        });
+      } else {
+        setMessage({
+          type: "error",
+          text: error.message || "Login failed. Please check your credentials.",
+        });
+      }
     }
   };
 
@@ -90,17 +113,26 @@ export default function LoginPage() {
         }),
       });
 
+      // Check if response is JSON
+      const contentType = response.headers.get("content-type");
+      if (!contentType || !contentType.includes("application/json")) {
+        const text = await response.text();
+        console.error("Non-JSON response:", text);
+        throw new Error("Server returned an invalid response. Please check if the backend is running.");
+      }
+
       const apiResult = await response.json();
 
       if (!response.ok) {
         throw new Error(apiResult.message || "Google login failed");
       }
 
-      const { token, data } = apiResult;
+      const { token } = apiResult;
 
-      // Store token in localStorage
+      // Store only token in localStorage - user data comes from backend
       localStorage.setItem("token", token);
-      localStorage.setItem("user", JSON.stringify(data));
+      
+      // User data will be fetched fresh from backend via getCurrentUser in context
 
       setMessage({ type: "success", text: "✅ Google login successful!" });
 
@@ -108,6 +140,24 @@ export default function LoginPage() {
       setTimeout(() => navigate("/dashboard"), 1000);
     } catch (error) {
       console.error("Google login error:", error);
+      
+      // Handle JSON parsing errors
+      if (error instanceof SyntaxError) {
+        setMessage({
+          type: "error",
+          text: "Server error: Invalid response format. Please check if the backend server is running.",
+        });
+        return;
+      }
+      
+      // Handle network errors
+      if (error.message.includes("Failed to fetch") || error.message.includes("NetworkError")) {
+        setMessage({
+          type: "error",
+          text: "Cannot connect to server. Please check if the backend is running on http://localhost:5000",
+        });
+        return;
+      }
       
       // Handle specific Firebase errors
       let errorMessage = "Google login failed. Please try again.";
