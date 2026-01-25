@@ -45,6 +45,7 @@ const client = new MongoClient(uri, {
 
 // Database and collection references
 let usersCollection;
+let successStoryCollection;
 
 // JWT Secret (should be in .env file)
 const JWT_SECRET = process.env.JWT_SECRET || "your-secret-key-change-this-in-production";
@@ -129,6 +130,7 @@ async function run() {
 
     // Collections
     usersCollection = client.db("FineAnswer").collection("usersCollection");
+    successStoryCollection = client.db("FineAnswer").collection("successStory");
 
 
 
@@ -602,6 +604,103 @@ app.get("/api/users/:id", async (req, res) => {
   }
 });
 
+// ==================== SUCCESS STORIES ROUTES ====================
+
+// GET /api/success-stories - Get all success stories (PUBLIC)
+app.get("/api/success-stories", async (req, res) => {
+  try {
+    const stories = await successStoryCollection
+      .find({})
+      .sort({ createdAt: -1 })
+      .toArray();
+
+    res.status(200).json(stories);
+  } catch (error) {
+    console.error("Error fetching success stories:", error);
+    res.status(500).json({
+      message: "Failed to fetch success stories",
+      error: error.message
+    });
+  }
+});
+
+// POST /api/success-stories - Create a new success story (ADMIN ONLY)
+app.post("/api/success-stories", authenticateToken, requireAdmin, async (req, res) => {
+  try {
+    const { image } = req.body;
+
+    // Validation
+    if (!image) {
+      return res.status(400).json({
+        message: "Image URL is required"
+      });
+    }
+
+    // Validate URL format
+    try {
+      new URL(image);
+    } catch (urlError) {
+      return res.status(400).json({
+        message: "Invalid image URL format"
+      });
+    }
+
+    // Create new success story
+    const newStory = {
+      image: image.trim(),
+      createdAt: new Date(),
+      updatedAt: new Date()
+    };
+
+    const result = await successStoryCollection.insertOne(newStory);
+    const savedStory = await successStoryCollection.findOne({ _id: result.insertedId });
+
+    res.status(201).json({
+      message: "Success story created successfully",
+      story: savedStory
+    });
+  } catch (error) {
+    console.error("Error creating success story:", error);
+    res.status(500).json({
+      message: "Failed to create success story",
+      error: error.message
+    });
+  }
+});
+
+// DELETE /api/success-stories/:id - Delete a success story (ADMIN ONLY)
+app.delete("/api/success-stories/:id", authenticateToken, requireAdmin, async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    // Validate ObjectId format
+    if (!ObjectId.isValid(id)) {
+      return res.status(400).json({
+        message: "Invalid success story ID format"
+      });
+    }
+
+    const deletedStory = await successStoryCollection.findOneAndDelete({
+      _id: new ObjectId(id)
+    });
+
+    if (!deletedStory) {
+      return res.status(404).json({
+        message: "Success story not found"
+      });
+    }
+
+    res.status(200).json({
+      message: "Success story deleted successfully"
+    });
+  } catch (error) {
+    console.error("Error deleting success story:", error);
+    res.status(500).json({
+      message: "Failed to delete success story",
+      error: error.message
+    });
+  }
+});
 
 app.listen(port, () => {
   // Server started on port ${port}
