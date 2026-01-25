@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
+import { FaTimes } from "react-icons/fa";
 import "./SuccessStories.css";
 import { getSuccessStories } from "../services/successStoriesApi";
 
@@ -6,6 +7,7 @@ export default function SuccessStories() {
   const [stories, setStories] = useState([]);
   const [loading, setLoading] = useState(true);
   const [active, setActive] = useState(0);
+  const [selectedImage, setSelectedImage] = useState(null);
 
   const autoSlideRef = useRef(null);
   const touchStartX = useRef(0);
@@ -80,6 +82,28 @@ export default function SuccessStories() {
   const prevSlide = () => setActive((prev) => prev - 1);
   const nextSlide = () => setActive((prev) => prev + 1);
 
+  // Modal handlers
+  const openModal = (story) => {
+    setSelectedImage(story);
+    document.body.style.overflow = 'hidden'; // Prevent background scrolling
+  };
+
+  const closeModal = () => {
+    setSelectedImage(null);
+    document.body.style.overflow = 'unset'; // Restore scrolling
+  };
+
+  // Close modal on Escape key
+  useEffect(() => {
+    const handleEscape = (e) => {
+      if (e.key === 'Escape' && selectedImage) {
+        closeModal();
+      }
+    };
+    window.addEventListener('keydown', handleEscape);
+    return () => window.removeEventListener('keydown', handleEscape);
+  }, [selectedImage]);
+
   if (loading) {
     return (
       <div className="success-wrapper">
@@ -105,52 +129,88 @@ export default function SuccessStories() {
   }
 
   return (
-    <div className="success-wrapper">
-      <h2 className="success-title">We have stories to inspire you</h2>
-      <p className="success-sub">People who transformed their career with us</p>
+    <>
+      <div className="success-wrapper">
+        <h2 className="success-title">We have stories to inspire you</h2>
+        <p className="success-sub">People who transformed their career with us</p>
 
-      <div className="carousel-container">
-        {/* LEFT BUTTON */}
-        <button className="nav2-btn left-btn" onClick={prevSlide}>
-          ❮
-        </button>
+        <div className="carousel-container">
+          {/* CAROUSEL */}
+          <div
+            className="carousel"
+            onTouchStart={onTouchStart}
+            onTouchMove={onTouchMove}
+          >
+            {stories.map((story, i) => {
+              const offset = i - active;
+              const scale = 1 - Math.min(Math.abs(offset) * 0.15, 0.6);
+              const blur = Math.min(Math.abs(offset) * 2, 6);
+              const opacity = Math.abs(offset) > 4 ? 0 : 1;
 
-        {/* CAROUSEL */}
-        <div
-          className="carousel"
-          onTouchStart={onTouchStart}
-          onTouchMove={onTouchMove}
-        >
-          {stories.map((story, i) => {
-            const offset = i - active;
-            const scale = 1 - Math.min(Math.abs(offset) * 0.15, 0.6);
-            const blur = Math.min(Math.abs(offset) * 2, 6);
-            const opacity = Math.abs(offset) > 4 ? 0 : 1;
-
-            return (
-              <div
-                className="card-container"
-                key={`${story._id || story.id}-${i}`}
-                style={{
-                  transform: `translateX(${offset * 220}px) scale(${scale})`,
-                  filter: `blur(${blur}px)`,
-                  opacity,
-                  zIndex: 100 - Math.abs(offset),
-                }}
-              >
-                <div className="card">
-                  <img src={story.image} alt="Success story" style={{ width: "100%", height: "auto", display: "block" }} />
+              return (
+                <div
+                  className="card-container"
+                  key={`${story._id || story.id}-${i}`}
+                  style={{
+                    transform: `translateX(${offset * 220}px) scale(${scale})`,
+                    filter: `blur(${blur}px)`,
+                    opacity,
+                    zIndex: 100 - Math.abs(offset),
+                  }}
+                >
+                  <div 
+                    className="card"
+                    onClick={() => openModal(story)}
+                    style={{ cursor: 'pointer' }}
+                  >
+                    <div className="card-image-wrapper">
+                      <img 
+                        src={story.image} 
+                        alt={story.name || "Success story"} 
+                        className="story-card-image"
+                      />
+                    </div>
+                    <div className="card-content">
+                      <h3>{story.name}</h3>
+                      <p className="card-university">{story.university}</p>
+                      <p className="card-country">{story.country}</p>
+                      <p className="card-program">{story.program}</p>
+                      <p className="card-story">{story.story}</p>
+                    </div>
+                  </div>
                 </div>
-              </div>
-            );
-          })}
+              );
+            })}
+          </div>
         </div>
-
-        {/* RIGHT BUTTON */}
-        <button className="nav2-btn right-btn" onClick={nextSlide}>
-          ❯
-        </button>
       </div>
-    </div>
+
+      {/* Modal */}
+      {selectedImage && (
+        <div className="story-modal-overlay" onClick={closeModal}>
+          <div className="story-modal-content" onClick={(e) => e.stopPropagation()}>
+            <button className="story-modal-close" onClick={closeModal}>
+              <FaTimes />
+            </button>
+            <div className="story-modal-body">
+              <div className="story-modal-image-wrapper">
+                <img 
+                  src={selectedImage.image} 
+                  alt={selectedImage.name || "Success story"} 
+                  className="story-modal-image"
+                />
+              </div>
+              <div className="story-modal-details">
+                <h2>{selectedImage.name}</h2>
+                <p className="modal-university"><strong>University:</strong> {selectedImage.university}</p>
+                <p className="modal-country"><strong>Country:</strong> {selectedImage.country}</p>
+                <p className="modal-program"><strong>Program:</strong> {selectedImage.program}</p>
+                <p className="modal-story">{selectedImage.story}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+    </>
   );
 }

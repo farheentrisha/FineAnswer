@@ -82,7 +82,14 @@ export default function SuccessStories() {
           {stories.map((story) => (
             <div key={story._id || story.id} className="story-card">
               <div className="story-image">
-                <img src={story.image} alt="Success story" />
+                <img src={story.image} alt={story.name || "Success story"} />
+              </div>
+              <div className="story-content">
+                <h3>{story.name}</h3>
+                <p className="story-university">{story.university}</p>
+                <p className="story-country">{story.country}</p>
+                <p className="story-program">{story.program}</p>
+                <p className="story-text">{story.story}</p>
               </div>
               <div className="story-actions">
                 <button

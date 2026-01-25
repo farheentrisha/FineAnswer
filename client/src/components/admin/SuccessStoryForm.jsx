@@ -5,10 +5,23 @@ import { createSuccessStory } from "../../services/successStoriesApi";
 import "./SuccessStoryForm.css";
 
 export default function SuccessStoryForm({ isOpen, onClose, onSuccess }) {
-  const [image, setImage] = useState(null);
+  const [formData, setFormData] = useState({
+    name: "",
+    university: "",
+    country: "",
+    program: "",
+    story: "",
+    image: null,
+  });
   const [imagePreview, setImagePreview] = useState(null);
   const [uploading, setUploading] = useState(false);
   const [error, setError] = useState(null);
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+    setError(null);
+  };
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
@@ -17,7 +30,7 @@ export default function SuccessStoryForm({ isOpen, onClose, onSuccess }) {
         setError("Image size should be less than 10MB");
         return;
       }
-      setImage(file);
+      setFormData({ ...formData, image: file });
       const reader = new FileReader();
       reader.onloadend = () => {
         setImagePreview(reader.result);
@@ -31,8 +44,9 @@ export default function SuccessStoryForm({ isOpen, onClose, onSuccess }) {
     e.preventDefault();
     setError(null);
 
-    if (!image) {
-      setError("Please select an image");
+    // Validation
+    if (!formData.name || !formData.university || !formData.country || !formData.program || !formData.story || !formData.image) {
+      setError("Please fill in all required fields");
       return;
     }
 
@@ -44,17 +58,29 @@ export default function SuccessStoryForm({ isOpen, onClose, onSuccess }) {
       }
 
       // Upload image to Cloudinary
-      const imageUrl = await uploadImageToCloudinary(image);
+      const imageUrl = await uploadImageToCloudinary(formData.image);
 
-      // Create success story with only image URL
+      // Create success story with all data
       const storyData = {
+        name: formData.name,
+        university: formData.university,
+        country: formData.country,
+        program: formData.program,
+        story: formData.story,
         image: imageUrl,
       };
 
       await createSuccessStory(storyData, token);
 
       // Reset form
-      setImage(null);
+      setFormData({
+        name: "",
+        university: "",
+        country: "",
+        program: "",
+        story: "",
+        image: null,
+      });
       setImagePreview(null);
       onSuccess();
       onClose();
@@ -81,8 +107,74 @@ export default function SuccessStoryForm({ isOpen, onClose, onSuccess }) {
           {error && <div className="error-message">{error}</div>}
 
           <div className="form-group">
-            <label htmlFor="image">Success Story Image *</label>
-            <p className="form-help-text">Upload a complete success story graphic. The image will be displayed on both the success stories page and home page.</p>
+            <label htmlFor="name">Name *</label>
+            <input
+              type="text"
+              id="name"
+              name="name"
+              value={formData.name}
+              onChange={handleChange}
+              placeholder="Enter student name"
+              required
+            />
+          </div>
+
+          <div className="form-row">
+            <div className="form-group">
+              <label htmlFor="university">University *</label>
+              <input
+                type="text"
+                id="university"
+                name="university"
+                value={formData.university}
+                onChange={handleChange}
+                placeholder="University name"
+                required
+              />
+            </div>
+
+            <div className="form-group">
+              <label htmlFor="country">Country *</label>
+              <input
+                type="text"
+                id="country"
+                name="country"
+                value={formData.country}
+                onChange={handleChange}
+                placeholder="Country name"
+                required
+              />
+            </div>
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="program">Program *</label>
+            <input
+              type="text"
+              id="program"
+              name="program"
+              value={formData.program}
+              onChange={handleChange}
+              placeholder="e.g., Master of Science in Computer Science"
+              required
+            />
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="story">Success Story *</label>
+            <textarea
+              id="story"
+              name="story"
+              value={formData.story}
+              onChange={handleChange}
+              placeholder="Write the success story here..."
+              rows="5"
+              required
+            />
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="image">Image *</label>
             <div className="image-upload-container">
               <input
                 type="file"

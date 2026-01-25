@@ -11,13 +11,12 @@ export default function Sidebar() {
     await logOut();
     navigate("/login");
   };
-
   return (
     <aside className="admin-sidebar">
       <div className="logo">
         <span>🛡️</span>
         <div>
-          <h3>Admin Panel</h3>
+          <h3><a href="/">FineAnswer</a></h3>
           <p>FineAnswer</p>
         </div>
       </div>

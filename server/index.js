@@ -627,16 +627,16 @@ app.get("/api/success-stories", async (req, res) => {
 // POST /api/success-stories - Create a new success story (ADMIN ONLY)
 app.post("/api/success-stories", authenticateToken, requireAdmin, async (req, res) => {
   try {
-    const { image } = req.body;
+    const { name, university, country, program, story, image } = req.body;
 
-    // Validation
-    if (!image) {
+    // Validation - ALL fields are required
+    if (!name || !university || !country || !program || !story || !image) {
       return res.status(400).json({
-        message: "Image URL is required"
+        message: "Name, university, country, program, story, and image are required"
       });
     }
 
-    // Validate URL format
+    // Validate URL format for image
     try {
       new URL(image);
     } catch (urlError) {
@@ -647,6 +647,11 @@ app.post("/api/success-stories", authenticateToken, requireAdmin, async (req, re
 
     // Create new success story
     const newStory = {
+      name: name.trim(),
+      university: university.trim(),
+      country: country.trim(),
+      program: program.trim(),
+      story: story.trim(),
       image: image.trim(),
       createdAt: new Date(),
       updatedAt: new Date()

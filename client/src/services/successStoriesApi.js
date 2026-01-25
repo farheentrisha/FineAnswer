@@ -38,7 +38,7 @@ export const getSuccessStories = async () => {
 
 export const createSuccessStory = async (storyData, token) => {
   try {
-    // storyData should only contain { image: "url" }
+    // storyData should contain: { name, university, country, program, story, image }
     const response = await fetch(`${API_BASE_URL}/success-stories`, {
       method: 'POST',
       headers: {
