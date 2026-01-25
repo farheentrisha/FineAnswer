@@ -203,7 +203,7 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* MAP SECTION */}
+      {/* MAP SECTION */} 
 <section className="map-section">
   <h2>Our Location</h2>
   <div className="map-container">
