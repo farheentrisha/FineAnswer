@@ -38,8 +38,6 @@ const ContextProvider = ({ children }) => {
     setLoading(true);
     return signInWithPopup(auth, googleProvider);
   };
-
-
   // Logout Function
   const logOut = async () => {
     try {
@@ -72,19 +70,6 @@ const ContextProvider = ({ children }) => {
         headers: { Authorization: `Bearer ${token}` },
       });
 
-      // Check if response is JSON
-      const contentType = response.headers.get("content-type");
-      if (!contentType || !contentType.includes("application/json")) {
-        const text = await response.text();
-        console.error("Non-JSON response from /api/auth/me:", text);
-        // If backend returns HTML, clear token and return null
-        localStorage.removeItem("token");
-        setUser(null);
-        setIsAdmin(false);
-        setLoading(false);
-        return null;
-      }
-
       const result = await response.json();
 
       if (!response.ok) {
@@ -113,10 +98,7 @@ const ContextProvider = ({ children }) => {
       return data;
     } catch (error) {
       console.error("Get current user error:", error);
-      // If it's a JSON parse error, clear token
-      if (error instanceof SyntaxError) {
-        localStorage.removeItem("token");
-      }
+      localStorage.removeItem("token");
       setUser(null);
       setIsAdmin(false);
       setLoading(false);
