@@ -4,21 +4,26 @@
 }
 
 .success-title {
-  font-size: 2.4rem;
-  font-weight: 700;
+  font-size: 2.8rem;
+  font-weight: 800;
+  color: #1a202c;
+  margin-bottom: 12px;
+  letter-spacing: -0.03em;
 }
 
 .success-sub {
-  margin-bottom: 40px;
-  color: #555;
+  margin-bottom: 50px;
+  color: #64748b;
+  font-size: 1.1rem;
+  font-weight: 400;
 }
 
 .carousel {
   position: relative;
   width: 100%;
-  max-width: 950px;
+  max-width: 1200px;
   margin: 0 auto;
-  height: 330px;
+  height: 450px;
   display: flex;
   align-items: center;
   overflow: visible;
@@ -26,36 +31,68 @@
 
 .card-container {
   position: absolute;
-  left: 35%;
+  left: 50%;
   top: 0;
   transform-origin: center;
-  transition: all 0.45s ease;
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  margin-left: -150px; /* Half of card width (300px) */
+}
+
+/* Grid layout for 2+ stories */
+.stories-grid-layout {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 32px;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+  justify-items: center;
+}
+
+.stories-grid-layout .card {
+  width: 100%;
+  max-width: 300px;
 }
 
 .card {
-  width: 270px;
-  min-height: 360px;
-  border-radius: 20px;
+  width: 300px;
+  min-height: 420px;
+  border-radius: 16px;
   background: white;
   padding: 0;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.18);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.12);
   text-align: center;
   overflow: hidden;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   display: flex;
   flex-direction: column;
+  border: 1px solid rgba(0, 0, 0, 0.06);
 }
 
 .card:hover {
-  transform: scale(1.02);
-  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.25);
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.2);
+  border-color: rgba(91, 107, 191, 0.2);
 }
 
 .card-image-wrapper {
   width: 100%;
-  height: 180px;
+  height: 200px;
   overflow: hidden;
   flex-shrink: 0;
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  position: relative;
+}
+
+.card-image-wrapper::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 40px;
+  background: linear-gradient(to top, rgba(255,255,255,0.9), transparent);
+  pointer-events: none;
 }
 
 .story-card-image {
@@ -63,53 +100,91 @@
   height: 100%;
   object-fit: cover;
   display: block;
+  transition: transform 0.3s ease;
+}
+
+.card:hover .story-card-image {
+  transform: scale(1.05);
 }
 
 .card-content {
-  padding: 15px;
+  padding: 20px;
   flex: 1;
   display: flex;
   flex-direction: column;
   text-align: left;
+  background: white;
 }
 
 .card-content h3 {
-  margin: 0 0 8px 0;
-  font-size: 18px;
-  font-weight: 600;
-  color: #1f2937;
+  margin: 0 0 12px 0;
+  font-size: 20px;
+  font-weight: 700;
+  color: #1a202c;
+  letter-spacing: -0.02em;
+  line-height: 1.3;
 }
 
-.card-university,
-.card-country,
-.card-program {
-  margin: 4px 0;
-  font-size: 13px;
-  color: #6b7280;
-}
-
-.card-program {
-  color: #5b6bbf;
+.card-university {
+  margin: 0 0 6px 0;
+  font-size: 14px;
+  color: #4a5568;
   font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.card-university::before {
+  content: '🎓';
+  font-size: 14px;
+}
+
+.card-country {
+  margin: 0 0 6px 0;
+  font-size: 14px;
+  color: #4a5568;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.card-country::before {
+  content: '🌍';
+  font-size: 14px;
+}
+
+.card-program {
+  margin: 0 0 12px 0;
+  font-size: 14px;
+  color: #5b6bbf;
+  font-weight: 600;
+  padding: 6px 12px;
+  background: rgba(91, 107, 191, 0.1);
+  border-radius: 6px;
+  display: inline-block;
+  width: fit-content;
 }
 
 .card-story {
-  margin: 10px 0 0 0;
-  font-size: 12px;
-  color: #4b5563;
-  line-height: 1.5;
+  margin: 12px 0 0 0;
+  font-size: 13px;
+  color: #4a5568;
+  line-height: 1.7;
   display: -webkit-box;
   -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
   overflow: hidden;
   flex: 1;
+  min-height: 60px;
 }
 /* WRAPPER */
 .carousel-container {
   position: relative;
-  max-width: 950px;
+  max-width: 1200px;
   margin: 0 auto;
-  height: 360px;
+  height: 450px;
 }
 
 /* Modal Styles */
@@ -270,11 +345,20 @@
   }
   
   .card {
-    width: 250px;
-    min-height: 340px;
+    width: 280px;
+    min-height: 400px;
   }
   
   .card-image-wrapper {
-    height: 150px;
+    height: 180px;
+  }
+  
+  .success-title {
+    font-size: 2rem;
+  }
+  
+  .success-sub {
+    font-size: 0.95rem;
+    margin-bottom: 30px;
   }
 }
