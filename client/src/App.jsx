@@ -17,7 +17,13 @@ import Messages from "./pages/Messages";
 
 import AdminLayout from "./layouts/AdminLayout";
 import AdminDashboard from "./pages/admin/AdminDashboard";
-import Students from "./pages/admin/Students";
+import Analytics from "./pages/admin/Analytics";
+import SuccessStories from "./pages/admin/SuccessStories";
+import Blog from "./pages/admin/Blog";
+import Career from "./pages/admin/Career";
+import TrackerUpdate from "./pages/admin/TrackerUpdate";
+import AdminSession from "./pages/admin/AdminSession";
+import StudentsInfo from "./pages/admin/StudentsInfo";
 import ProtectedRoute from "./components/ProtectedRoute";
 import { AuthContext } from "./pages/Provider/ContextProvider";
 
@@ -106,14 +112,13 @@ function AppRoutes() {
         }
       >
         <Route path="dashboard" element={<AdminDashboard />} />
-        <Route path="students" element={<Students />} />
-        <Route path="analytics" element={<div className="card"><h3>Analytics</h3><p>Coming soon...</p></div>} />
-        <Route path="counselors" element={<div className="card"><h3>Counselors</h3><p>Coming soon...</p></div>} />
-        <Route path="universities" element={<div className="card"><h3>Universities</h3><p>Coming soon...</p></div>} />
-        <Route path="applications" element={<div className="card"><h3>Applications</h3><p>Coming soon...</p></div>} />
-        <Route path="sessions" element={<div className="card"><h3>Sessions</h3><p>Coming soon...</p></div>} />
-        <Route path="documents" element={<div className="card"><h3>Documents</h3><p>Coming soon...</p></div>} />
-        <Route path="settings" element={<div className="card"><h3>Settings</h3><p>Coming soon...</p></div>} />
+        <Route path="analytics" element={<Analytics />} />
+        <Route path="success-stories" element={<SuccessStories />} />
+        <Route path="blog" element={<Blog />} />
+        <Route path="career" element={<Career />} />
+        <Route path="tracker-update" element={<TrackerUpdate />} />
+        <Route path="sessions" element={<AdminSession />} />
+        <Route path="students-info" element={<StudentsInfo />} />
       </Route>
 
       {/* Default redirect */}

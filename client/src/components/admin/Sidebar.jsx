@@ -1,6 +1,6 @@
 import { NavLink, useNavigate } from "react-router-dom";
 import { useContext } from "react";
-import { FaUserGraduate, FaCog, FaChartBar, FaSignOutAlt } from "react-icons/fa";
+import { FaSignOutAlt } from "react-icons/fa";
 import { AuthContext } from "../../pages/Provider/ContextProvider";
 
 export default function Sidebar() {
@@ -23,37 +23,29 @@ export default function Sidebar() {
       </div>
 
       <nav>
-        <p className="menu-title">MAIN</p>
         <NavLink to="/admin/dashboard" end>
           Dashboard
         </NavLink>
         <NavLink to="/admin/analytics">
           Analytics
         </NavLink>
-
-        <p className="menu-title">MANAGEMENT</p>
-        <NavLink to="/admin/students">
-          <FaUserGraduate /> Students <span className="badge">4</span>
+        <NavLink to="/admin/success-stories">
+          Success Stories
         </NavLink>
-        <NavLink to="/admin/counselors">
-          Counselors
+        <NavLink to="/admin/blog">
+          Blog
         </NavLink>
-        <NavLink to="/admin/universities">
-          Universities
+        <NavLink to="/admin/career">
+          Career
         </NavLink>
-        <NavLink to="/admin/applications">
-          Applications <span className="badge">23</span>
+        <NavLink to="/admin/tracker-update">
+          Tracker Update
         </NavLink>
         <NavLink to="/admin/sessions">
-          Sessions
+          Session
         </NavLink>
-        <NavLink to="/admin/documents">
-          Documents
-        </NavLink>
-
-        <p className="menu-title">SYSTEM</p>
-        <NavLink to="/admin/settings">
-          <FaCog /> Settings
+        <NavLink to="/admin/students-info">
+          Get overall info About students
         </NavLink>
       </nav>
 
