@@ -1,6 +1,22 @@
+// Suppress dotenvx console tips
+const originalConsoleLog = console.log;
+console.log = function(...args) {
+  const message = args[0];
+  if (message && typeof message === 'string' && message.includes('[dotenv@')) {
+    return; // Suppress dotenvx tips
+  }
+  originalConsoleLog.apply(console, args);
+};
+
 const express = require("express");
 const cors = require("cors");
 require("dotenv").config();
+
+// Restore console.log after dotenv loads
+setTimeout(() => {
+  console.log = originalConsoleLog;
+}, 100);
+
 const { MongoClient, ServerApiVersion, ObjectId } = require("mongodb");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
@@ -15,22 +31,6 @@ app.use(cors({
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Request logging middleware (for debugging)
-app.use((req, res, next) => {
-  console.log(`${req.method} ${req.path}`);
-  next();
-});
-
-// Ensure all responses are JSON (unless already sent)
-const ensureJsonResponse = (req, res, next) => {
-  const originalJson = res.json;
-  res.json = function(data) {
-    res.setHeader('Content-Type', 'application/json');
-    return originalJson.call(this, data);
-  };
-  next();
-};
-app.use(ensureJsonResponse);
 
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@cluster1.pvs4l8x.mongodb.net/?appName=Cluster1`;
 
@@ -126,7 +126,6 @@ async function run() {
   try {
     // Connect the client to the server
     await client.connect();
-    console.log("Connected to MongoDB!");
 
     // Collections
     usersCollection = client.db("FineAnswer").collection("usersCollection");
@@ -145,12 +144,13 @@ async function run() {
 
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
-    console.log("Pinged your deployment. You successfully connected to MongoDB!");
   } catch (error) {
     console.error("MongoDB connection error:", error);
   }
 }
-run().catch(console.dir);
+run().catch((error) => {
+  console.error("Failed to start MongoDB connection:", error);
+});
 
 // Routes
 app.get("/", (req, res) => {
@@ -171,19 +171,8 @@ app.get("/api/health", (req, res) => {
   });
 });
 
-// Middleware to check if database is connected
-const checkDatabaseConnection = (req, res, next) => {
-  if (!usersCollection) {
-    return res.status(503).json({
-      success: false,
-      message: "Database connection not established. Please try again."
-    });
-  }
-  next();
-};
-
 // POST /api/auth/login - Login with email and password
-app.post("/api/auth/login", checkDatabaseConnection, async (req, res) => {
+app.post("/api/auth/login", async (req, res) => {
   try {
     const { email, password } = req.body;
 
@@ -196,16 +185,7 @@ app.post("/api/auth/login", checkDatabaseConnection, async (req, res) => {
     }
 
     // Find user by email
-    let user;
-    try {
-      user = await usersCollection.findOne({ email });
-    } catch (dbError) {
-      console.error("Database error in login:", dbError);
-      return res.status(503).json({
-        success: false,
-        message: "Database error. Please try again."
-      });
-    }
+    const user = await usersCollection.findOne({ email });
 
     if (!user) {
       return res.status(401).json({
@@ -265,20 +245,16 @@ app.post("/api/auth/login", checkDatabaseConnection, async (req, res) => {
     });
   } catch (error) {
     console.error("Error during login:", error);
-    
-    // Ensure we always return JSON, even if there's an error
-    if (!res.headersSent) {
-      res.status(500).json({
-        success: false,
-        message: "Internal server error",
-        error: error.message || "Unknown error occurred"
-      });
-    }
+    res.status(500).json({
+      success: false,
+      message: "Internal server error",
+      error: error.message
+    });
   }
 });
 
 // POST /api/auth/google - Login/Register with Google OAuth
-app.post("/api/auth/google", checkDatabaseConnection, async (req, res) => {
+app.post("/api/auth/google", async (req, res) => {
   try {
     const { email, googleId, name, picture } = req.body;
 
@@ -291,28 +267,11 @@ app.post("/api/auth/google", checkDatabaseConnection, async (req, res) => {
     }
 
     // Check if user exists by googleId or email
-    let user = null;
-    try {
-      user = await usersCollection.findOne({ googleId });
-    } catch (dbError) {
-      console.error("Database error in Google login:", dbError);
-      return res.status(503).json({
-        success: false,
-        message: "Database error. Please try again."
-      });
-    }
+    let user = await usersCollection.findOne({ googleId });
     
     if (!user) {
       // Check by email
-      try {
-        user = await usersCollection.findOne({ email });
-      } catch (dbError) {
-        console.error("Database error in Google login:", dbError);
-        return res.status(503).json({
-          success: false,
-          message: "Database error. Please try again."
-        });
-      }
+      user = await usersCollection.findOne({ email });
       
       if (user) {
         // Check and update admin status
@@ -378,15 +337,11 @@ app.post("/api/auth/google", checkDatabaseConnection, async (req, res) => {
     });
   } catch (error) {
     console.error("Error during Google login:", error);
-    
-    // Ensure we always return JSON, even if there's an error
-    if (!res.headersSent) {
-      res.status(500).json({
-        success: false,
-        message: "Internal server error",
-        error: error.message || "Unknown error occurred"
-      });
-    }
+    res.status(500).json({
+      success: false,
+      message: "Internal server error",
+      error: error.message
+    });
   }
 });
 
@@ -412,7 +367,7 @@ app.get("/api/auth/me", authenticateToken, async (req, res) => {
 });
 
 // POST /api/users - Create a new user
-app.post("/api/users", checkDatabaseConnection, async (req, res) => {
+app.post("/api/users", async (req, res) => {
   try {
     const { name, email, phone, password, authProvider = "email", googleId, picture } = req.body;
 
@@ -451,34 +406,17 @@ app.post("/api/users", checkDatabaseConnection, async (req, res) => {
     // Check if user already exists
     if (authProvider === "google" && googleId) {
       // For Google users, check by googleId first, then email
-      try {
-        const existingGoogleUser = await usersCollection.findOne({ googleId });
-        if (existingGoogleUser) {
-          return res.status(400).json({ 
-            success: false, 
-            message: "User with this Google account already exists" 
-          });
-        }
-      } catch (dbError) {
-        console.error("Database error in registration:", dbError);
-        return res.status(503).json({
-          success: false,
-          message: "Database error. Please try again."
+      const existingGoogleUser = await usersCollection.findOne({ googleId });
+      if (existingGoogleUser) {
+        return res.status(400).json({ 
+          success: false, 
+          message: "User with this Google account already exists" 
         });
       }
     }
     
     // Check by email (for both email and Google users)
-    let existingUser;
-    try {
-      existingUser = await usersCollection.findOne({ email });
-    } catch (dbError) {
-      console.error("Database error in registration:", dbError);
-      return res.status(503).json({
-        success: false,
-        message: "Database error. Please try again."
-      });
-    }
+    const existingUser = await usersCollection.findOne({ email });
     if (existingUser) {
       return res.status(400).json({ 
         success: false, 
@@ -527,22 +465,18 @@ app.post("/api/users", checkDatabaseConnection, async (req, res) => {
     });
   } catch (error) {
     console.error("Error creating user:", error);
-    
-    // Ensure we always return JSON, even if there's an error
-    if (!res.headersSent) {
-      res.status(500).json({ 
-        success: false, 
-        message: "Internal server error", 
-        error: error.message || "Unknown error occurred"
-      });
-    }
+    res.status(500).json({ 
+      success: false, 
+      message: "Internal server error", 
+      error: error.message
+    });
   }
 });
 
 
 
 // GET /api/users - Get all users
-app.get("/api/users", checkDatabaseConnection, async (req, res) => {
+app.get("/api/users", async (req, res) => {
   try {
     const users = await usersCollection.find({}).toArray();
     
@@ -568,7 +502,7 @@ app.get("/api/users", checkDatabaseConnection, async (req, res) => {
 });
 
 // GET /api/users/google/:googleId - Get a user by Google ID
-app.get("/api/users/google/:googleId", checkDatabaseConnection, async (req, res) => {
+app.get("/api/users/google/:googleId", async (req, res) => {
   try {
     const { googleId } = req.params;
 
@@ -599,7 +533,7 @@ app.get("/api/users/google/:googleId", checkDatabaseConnection, async (req, res)
 });
 
 // GET /api/users/email/:email - Get a user by email
-app.get("/api/users/email/:email", checkDatabaseConnection, async (req, res) => {
+app.get("/api/users/email/:email", async (req, res) => {
   try {
     const { email } = req.params;
 
@@ -630,7 +564,7 @@ app.get("/api/users/email/:email", checkDatabaseConnection, async (req, res) => 
 });
 
 // GET /api/users/:id - Get a single user by ID
-app.get("/api/users/:id", checkDatabaseConnection, async (req, res) => {
+app.get("/api/users/:id", async (req, res) => {
   try {
     const { id } = req.params;
 
@@ -668,42 +602,7 @@ app.get("/api/users/:id", checkDatabaseConnection, async (req, res) => {
   }
 });
 
-// 404 Handler - Return JSON instead of HTML
-app.use((req, res) => {
-  res.status(404).json({
-    success: false,
-    message: `Route ${req.method} ${req.path} not found`
-  });
-});
-
-// Global Error Handler - Return JSON instead of HTML
-app.use((err, req, res, next) => {
-  console.error("Global error handler:", err);
-  
-  // Ensure response hasn't been sent
-  if (res.headersSent) {
-    return next(err);
-  }
-  
-  // Always return JSON
-  res.status(err.status || 500).json({
-    success: false,
-    message: err.message || "Internal server error",
-    ...(process.env.NODE_ENV === 'development' && { stack: err.stack })
-  });
-});
-
-// Handle unhandled promise rejections
-process.on('unhandledRejection', (err) => {
-  console.error('Unhandled Promise Rejection:', err);
-});
-
-// Handle uncaught exceptions
-process.on('uncaughtException', (err) => {
-  console.error('Uncaught Exception:', err);
-  process.exit(1);
-});
 
 app.listen(port, () => {
-  console.log(`Port Is Running On bhaai ree ${port}`);
+  // Server started on port ${port}
 });
