@@ -1,33 +1,15 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useNavigate, NavLink } from "react-router-dom";
 import "../css/navbar3.css";
 import logo from "../images/logo.png";
 
 export default function Navbar() {
   const navigate = useNavigate();
-  const [hidden, setHidden] = useState(false);
-  const [lastScrollY, setLastScrollY] = useState(0);
   const [menuOpen, setMenuOpen] = useState(false);
 
-  // Scroll hide/show logic
-  useEffect(() => {
-    const handleScroll = () => {
-      if (window.scrollY > lastScrollY && window.scrollY > 80) {
-        setHidden(true);   // scrolling down
-      } else {
-        setHidden(false);  // scrolling up
-      }
-      setLastScrollY(window.scrollY);
-    };
-
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, [lastScrollY]);
-
   return (
-    <header className={`minimal-navbar ${hidden ? "nav-hide" : "nav-show"}`}>
+    <header className="minimal-navbar">
       <div className="nav-inner">
-
         {/* Logo */}
         <div className="nav-logo" onClick={() => navigate("/")}>
           <img src={logo} alt="Logo" />
@@ -54,16 +36,15 @@ export default function Navbar() {
           </button>
         </nav>
 
-        {/* Hamburger (Mobile) */}
+        {/* Hamburger */}
         <div
-          className={`hamburger ${menuOpen ? "active" : ""}`}
+          className="hamburger"
           onClick={() => setMenuOpen(!menuOpen)}
         >
           <span></span>
           <span></span>
           <span></span>
         </div>
-
       </div>
     </header>
   );

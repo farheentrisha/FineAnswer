@@ -177,6 +177,8 @@ export default function LandingPage() {
       </section>
 
       {/* SPECIALIZATION SECTION */}
+      
+      
       <section className="specialization">
         <h2>Our Specializations</h2>
         <p>We provide expert guidance and end-to-end support for top study destinations.</p>

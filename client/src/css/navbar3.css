@@ -1,127 +1,47 @@
-@import url('https://fonts.googleapis.com/css2?family=Mulish:wght@400;500;600;700&display=swap');
-/* Navbar animation */
+/* BASE NAVBAR */
 .minimal-navbar {
   position: fixed;
   top: 0;
   width: 100%;
   z-index: 9999;
-  background: rgba(10, 10, 20, 0.9);
-  backdrop-filter: blur(12px);
-  transition: transform 0.35s ease, box-shadow 0.3s ease;
+  padding: 20px 0;
+  transition: background 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
 }
 
-.nav-hide {
-  transform: translateY(-100%);
+/* HERO (transparent) */
+.minimal-navbar.hero {
+  background: transparent;
+  box-shadow: none;
 }
 
-.nav-show {
-  transform: translateY(0);
+/* SCROLLED (white) */
+.minimal-navbar.scrolled {
+  background: rgba(255, 255, 255, 0.95);
   box-shadow: 0 4px 20px rgba(0,0,0,0.08);
 }
 
-/* Hamburger */
-.hamburger {
-  display: none;
-  flex-direction: column;
-  gap: 5px;
-  cursor: pointer;
-}
-
-.hamburger span {
-  width: 26px;
-  height: 3px;
-  background: #fff;
-  border-radius: 2px;
-}
-
-/* Mobile */
-@media (max-width: 900px) {
-  .hamburger {
-    display: flex;
-  }
-
-  .nav-menu {
-    position: absolute;
-    top: 70px;
-    left: 0;
-    width: 100%;
-    background: rgba(10,10,20,0.95);
-    flex-direction: column;
-    padding: 20px 0;
-    transform: translateY(-120%);
-    transition: transform 0.35s ease;
-  }
-
-  .nav-menu.open {
-    transform: translateY(0);
-  }
-}
-
-
-header.navbar {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  z-index: 9999;
-  transition: transform 0.35s ease-in-out, box-shadow 0.3s ease;
-}
-
-/* Hide navbar (scroll down) */
-header.nav-hide {
+/* HIDE / SHOW */
+.nav-hide {
   transform: translateY(-100%);
 }
-
-/* Show navbar (scroll up) */
-header.nav-show {
+.nav-show {
   transform: translateY(0);
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
 }
 
-
-.minimal-navbar {
-  width: 100%;
-  padding: 20px 0;
-  
-  position: absolute;
-  top: 0;
-  left: 0;
-  z-index: 100;
-
-  /* TRUE TRANSPARENCY */
-  background: transparent !important;
-  backdrop-filter: none !important;
-
-  /* REMOVE ALL LINES / BORDERS */
-  border: none !important;
-  border-bottom: none !important;
-  outline: none !important;
-  box-shadow: none !important;
-
-  /* Some browsers add a default bottom line → remove completely */
-  border-bottom: 0px solid transparent !important;
-}
-
-
-/* Layout */
+/* MENU */
 .nav-inner {
-  width: 92%;
   max-width: 1300px;
   margin: auto;
   display: flex;
-  align-items: center;
   justify-content: space-between;
+  align-items: center;
 }
 
-/* Logo */
-.nav-logo {
-  font-size: 28px;
-  font-weight: 700;
-  font-family: "Poppins", sans-serif;
-  color: white;  /* visible on dark hero image */
+.nav-logo img {
+  height: 60px;
+  cursor: pointer;
 }
 
-/* Right menu */
 .nav-menu {
   display: flex;
   align-items: center;
@@ -129,15 +49,12 @@ header.nav-show {
 
 .nav-menu a {
   margin-left: 28px;
-  font-size: 16px;
-   font-weight: 600; /* Mulish Semibold */
-  font-family: "Mulish", sans-serif;
   text-decoration: none;
-  color: white;
-  transition: 0.3s ease;
-   position: relative;
-  display: inline-block; /* ← FIX: keeps underline under text only */
+  font-weight: 600;
+  color: white; /* default for hero */
+  position: relative;
   padding-bottom: 4px;
+  transition: color 0.3s ease;
 }
 
 .nav-menu a::after {
@@ -150,36 +67,80 @@ header.nav-show {
   background: #ffd250;
   transition: width 0.35s ease;
 }
-
 .nav-menu a:hover::after {
   width: 100%;
 }
 
-/* Keep text color white (you said no color change) */
-.nav-menu a:hover {
-  color: white;
-}
-.nav-logo img {
-  height: 60px;
-  width: auto;
-  cursor: pointer;
+/* SCROLLED TEXT */
+.minimal-navbar.scrolled .nav-menu a {
+  color: #111;
 }
 
-/* Join Button */
+/* JOIN BUTTON */
 .nav-btn {
   margin-left: 32px;
   padding: 8px 22px;
   border: 1.5px solid #ffd250;
-  background: transparent; /* no fill */
+  background: transparent;
   color: #ffd250;
   border-radius: 22px;
-  font-size: 15px;
   font-weight: 600;
   cursor: pointer;
-  transition: 0.3s ease;
+  transition: all 0.3s ease;
 }
-
+.minimal-navbar.scrolled .nav-btn {
+  border-color: #5fbd00;
+  color: #5fbd00;
+}
 .nav-btn:hover {
   background: #ffd250;
   color: #003b31;
+}
+.minimal-navbar.scrolled .nav-btn:hover {
+  background: #5fbd00;
+  color: #fff;
+}
+
+/* HAMBURGER */
+.hamburger {
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  cursor: pointer;
+}
+.hamburger span {
+  width: 26px;
+  height: 3px;
+  background: white;
+  border-radius: 2px;
+  transition: background 0.3s ease;
+}
+.minimal-navbar.scrolled .hamburger span {
+  background: #111;
+}
+
+/* MOBILE */
+@media (max-width: 900px) {
+  .hamburger { display: flex; }
+
+  .nav-menu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    flex-direction: column;
+    padding: 20px 0;
+    background: rgba(255,255,255,0.95);
+    transform: translateY(-120%);
+    transition: transform 0.35s ease;
+  }
+
+  .nav-menu.open {
+    transform: translateY(0);
+  }
+
+  .nav-menu a {
+    color: #111;
+    margin: 14px 0;
+  }
 }
