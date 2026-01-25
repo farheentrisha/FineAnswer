@@ -16,7 +16,7 @@ export default function CEOQuote() {
         <div className="quote-icon-left">“</div>
 
         <p className="ceo-quote-text">
-          Don’t just dream of studying abroad—make it happen. With our guidance, expert advice, and personalized strategies, we open doors to universities and opportunities around the world.
+          Don't just dream of studying abroad—make it happen. With our guidance, expert advice, and personalized strategies, we open doors to universities and opportunities around the world.
         </p>
 
         <div className="quote-icon-right">”</div>

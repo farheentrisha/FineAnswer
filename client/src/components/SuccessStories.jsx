@@ -12,23 +12,32 @@ export default function SuccessStories() {
   const autoSlideRef = useRef(null);
   const touchStartX = useRef(0);
 
+  const [originalStories, setOriginalStories] = useState([]);
+
   // Fetch success stories from API
   useEffect(() => {
     const fetchStories = async () => {
       try {
         const data = await getSuccessStories();
         const storiesData = data.stories || data || [];
-        setStories(storiesData);
+        setOriginalStories(storiesData);
         
-        // Create infinite loop effect by duplicating stories
-        if (storiesData.length > 0) {
+        // Only duplicate if we have exactly 1 story for carousel effect
+        // For 2+ stories, show them as-is (no duplication)
+        if (storiesData.length === 1) {
+          // For 1 story, duplicate to create smooth carousel
           const duplicated = [...storiesData, ...storiesData, ...storiesData];
           setStories(duplicated);
           setActive(storiesData.length); // Start in the middle
+        } else {
+          // For 2+ stories, show them as-is (no duplication)
+          setStories(storiesData);
+          setActive(0);
         }
       } catch (error) {
         console.error("Error fetching success stories:", error);
         setStories([]);
+        setOriginalStories([]);
       } finally {
         setLoading(false);
       }
@@ -37,30 +46,41 @@ export default function SuccessStories() {
     fetchStories();
   }, []);
 
-  const originalLength = stories.length / 3 || 0;
-  const mid = originalLength;
+  // Use original stories length for calculations
+  const originalLength = originalStories.length;
+  const mid = originalLength === 1 ? 1 : 0;
 
-  // AUTO SLIDE
+  // AUTO SLIDE (only for duplicated stories with exactly 1 item)
   useEffect(() => {
     if (stories.length === 0) return;
-
-    autoSlideRef.current = setInterval(() => {
-      setActive((prev) => prev + 1);
-    }, 3000);
-
-    return () => clearInterval(autoSlideRef.current);
-  }, [stories.length]);
-
-  // RESET LOOP
-  useEffect(() => {
-    if (stories.length === 0) return;
-
-    if (active >= stories.length - mid) {
-      setActive(mid);
-    } else if (active < mid) {
-      setActive(stories.length - mid * 2);
+    
+    // Only auto-slide if we have exactly 1 story (duplicated for carousel)
+    if (originalLength === 1) {
+      autoSlideRef.current = setInterval(() => {
+        setActive((prev) => prev + 1);
+      }, 4000); // Slower slide for better UX
     }
-  }, [active, stories.length, mid]);
+
+    return () => {
+      if (autoSlideRef.current) {
+        clearInterval(autoSlideRef.current);
+      }
+    };
+  }, [stories.length, originalLength]);
+
+  // RESET LOOP (only for duplicated stories with exactly 1 item)
+  useEffect(() => {
+    if (stories.length === 0) return;
+    
+    // Only reset loop if we duplicated (when originalLength is exactly 1)
+    if (originalLength === 1 && stories.length > originalLength) {
+      if (active >= stories.length - mid) {
+        setActive(mid);
+      } else if (active < mid) {
+        setActive(stories.length - mid * 2);
+      }
+    }
+  }, [active, stories.length, mid, originalLength]);
 
   // TOUCH SWIPE
   const onTouchStart = (e) => {
@@ -134,55 +154,84 @@ export default function SuccessStories() {
         <h2 className="success-title">We have stories to inspire you</h2>
         <p className="success-sub">People who transformed their career with us</p>
 
-        <div className="carousel-container">
-          {/* CAROUSEL */}
-          <div
-            className="carousel"
-            onTouchStart={onTouchStart}
-            onTouchMove={onTouchMove}
-          >
-            {stories.map((story, i) => {
-              const offset = i - active;
-              const scale = 1 - Math.min(Math.abs(offset) * 0.15, 0.6);
-              const blur = Math.min(Math.abs(offset) * 2, 6);
-              const opacity = Math.abs(offset) > 4 ? 0 : 1;
+        {originalLength === 1 ? (
+          // Carousel for single story (duplicated)
+          <div className="carousel-container">
+            <div
+              className="carousel"
+              onTouchStart={onTouchStart}
+              onTouchMove={onTouchMove}
+            >
+              {stories.map((story, i) => {
+                const offset = i - active;
+                const scale = 1 - Math.min(Math.abs(offset) * 0.15, 0.6);
+                const blur = Math.min(Math.abs(offset) * 2, 6);
+                const opacity = Math.abs(offset) > 4 ? 0 : 1;
 
-              return (
-                <div
-                  className="card-container"
-                  key={`${story._id || story.id}-${i}`}
-                  style={{
-                    transform: `translateX(${offset * 220}px) scale(${scale})`,
-                    filter: `blur(${blur}px)`,
-                    opacity,
-                    zIndex: 100 - Math.abs(offset),
-                  }}
-                >
-                  <div 
-                    className="card"
-                    onClick={() => openModal(story)}
-                    style={{ cursor: 'pointer' }}
+                return (
+                  <div
+                    className="card-container"
+                    key={`${story._id || story.id}-${i}`}
+                    style={{
+                      transform: `translateX(${offset * 320}px) scale(${scale})`,
+                      filter: `blur(${blur}px)`,
+                      opacity,
+                      zIndex: 100 - Math.abs(offset),
+                    }}
                   >
-                    <div className="card-image-wrapper">
-                      <img 
-                        src={story.image} 
-                        alt={story.name || "Success story"} 
-                        className="story-card-image"
-                      />
-                    </div>
-                    <div className="card-content">
-                      <h3>{story.name}</h3>
-                      <p className="card-university">{story.university}</p>
-                      <p className="card-country">{story.country}</p>
-                      <p className="card-program">{story.program}</p>
-                      <p className="card-story">{story.story}</p>
+                    <div 
+                      className="card"
+                      onClick={() => openModal(story)}
+                      style={{ cursor: 'pointer' }}
+                    >
+                      <div className="card-image-wrapper">
+                        <img 
+                          src={story.image} 
+                          alt={story.name || "Success story"} 
+                          className="story-card-image"
+                        />
+                      </div>
+                      <div className="card-content">
+                        <h3>{story.name}</h3>
+                        <p className="card-university">{story.university}</p>
+                        <p className="card-country">{story.country}</p>
+                        <p className="card-program">{story.program}</p>
+                        <p className="card-story">{story.story}</p>
+                      </div>
                     </div>
                   </div>
-                </div>
-              );
-            })}
+                );
+              })}
+            </div>
           </div>
-        </div>
+        ) : (
+          // Grid layout for 2+ stories
+          <div className="stories-grid-layout">
+            {stories.map((story) => (
+              <div 
+                key={story._id || story.id}
+                className="card"
+                onClick={() => openModal(story)}
+                style={{ cursor: 'pointer' }}
+              >
+                <div className="card-image-wrapper">
+                  <img 
+                    src={story.image} 
+                    alt={story.name || "Success story"} 
+                    className="story-card-image"
+                  />
+                </div>
+                <div className="card-content">
+                  <h3>{story.name}</h3>
+                  <p className="card-university">{story.university}</p>
+                  <p className="card-country">{story.country}</p>
+                  <p className="card-program">{story.program}</p>
+                  <p className="card-story">{story.story}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
       </div>
 
       {/* Modal */}
