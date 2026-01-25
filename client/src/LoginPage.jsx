@@ -5,7 +5,7 @@ import { AuthContext } from "./pages/Provider/ContextProvider";
 
 export default function LoginPage() {
   const navigate = useNavigate();
-  const { googleSignIn } = useContext(AuthContext);
+  const { googleSignIn, getCurrentUser } = useContext(AuthContext);
 
   // Slideshow images
   const images = [
@@ -58,17 +58,36 @@ export default function LoginPage() {
         throw new Error(result.message || "Login failed");
       }
 
-      const { token } = result;
+      const { token, isAdmin: adminStatus, data } = result;
       
       // Store only token in localStorage - user data comes from backend
       localStorage.setItem("token", token);
       
-      // User data will be fetched fresh from backend via getCurrentUser in context
+      // Fetch fresh user data from backend to update context (including isAdmin)
+      const currentUser = await getCurrentUser();
+      
+      // Get admin status from backend response only
+      // Priority: getCurrentUser result > login response root isAdmin > login response data.isAdmin
+      let isAdminFromContext = false;
+      
+      if (typeof currentUser?.isAdmin === 'boolean') {
+        isAdminFromContext = currentUser.isAdmin;
+      } else if (typeof adminStatus === 'boolean') {
+        isAdminFromContext = adminStatus;
+      } else if (typeof data?.isAdmin === 'boolean') {
+        isAdminFromContext = data.isAdmin;
+      }
 
       setMessage({ type: "success", text: "✅ Login successful!" });
 
-      // Redirect to dashboard after 1s
-      setTimeout(() => navigate("/dashboard"), 1000);
+      // Redirect based on admin status
+      setTimeout(() => {
+        if (isAdminFromContext) {
+          navigate("/admin/dashboard");
+        } else {
+          navigate("/dashboard");
+        }
+      }, 1000);
     } catch (error) {
       console.error("Login error:", error);
       
@@ -127,17 +146,36 @@ export default function LoginPage() {
         throw new Error(apiResult.message || "Google login failed");
       }
 
-      const { token } = apiResult;
+      const { token, isAdmin: adminStatus, data } = apiResult;
 
       // Store only token in localStorage - user data comes from backend
       localStorage.setItem("token", token);
       
-      // User data will be fetched fresh from backend via getCurrentUser in context
+      // Fetch fresh user data from backend to update context (including isAdmin)
+      const currentUser = await getCurrentUser();
+      
+      // Get admin status from backend response only
+      // Priority: getCurrentUser result > login response root isAdmin > login response data.isAdmin
+      let isAdminFromContext = false;
+      
+      if (typeof currentUser?.isAdmin === 'boolean') {
+        isAdminFromContext = currentUser.isAdmin;
+      } else if (typeof adminStatus === 'boolean') {
+        isAdminFromContext = adminStatus;
+      } else if (typeof data?.isAdmin === 'boolean') {
+        isAdminFromContext = data.isAdmin;
+      }
 
       setMessage({ type: "success", text: "✅ Google login successful!" });
 
-      // Redirect to dashboard after 1s
-      setTimeout(() => navigate("/dashboard"), 1000);
+      // Redirect based on admin status
+      setTimeout(() => {
+        if (isAdminFromContext) {
+          navigate("/admin/dashboard");
+        } else {
+          navigate("/dashboard");
+        }
+      }, 1000);
     } catch (error) {
       console.error("Google login error:", error);
       

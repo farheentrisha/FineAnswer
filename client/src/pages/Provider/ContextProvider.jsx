@@ -9,7 +9,7 @@ import {
 } from "firebase/auth";
 
 
-import { createContext, useEffect, useState } from "react";
+import { createContext, useEffect, useState, useCallback } from "react";
 
 import auth from "../../Firebase/firebase.config";
 
@@ -18,6 +18,7 @@ const googleProvider = new GoogleAuthProvider();
 
 const ContextProvider = ({ children }) => {
   const [user, setUser] = useState(null);
+  const [isAdmin, setIsAdmin] = useState(false);
   const [loading, setLoading] = useState(true);
 
   // Creating The Function Of The USER
@@ -49,6 +50,7 @@ const ContextProvider = ({ children }) => {
       localStorage.removeItem("token");
       localStorage.removeItem("Access-Token");
       setUser(null);
+      setIsAdmin(false);
       setLoading(false);
     } catch (error) {
       console.error("Logout error:", error);
@@ -57,7 +59,7 @@ const ContextProvider = ({ children }) => {
   };
 
   // Get Current User from Backend
-  const getCurrentUser = async () => {
+  const getCurrentUser = useCallback(async () => {
     try {
       const token = localStorage.getItem("token");
       if (!token) {
@@ -78,6 +80,7 @@ const ContextProvider = ({ children }) => {
         // If backend returns HTML, clear token and return null
         localStorage.removeItem("token");
         setUser(null);
+        setIsAdmin(false);
         setLoading(false);
         return null;
       }
@@ -88,12 +91,23 @@ const ContextProvider = ({ children }) => {
         // Token invalid, clear it
         localStorage.removeItem("token");
         setUser(null);
+        setIsAdmin(false);
         setLoading(false);
         return null;
       }
 
-      const { data } = result;
+      const { data, isAdmin: adminStatus } = result;
       setUser(data);
+      
+      // Set admin status from backend response only
+      // Backend can return isAdmin at root level OR in data object
+      // Priority: root level isAdmin > data.isAdmin > false
+      const adminValue = typeof adminStatus === 'boolean' 
+        ? adminStatus 
+        : (typeof data?.isAdmin === 'boolean' ? data.isAdmin : false);
+      
+      setIsAdmin(adminValue);
+      
       // Don't store user data in localStorage - always fetch from backend
       setLoading(false);
       return data;
@@ -104,10 +118,11 @@ const ContextProvider = ({ children }) => {
         localStorage.removeItem("token");
       }
       setUser(null);
+      setIsAdmin(false);
       setLoading(false);
       return null;
     }
-  };
+  }, []);
 
   //   Update Profile
   const updateUserProfile = (name, photo) => {
@@ -143,10 +158,11 @@ const ContextProvider = ({ children }) => {
     });
 
     return () => unsubscribe();
-  }, []);
+  }, [getCurrentUser]);
 
   const authInfo = {
     user,
+    isAdmin,
     createUser,
     logIn,
     logOut,
