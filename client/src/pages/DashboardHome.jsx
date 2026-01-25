@@ -5,7 +5,7 @@ import DocumentChecklist from "./DocumentChecklist";
 import { AuthContext } from "./Provider/ContextProvider";
 
 export default function DashboardHome() {
-  const { user, getCurrentUser, loading } = useContext(AuthContext);
+  const { user, isAdmin, getCurrentUser, loading } = useContext(AuthContext);
   const navigate = useNavigate();
   const [userData, setUserData] = useState(null);
 
@@ -22,7 +22,15 @@ export default function DashboardHome() {
     };
 
     fetchUser();
-  }, [getCurrentUser, navigate]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []); // Only run once on mount
+
+  // Redirect admin users to admin dashboard
+  useEffect(() => {
+    if (!loading && isAdmin) {
+      navigate("/admin/dashboard", { replace: true });
+    }
+  }, [isAdmin, loading, navigate]);
 
   // Show loading state
   if (loading) {

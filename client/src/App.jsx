@@ -1,5 +1,5 @@
-import React, { useEffect } from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import React, { useEffect, useContext } from "react";
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import LandingPage from "./LandingPage";
 import AustraliaPage from "./AustraliaPage";
 import UKPage from "./UKPage";
@@ -15,13 +15,21 @@ import Sessions from "./pages/Sessions";
 import Profile from "./pages/Profile";
 import Messages from "./pages/Messages";
 
+import AdminLayout from "./layouts/AdminLayout";
+import AdminDashboard from "./pages/admin/AdminDashboard";
+import Students from "./pages/admin/Students";
+import ProtectedRoute from "./components/ProtectedRoute";
+import { AuthContext } from "./pages/Provider/ContextProvider";
+
 import "./App.css";
 
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 gsap.registerPlugin(ScrollTrigger);
 
-export default function App() {
+function AppRoutes() {
+  const { user, isAdmin, loading } = useContext(AuthContext);
+
   useEffect(() => {
     gsap.utils.toArray(".reveal").forEach((elem) => {
       gsap.from(elem, {
@@ -38,26 +46,86 @@ export default function App() {
   }, []);
 
   return (
-    <Router>
-      <Routes>
-  {/* Public */}
-  <Route path="/" element={<LandingPage />} />
-  <Route path="/australia" element={<AustraliaPage />} />
-  <Route path="/uk" element={<UKPage />} />
-  <Route path="/ireland" element={<IrelandPage />} />
-  <Route path="/login" element={<Login />} />
-  <Route path="/register" element={<Register />} />
+    <Routes>
+      {/* Public Routes */}
+      <Route path="/" element={<LandingPage />} />
+      <Route path="/australia" element={<AustraliaPage />} />
+      <Route path="/uk" element={<UKPage />} />
+      <Route path="/ireland" element={<IrelandPage />} />
+      
+      {/* Login/Register - Redirect if already logged in */}
+      <Route 
+        path="/login" 
+        element={
+          !loading && user ? (
+            <Navigate to={isAdmin ? "/admin/dashboard" : "/dashboard"} replace />
+          ) : (
+            <Login />
+          )
+        } 
+      />
+      <Route 
+        path="/register" 
+        element={
+          !loading && user ? (
+            <Navigate to={isAdmin ? "/admin/dashboard" : "/dashboard"} replace />
+          ) : (
+            <Register />
+          )
+        } 
+      />
 
-  {/* Dashboard (layout-based routing) */}
-  <Route path="/dashboard" element={<DashboardLayout />}>
-    <Route index element={<DashboardHome />} />
-    <Route path="universities" element={<Universities />} />
-     <Route path="documentchecklist" element={<DocumentChecklist />} />
-     <Route path="sessions" element={<Sessions />} />
-    <Route path="profile" element={<Profile />} />
-    <Route path="messages" element={<Messages />} />
-  </Route>
-</Routes>
+      {/* User Dashboard - Protected */}
+      <Route 
+        path="/dashboard" 
+        element={
+          <ProtectedRoute>
+            {!loading && isAdmin ? (
+              <Navigate to="/admin/dashboard" replace />
+            ) : (
+              <DashboardLayout />
+            )}
+          </ProtectedRoute>
+        }
+      >
+        <Route index element={<DashboardHome />} />
+        <Route path="universities" element={<Universities />} />
+        <Route path="documentchecklist" element={<DocumentChecklist />} />
+        <Route path="sessions" element={<Sessions />} />
+        <Route path="profile" element={<Profile />} />
+        <Route path="messages" element={<Messages />} />
+      </Route>
+
+      {/* Admin Dashboard - Protected, Admin Only */}
+      <Route 
+        path="/admin" 
+        element={
+          <ProtectedRoute requireAdmin={true}>
+            <AdminLayout />
+          </ProtectedRoute>
+        }
+      >
+        <Route path="dashboard" element={<AdminDashboard />} />
+        <Route path="students" element={<Students />} />
+        <Route path="analytics" element={<div className="card"><h3>Analytics</h3><p>Coming soon...</p></div>} />
+        <Route path="counselors" element={<div className="card"><h3>Counselors</h3><p>Coming soon...</p></div>} />
+        <Route path="universities" element={<div className="card"><h3>Universities</h3><p>Coming soon...</p></div>} />
+        <Route path="applications" element={<div className="card"><h3>Applications</h3><p>Coming soon...</p></div>} />
+        <Route path="sessions" element={<div className="card"><h3>Sessions</h3><p>Coming soon...</p></div>} />
+        <Route path="documents" element={<div className="card"><h3>Documents</h3><p>Coming soon...</p></div>} />
+        <Route path="settings" element={<div className="card"><h3>Settings</h3><p>Coming soon...</p></div>} />
+      </Route>
+
+      {/* Default redirect */}
+      <Route path="*" element={<Navigate to="/" replace />} />
+    </Routes>
+  );
+}
+
+export default function App() {
+  return (
+    <Router>
+      <AppRoutes />
     </Router>
   );
 }

@@ -10,12 +10,20 @@
   background: #5b6bbf;
   color: #fff;
   padding: 20px;
+  display: flex;
+  flex-direction: column;
 }
 
 .logo {
   display: flex;
   gap: 10px;
   margin-bottom: 30px;
+}
+
+.admin-sidebar nav {
+  flex: 1;
+  overflow-y: auto;
+  margin-bottom: 20px;
 }
 
 .menu-title {
@@ -124,4 +132,29 @@
   color: #991b1b;
   padding: 6px 12px;
   border-radius: 20px;
+}
+
+/* Admin Sidebar Navigation Links */
+.admin-sidebar nav a {
+  color: rgba(255, 255, 255, 0.9);
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.admin-sidebar nav a.active {
+  background: rgba(255, 255, 255, 0.15);
+  color: #fff;
+}
+
+.admin-sidebar nav a:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+}
+
+/* Admin Sidebar Logout Button */
+.admin-sidebar .logout-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.4);
 }

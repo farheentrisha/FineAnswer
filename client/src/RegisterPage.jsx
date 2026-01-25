@@ -65,25 +65,37 @@ export default function RegisterPage() {
       }
 
       // Registration successful
-      console.log("User registered:", result);
-
       // Store only token in localStorage - user data comes from backend
       if (result.token) {
         localStorage.setItem("token", result.token);
       }
       
-      // User data will be fetched fresh from backend via getCurrentUser in context
+      // Get admin status from backend response only
+      // Backend can return isAdmin at root level OR in data object
+      let isAdmin = false;
+      
+      if (typeof result.isAdmin === 'boolean') {
+        isAdmin = result.isAdmin;
+      } else if (typeof result.data?.isAdmin === 'boolean') {
+        isAdmin = result.data.isAdmin;
+      }
 
       setMessage({ 
         type: "success", 
-        text: "✅ Registration successful! Redirecting to dashboard..." 
+        text: "✅ Registration successful! Redirecting..." 
       });
 
       // Reset form
       setFormData({ name: "", email: "", phone: "", password: "" });
 
-      // Redirect to dashboard after 1.5 seconds
-      setTimeout(() => navigate("/dashboard"), 1500);
+      // Redirect based on admin status
+      setTimeout(() => {
+        if (isAdmin) {
+          navigate("/admin/dashboard");
+        } else {
+          navigate("/dashboard");
+        }
+      }, 1500);
 
     } catch (error) {
       console.error("Registration error:", error);
