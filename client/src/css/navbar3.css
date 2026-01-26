@@ -1,25 +1,22 @@
-/* BASE NAVBAR */
+/* ===================== BASE NAVBAR ===================== */
 .minimal-navbar {
-  width: 100%;
-  padding: 20px 0;
-  position: relative; /* default */
-  top: 0;
-  left: 0;
-  z-index: 100;
-  transition: transform 0.35s ease, box-shadow 0.3s ease;
-  background: transparent;
-}
-
-/* Becomes fixed only after scroll */
-.navbar-fixed {
   position: fixed;
-  top: 0;
-  background: rgba(10, 10, 20, 0.9);
-  backdrop-filter: blur(12px);
-  box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+  top: 6px;
+  left: 0;
+  width: 100%;
+  background: transparent;
+  z-index: 100;
 }
 
-/* hide/show */
+.navbar-fixed {
+  background: rgba(0, 0, 0, 0.25); /* dark glass */
+  backdrop-filter: blur(10px);
+}
+
+
+
+
+/* ===================== HIDE / SHOW ON SCROLL ===================== */
 .nav-hide {
   transform: translateY(-100%);
 }
@@ -28,64 +25,7 @@
   transform: translateY(0);
 }
 
-
-/* Hamburger */
-.hamburger {
-  display: none;
-  flex-direction: column;
-  gap: 5px;
-  cursor: pointer;
-}
-
-.hamburger span {
-  width: 26px;
-  height: 3px;
-  background: #fff;
-  border-radius: 2px;
-}
-
-/* Mobile */
-@media (max-width: 900px) {
-  .hamburger {
-    display: flex;
-  }
-
-  .nav-menu {
-    position: absolute;
-    top: 70px;
-    left: 0;
-    width: 100%;
-    background: rgba(10,10,20,0.95);
-    flex-direction: column;
-    padding: 20px 0;
-    transform: translateY(-120%);
-    transition: transform 0.35s ease;
-  }
-
-  .nav-menu.open {
-    transform: translateY(0);
-  }
-}
-
-
-header.navbar {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  z-index: 9999;
-  transition: transform 0.35s ease-in-out, box-shadow 0.3s ease;
-}
-
-/* Hide navbar (scroll down) */
-header.nav-hide {
-  transform: translateY(-100%);
-}
-.nav-show {
-  transform: translateY(0);
-}
-
-/* MENU */
+/* ===================== NAV INNER ===================== */
 .nav-inner {
   max-width: 1300px;
   margin: auto;
@@ -99,6 +39,7 @@ header.nav-hide {
   cursor: pointer;
 }
 
+/* ===================== NAV MENU ===================== */
 .nav-menu {
   display: flex;
   align-items: center;
@@ -108,7 +49,7 @@ header.nav-hide {
   margin-left: 28px;
   text-decoration: none;
   font-weight: 600;
-  color: white; /* default for hero */
+  color: white; /* default text color for hero section */
   position: relative;
   padding-bottom: 4px;
   transition: color 0.3s ease;
@@ -124,16 +65,17 @@ header.nav-hide {
   background: #ffd250;
   transition: width 0.35s ease;
 }
+
 .nav-menu a:hover::after {
   width: 100%;
 }
 
-/* SCROLLED TEXT */
+/* Change link color after scroll */
 .minimal-navbar.scrolled .nav-menu a {
   color: #111;
 }
 
-/* JOIN BUTTON */
+/* ===================== JOIN BUTTON ===================== */
 .nav-btn {
   margin-left: 32px;
   padding: 8px 22px;
@@ -145,26 +87,30 @@ header.nav-hide {
   cursor: pointer;
   transition: all 0.3s ease;
 }
+
 .minimal-navbar.scrolled .nav-btn {
   border-color: #5fbd00;
   color: #5fbd00;
 }
+
 .nav-btn:hover {
   background: #ffd250;
   color: #003b31;
 }
+
 .minimal-navbar.scrolled .nav-btn:hover {
   background: #5fbd00;
   color: #fff;
 }
 
-/* HAMBURGER */
+/* ===================== HAMBURGER ===================== */
 .hamburger {
   display: none;
   flex-direction: column;
   gap: 5px;
   cursor: pointer;
 }
+
 .hamburger span {
   width: 26px;
   height: 3px;
@@ -172,13 +118,16 @@ header.nav-hide {
   border-radius: 2px;
   transition: background 0.3s ease;
 }
+
 .minimal-navbar.scrolled .hamburger span {
   background: #111;
 }
 
-/* MOBILE */
+/* ===================== MOBILE MENU ===================== */
 @media (max-width: 900px) {
-  .hamburger { display: flex; }
+  .hamburger {
+    display: flex;
+  }
 
   .nav-menu {
     position: absolute;
@@ -187,9 +136,9 @@ header.nav-hide {
     width: 100%;
     flex-direction: column;
     padding: 20px 0;
-    background: rgba(255,255,255,0.95);
+    background: rgba(10, 10, 20, 0.6); /* semi-transparent dark background */
     transform: translateY(-120%);
-    transition: transform 0.35s ease;
+    transition: transform 0.35s ease, background 0.3s ease;
   }
 
   .nav-menu.open {
@@ -197,7 +146,11 @@ header.nav-hide {
   }
 
   .nav-menu a {
-    color: #111;
+    color: white; /* mobile menu links visible over dark bg */
     margin: 14px 0;
+  }
+
+  .minimal-navbar.scrolled .nav-menu a {
+    color: #111; /* darker after scroll */
   }
 }
