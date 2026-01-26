@@ -42,7 +42,6 @@ export default function SuccessStories() {
         setLoading(false);
       }
     };
-
     fetchStories();
   }, []);
 
