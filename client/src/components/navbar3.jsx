@@ -32,10 +32,10 @@ export default function Navbar() {
 
   return (
     <header
-      className={`minimal-navbar 
-      ${scrolled ? "navbar-fixed" : ""} 
-      ${hidden ? "nav-hide" : "nav-show"}`}
-    >
+  className={`minimal-navbar ${scrolled ? "navbar-fixed scrolled" : ""} ${hidden ? "nav-hide" : "nav-show"}`}
+>
+
+
       <div className="nav-inner">
 
         <div className="nav-logo" onClick={() => navigate("/")}>
