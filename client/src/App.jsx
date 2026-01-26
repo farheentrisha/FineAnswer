@@ -26,6 +26,7 @@ import AdminSession from "./pages/admin/AdminSession";
 import StudentsInfo from "./pages/admin/StudentsInfo";
 import ProtectedRoute from "./components/ProtectedRoute";
 import { AuthContext } from "./pages/Provider/ContextProvider";
+import PublicBlog from "./pages/Blog"; 
 
 import "./App.css";
 
@@ -58,7 +59,7 @@ function AppRoutes() {
       <Route path="/australia" element={<AustraliaPage />} />
       <Route path="/uk" element={<UKPage />} />
       <Route path="/ireland" element={<IrelandPage />} />
-      
+      <Route path="/blog" element={<PublicBlog />} /> 
       {/* Login/Register - Redirect if already logged in */}
       <Route 
         path="/login" 
