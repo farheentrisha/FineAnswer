@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useNavigate, NavLink } from "react-router-dom";
 import "../css/navbar3.css";
 import logo from "../images/logo.png";
@@ -6,38 +6,12 @@ import logo from "../images/logo.png";
 export default function Navbar() {
   const navigate = useNavigate();
   const [menuOpen, setMenuOpen] = useState(false);
-  const [scrolled, setScrolled] = useState(false);
-  const [hidden, setHidden] = useState(false);
-  const [lastScrollY, setLastScrollY] = useState(0);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      const currentScroll = window.scrollY;
-
-      // fix navbar only after scrolling
-      setScrolled(currentScroll > 80);
-
-      if (currentScroll > lastScrollY && currentScroll > 120) {
-        setHidden(true);   // scrolling down
-      } else {
-        setHidden(false);  // scrolling up
-      }
-
-      setLastScrollY(currentScroll);
-    };
-
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, [lastScrollY]);
 
   return (
     <header
-  className={`minimal-navbar ${scrolled ? "navbar-fixed scrolled" : ""} ${hidden ? "nav-hide" : "nav-show"}`}
->
-
-
+      className="minimal-navbar"
+    >
       <div className="nav-inner">
-
         <div className="nav-logo" onClick={() => navigate("/")}>
           <img src={logo} alt="Logo" />
         </div>
