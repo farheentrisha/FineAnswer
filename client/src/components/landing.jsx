@@ -177,6 +177,8 @@ export default function LandingPage() {
       </section>
 
       {/* SPECIALIZATION SECTION */}
+      
+      
       <section className="specialization">
         <h2>Our Specializations</h2>
         <p>We provide expert guidance and end-to-end support for top study destinations.</p>
@@ -203,7 +205,7 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* MAP SECTION */}
+      {/* MAP SECTION */} 
 <section className="map-section">
   <h2>Our Location</h2>
   <div className="map-container">

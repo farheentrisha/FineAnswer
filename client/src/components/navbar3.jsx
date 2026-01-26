@@ -1,12 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useNavigate, NavLink } from "react-router-dom";
 import "../css/navbar3.css";
 import logo from "../images/logo.png";
 
 export default function Navbar() {
   const navigate = useNavigate();
-  const [hidden, setHidden] = useState(false);
-  const [lastScrollY, setLastScrollY] = useState(0);
   const [menuOpen, setMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
 
@@ -63,14 +61,13 @@ export default function Navbar() {
         </nav>
 
         <div
-          className={`hamburger ${menuOpen ? "active" : ""}`}
+          className="hamburger"
           onClick={() => setMenuOpen(!menuOpen)}
         >
           <span></span>
           <span></span>
           <span></span>
         </div>
-
       </div>
     </header>
   );
