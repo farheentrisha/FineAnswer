@@ -1,88 +1,22 @@
 /* ===================== BASE NAVBAR ===================== */
 .minimal-navbar {
   position: fixed;
-  top: 6px;
-  left: 0;
-  width: 100%;
-  background: transparent;
-  z-index: 100;
-}
-
-.navbar-fixed {
-  position: fixed;
-  top: 0;
-  background: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(12px);
-  box-shadow: 0 4px 20px rgba(0,0,0,0.08);
-}
-
-/* hide/show */
-.nav-hide {
-  transform: translateY(-100%);
-}
-
-.nav-show {
-  transform: translateY(0);
-}
-
-
-/* Hamburger */
-.hamburger {
-  display: none;
-  flex-direction: column;
-  gap: 5px;
-  cursor: pointer;
-}
-
-.hamburger span {
-  width: 26px;
-  height: 3px;
-  background: #213547;
-  border-radius: 2px;
-}
-
-
-  .nav-menu {
-    position: absolute;
-    top: 70px;
-    left: 0;
-    width: 100%;
-    background: rgba(255,255,255,0.98);
-    flex-direction: column;
-    padding: 20px 0;
-    transform: translateY(-120%);
-    transition: transform 0.35s ease;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
-  }
-
-  .nav-menu.open {
-    transform: translateY(0);
-  }
-}
-
-
-header.navbar {
-  position: fixed;
   top: 0;
   left: 0;
   width: 100%;
-  z-index: 9999;
-  transition: transform 0.35s ease-in-out, box-shadow 0.3s ease;
+  padding: 20px 0;
+  background: #ffffff; /* white background always */
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  z-index: 1000;
 }
 
-/* Hide navbar (scroll down) */
-header.nav-hide {
-  transform: translateY(-100%);
-}
-
-.nav-show {
-  transform: translateY(0);
-}
+/* No scroll behaviour: always visible */
 
 /* ===================== NAV INNER ===================== */
 .nav-inner {
   max-width: 1300px;
   margin: auto;
+  padding: 0 20px;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -103,7 +37,7 @@ header.nav-hide {
   margin-left: 28px;
   text-decoration: none;
   font-weight: 600;
-  color: #213547; /* light theme text color */
+  color: #213547; /* dark text for white background */
   position: relative;
   padding-bottom: 4px;
   transition: color 0.3s ease;
@@ -116,7 +50,7 @@ header.nav-hide {
   bottom: 0;
   height: 2px;
   width: 0%;
-  background: #ffd250;
+  background: #5b6bbf;
   transition: width 0.35s ease;
 }
 
@@ -124,37 +58,26 @@ header.nav-hide {
   width: 100%;
 }
 
-/* Change link color after scroll */
-.minimal-navbar.scrolled .nav-menu a {
-  color: #111;
+.nav-menu a:hover {
+  color: #5b6bbf;
 }
 
 /* ===================== JOIN BUTTON ===================== */
 .nav-btn {
   margin-left: 32px;
   padding: 8px 22px;
-  border: 1.5px solid #ffd250;
+  border: 1.5px solid #5b6bbf;
   background: transparent;
-  color: #ffd250;
+  color: #5b6bbf;
   border-radius: 22px;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.3s ease;
 }
 
-.minimal-navbar.scrolled .nav-btn {
-  border-color: #5fbd00;
-  color: #5fbd00;
-}
-
 .nav-btn:hover {
-  background: #ffd250;
-  color: #003b31;
-}
-
-.minimal-navbar.scrolled .nav-btn:hover {
-  background: #5fbd00;
-  color: #fff;
+  background: #5b6bbf;
+  color: #ffffff;
 }
 
 /* ===================== HAMBURGER ===================== */
@@ -168,13 +91,9 @@ header.nav-hide {
 .hamburger span {
   width: 26px;
   height: 3px;
-  background: #213547;
+  background: #213547; /* dark hamburger for white background */
   border-radius: 2px;
   transition: background 0.3s ease;
-}
-
-.minimal-navbar.scrolled .hamburger span {
-  background: #213547;
 }
 
 /* ===================== MOBILE MENU ===================== */
@@ -190,7 +109,8 @@ header.nav-hide {
     width: 100%;
     flex-direction: column;
     padding: 20px 0;
-    background: rgba(10, 10, 20, 0.6); /* semi-transparent dark background */
+    background: rgba(255, 255, 255, 0.98); /* light background for mobile menu */
+    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
     transform: translateY(-120%);
     transition: transform 0.35s ease, background 0.3s ease;
   }
@@ -200,11 +120,11 @@ header.nav-hide {
   }
 
   .nav-menu a {
-    color: white; /* mobile menu links visible over dark bg */
+    color: #213547; /* dark text for light background */
     margin: 14px 0;
   }
 
   .minimal-navbar.scrolled .nav-menu a {
-    color: #111; /* darker after scroll */
+    color: #213547; /* consistent dark text */
   }
 }
