@@ -20,7 +20,7 @@ export default function Topbar() {
   };
 
   return (
-    <header className="admin-topbar">
+    <header className="topbar">
       <div>
         <h2>Admin Dashboard</h2>
         <p>Manage and monitor your platform</p>

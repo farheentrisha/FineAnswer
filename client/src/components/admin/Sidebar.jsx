@@ -1,7 +1,18 @@
 import { NavLink, useNavigate } from "react-router-dom";
 import { useContext } from "react";
-import { FaSignOutAlt } from "react-icons/fa";
+import {
+  FaTachometerAlt,
+  FaChartBar,
+  FaStar,
+  FaBlog,
+  FaBriefcase,
+  FaTasks,
+  FaVideo,
+  FaUsers,
+  FaSignOutAlt,
+} from "react-icons/fa";
 import { AuthContext } from "../../pages/Provider/ContextProvider";
+import "../Sidebar.css";
 
 export default function Sidebar() {
   const { logOut } = useContext(AuthContext);
@@ -11,60 +22,57 @@ export default function Sidebar() {
     await logOut();
     navigate("/login");
   };
+
   return (
-    <aside className="admin-sidebar">
-      <div className="logo">
-        <span>🛡️</span>
+    <aside className="sidebar">
+      {/* Logo - same style as user dashboard */}
+      <div className="sidebar-logo">
+        <div className="logo-icon">🛡️</div>
         <div>
-          <h3><a href="/">FineAnswer</a></h3>
-          <p>FineAnswer</p>
+          <h3>
+            <a href="/">FineAnswer</a>
+          </h3>
+          <span>Admin Panel</span>
         </div>
       </div>
 
-      <nav>
+      {/* Navigation - same layout as user sidebar */}
+      <nav className="sidebar-nav">
         <NavLink to="/admin/dashboard" end>
-          Dashboard
+          <FaTachometerAlt /> <span>Dashboard</span>
         </NavLink>
+
         <NavLink to="/admin/analytics">
-          Analytics
+          <FaChartBar /> <span>Analytics</span>
         </NavLink>
+
         <NavLink to="/admin/success-stories">
-          Success Stories
+          <FaStar /> <span>Success Stories</span>
         </NavLink>
+
         <NavLink to="/admin/blog">
-          Blog
+          <FaBlog /> <span>Blog</span>
         </NavLink>
+
         <NavLink to="/admin/career">
-          Career
+          <FaBriefcase /> <span>Career</span>
         </NavLink>
+
         <NavLink to="/admin/tracker-update">
-          Tracker Update
+          <FaTasks /> <span>Tracker Update</span>
         </NavLink>
+
         <NavLink to="/admin/sessions">
-          Session
+          <FaVideo /> <span>Sessions</span>
         </NavLink>
+
         <NavLink to="/admin/students-info">
-          Get overall info About students
+          <FaUsers /> <span>Students Info</span>
         </NavLink>
       </nav>
 
-      {/* Logout */}
-      <button className="logout-btn" onClick={handleLogout} style={{
-        marginTop: "auto",
-        padding: "12px 16px",
-        border: "1px solid rgba(255,255,255,0.3)",
-        borderRadius: "10px",
-        background: "transparent",
-        color: "#fff",
-        cursor: "pointer",
-        display: "flex",
-        alignItems: "center",
-        gap: "10px",
-        width: "100%",
-        fontSize: "14px",
-        fontWeight: "500",
-        transition: "0.25s"
-      }}>
+      {/* Logout - shares same styling as user sidebar */}
+      <button className="logout-btn" onClick={handleLogout}>
         <FaSignOutAlt /> Logout
       </button>
     </aside>
