@@ -139,7 +139,6 @@ export default function LandingPage() {
           </div>
         </div>
       </section>
-
       {/* STATISTICS SECTION */}
       <section className="statistics" ref={statsRef}>
         <div className="stat-card">
@@ -163,7 +162,6 @@ export default function LandingPage() {
           <p>Learners Enrolled in Edexcel Courses</p>
         </div>
       </section>
-
       {/* SERVICES SECTION */}
       <section className="services">
         <h2>Our Services</h2>
@@ -177,8 +175,7 @@ export default function LandingPage() {
       </section>
 
       {/* SPECIALIZATION SECTION */}
-      
-      
+    
       <section className="specialization">
         <h2>Our Specializations</h2>
         <p>We provide expert guidance and end-to-end support for top study destinations.</p>
