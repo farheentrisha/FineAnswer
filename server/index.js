@@ -305,6 +305,7 @@ app.post("/api/auth/google", async (req, res) => {
           authProvider: "google",
           picture: picture || null,
           isAdmin: adminStatus,
+          progressTracker: [], // Initialize empty progress tracker
           createdAt: new Date(),
           updatedAt: new Date()
         };
@@ -435,6 +436,7 @@ app.post("/api/users", async (req, res) => {
       email,
       authProvider,
       isAdmin: adminStatus,
+      progressTracker: [], // Initialize empty progress tracker
       createdAt: new Date(),
       updatedAt: new Date()
     };
@@ -477,8 +479,8 @@ app.post("/api/users", async (req, res) => {
 
 
 
-// GET /api/users - Get all users
-app.get("/api/users", async (req, res) => {
+// GET /api/users - Get all users (ADMIN ONLY)
+app.get("/api/users", authenticateToken, requireAdmin, async (req, res) => {
   try {
     const users = await usersCollection.find({}).toArray();
     
@@ -490,14 +492,13 @@ app.get("/api/users", async (req, res) => {
 
     res.status(200).json({
       success: true,
-      count: usersWithoutPassword.length,
-      data: usersWithoutPassword
+      users: usersWithoutPassword
     });
   } catch (error) {
     console.error("Error fetching users:", error);
     res.status(500).json({ 
       success: false, 
-      message: "Internal server error", 
+      message: "Failed to fetch users", 
       error: error.message 
     });
   }
@@ -577,7 +578,6 @@ app.get("/api/users/:id", async (req, res) => {
         message: "Invalid user ID format" 
       });
     }
-
     const user = await usersCollection.findOne({ _id: new ObjectId(id) });
 
     if (!user) {
@@ -600,6 +600,122 @@ app.get("/api/users/:id", async (req, res) => {
       success: false, 
       message: "Internal server error", 
       error: error.message 
+    });
+  }
+});
+
+// ==================== PROGRESS TRACKER ROUTES ====================
+
+// GET /api/users/me/progress-tracker - Get own progress tracker (USER - Any authenticated user)
+// IMPORTANT: This route must be defined BEFORE /api/users/:userId/progress-tracker
+// Otherwise Express will match "me" as a userId parameter
+app.get("/api/users/me/progress-tracker", authenticateToken, async (req, res) => {
+  try {
+    // req.user is set by authenticateToken middleware with user._id
+    // Fetch fresh user data from database to ensure we have latest progressTracker
+    const user = await usersCollection.findOne({ _id: req.user._id });
+
+    if (!user) {
+      return res.status(404).json({
+        message: "User not found"
+      });
+    }
+
+    // Return the user's own progress tracker
+    res.status(200).json({
+      timeline: user.progressTracker || []
+    });
+  } catch (error) {
+    console.error("Error fetching progress tracker:", error);
+    res.status(500).json({
+      message: "Failed to fetch progress tracker",
+      error: error.message
+    });
+  }
+});
+
+// GET /api/users/:userId/progress-tracker - Get user's progress tracker (ADMIN ONLY)
+app.get("/api/users/:userId/progress-tracker", authenticateToken, requireAdmin, async (req, res) => {
+  try {
+    const { userId } = req.params;
+
+    // Validate ObjectId format
+    if (!ObjectId.isValid(userId)) {
+      return res.status(400).json({
+        message: "Invalid user ID format"
+      });
+    }
+
+    const user = await usersCollection.findOne({ _id: new ObjectId(userId) });
+
+    if (!user) {
+      return res.status(404).json({
+        message: "User not found"
+      });
+    }
+
+    res.status(200).json({
+      timeline: user.progressTracker || []
+    });
+  } catch (error) {
+    console.error("Error fetching progress tracker:", error);
+    res.status(500).json({
+      message: "Failed to fetch progress tracker",
+      error: error.message
+    });
+  }
+});
+
+// PUT /api/users/:userId/progress-tracker - Update user's progress tracker (ADMIN ONLY)
+app.put("/api/users/:userId/progress-tracker", authenticateToken, requireAdmin, async (req, res) => {
+  try {
+    const { userId } = req.params;
+    const { timeline } = req.body;
+
+    // Validate ObjectId format
+    if (!ObjectId.isValid(userId)) {
+      return res.status(400).json({
+        message: "Invalid user ID format"
+      });
+    }
+
+    // Validate timeline is provided
+    if (!Array.isArray(timeline)) {
+      return res.status(400).json({
+        message: "Timeline must be an array"
+      });
+    }
+
+    // Update user's progress tracker
+    const result = await usersCollection.findOneAndUpdate(
+      { _id: new ObjectId(userId) },
+      {
+        $set: {
+          progressTracker: timeline,
+          updatedAt: new Date()
+        }
+      },
+      { returnDocument: "after" }
+    );
+
+    if (!result) {
+      return res.status(404).json({
+        message: "User not found"
+      });
+    }
+
+    res.status(200).json({
+      message: "Progress tracker updated successfully",
+      user: {
+        _id: result._id,
+        progressTracker: result.progressTracker
+      }
+    });
+  } catch (error) {
+    console.error("Error updating progress tracker:", error);
+    res.status(500).json({
+      message: "Failed to update progress tracker",
+      error: error.message
     });
   }
 });
