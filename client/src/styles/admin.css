@@ -1,72 +1,151 @@
+/* Admin layout matches user dashboard exactly - uses same CSS variables and structure */
 .admin-layout {
   display: flex;
   height: 100vh;
-  background: #f6f8fc;
-  font-family: "Poppins", sans-serif;
+  overflow: hidden;
+  background: var(--bg, #f0f5fa);
+  font-family: "Inter", sans-serif;
 }
 
-.admin-sidebar {
-  width: 260px;
-  background: #5b6bbf;
-  color: #fff;
-  padding: 20px;
-  display: flex;
-  flex-direction: column;
+/* Ensure admin sidebar matches user sidebar - white background */
+.admin-layout .sidebar {
+  width: 260px !important;
+  height: 100vh !important;
+  position: fixed !important;
+  left: 0 !important;
+  top: 0 !important;
+  background: #ffffff !important;
+  border-right: 1px solid #eef1f6 !important;
+  padding: 18px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  z-index: 50 !important;
 }
 
-.logo {
-  display: flex;
-  gap: 10px;
-  margin-bottom: 30px;
+/* Ensure sidebar navigation links match user dashboard */
+.admin-layout .sidebar .sidebar-nav a {
+  display: flex !important;
+  align-items: center !important;
+  gap: 15px !important;
+  padding: 16px 14px !important;
+  border-radius: 12px !important;
+  color: #2d2d2d !important;
+  font-size: 14px !important;
+  text-decoration: none !important;
+  margin-bottom: 6px !important;
+  flex-direction: row !important;
 }
 
-.admin-sidebar nav {
-  flex: 1;
-  overflow-y: auto;
-  margin-bottom: 20px;
+.admin-layout .sidebar .sidebar-nav a:hover {
+  background-color: #f1f4ff !important;
+  color: #5b6bbf !important;
 }
 
-.menu-title {
-  margin: 20px 0 8px;
-  font-size: 12px;
-  opacity: 0.7;
+.admin-layout .sidebar .sidebar-nav a.active {
+  background-color: #5b6bbf !important;
+  color: #ffffff !important;
+  font-weight: 600 !important;
 }
 
-.admin-sidebar a {
-  display: flex;
-  justify-content: space-between;
-  padding: 10px;
-  border-radius: 8px;
-  margin-bottom: 6px;
-  cursor: pointer;
+/* Ensure logo matches */
+.admin-layout .sidebar .sidebar-logo {
+  display: flex !important;
+  align-items: center !important;
+  gap: 13px !important;
+  margin-bottom: 30px !important;
 }
 
-.admin-sidebar a.active,
-.admin-sidebar a:hover {
-  background: rgba(255,255,255,0.15);
+.admin-layout .sidebar .logo-icon {
+  width: 42px !important;
+  height: 42px !important;
+  border-radius: 12px !important;
+  background: #5b6bbf !important;
+  color: #fff !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
 }
 
-.badge {
-  background: orange;
-  border-radius: 20px;
-  padding: 2px 8px;
-  font-size: 12px;
+.admin-layout .sidebar .sidebar-logo h3 {
+  margin: 0 !important;
+  font-size: 16px !important;
+  font-weight: 600 !important;
+  color: #2d2d2d !important;
+}
+
+.admin-layout .sidebar .sidebar-logo h3 a {
+  color: #2d2d2d !important;
+  text-decoration: none !important;
+}
+
+.admin-layout .sidebar .sidebar-logo span {
+  font-size: 12px !important;
+  color: #8a8fa3 !important;
+}
+
+/* Ensure logout button matches */
+.admin-layout .sidebar .logout-btn {
+  background: transparent !important;
+  border: 1px solid #e5e7eb !important;
+  margin-top: auto !important;
+  padding: 12px 16px !important;
+  border-radius: 10px !important;
+  cursor: pointer !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 10px !important;
+  justify-content: center !important;
+  transition: 0.25s !important;
+  color: #2d2d2d !important;
+  font-size: 14px !important;
+  font-weight: 500 !important;
+  width: 100% !important;
+}
+
+.admin-layout .sidebar .logout-btn:hover {
+  background: #fee2e2 !important;
+  border-color: #ef4444 !important;
+  color: #dc2626 !important;
 }
 
 .admin-main {
+  margin-left: 260px; /* same as sidebar width */
   flex: 1;
+  height: 100vh;
+  overflow-y: auto;
+  background: #f6f8fc;
+  padding: 20px 24px;
 }
 
-.admin-topbar {
-  background: #fff;
-  padding: 20px 30px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+/* Topbar matches user dashboard */
+.admin-layout .topbar {
+  display: flex !important;
+  justify-content: space-between !important;
+  margin-bottom: 20px !important;
+}
+
+.admin-layout .topbar input {
+  width: 60% !important;
+  padding: 10px !important;
+  border-radius: 8px !important;
+  border: 1px solid #ddd !important;
+}
+
+.admin-layout .topbar-right {
+  display: flex !important;
+  align-items: center !important;
+  gap: 15px !important;
+}
+
+.admin-layout .avatar {
+  background: var(--primary, #4c5c9e) !important;
+  color: white !important;
+  padding: 8px !important;
+  border-radius: 50% !important;
 }
 
 .admin-content {
-  padding: 30px;
+  padding: 0;
 }
 
 .card {
@@ -81,11 +160,17 @@
 }
 
 .primary-btn {
-  background: #5b6bbf;
+  background: var(--primary, #4c5c9e);
   color: #fff;
   border: none;
   padding: 10px 16px;
   border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.25s ease;
+}
+
+.primary-btn:hover {
+  background: #3d4a7d;
 }
 
 .filters {
@@ -111,13 +196,14 @@
 }
 
 .avatar-circle {
-  background: #5b6bbf;
+  background: var(--primary, #4c5c9e);
   color: #fff;
   width: 36px;
   height: 36px;
   border-radius: 50%;
   display: grid;
   place-items: center;
+  font-weight: 600;
 }
 
 .status.active {
@@ -134,27 +220,3 @@
   border-radius: 20px;
 }
 
-/* Admin Sidebar Navigation Links */
-.admin-sidebar nav a {
-  color: rgba(255, 255, 255, 0.9);
-  text-decoration: none;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.admin-sidebar nav a.active {
-  background: rgba(255, 255, 255, 0.15);
-  color: #fff;
-}
-
-.admin-sidebar nav a:hover {
-  background: rgba(255, 255, 255, 0.1);
-  color: #fff;
-}
-
-/* Admin Sidebar Logout Button */
-.admin-sidebar .logout-btn:hover {
-  background: rgba(255, 255, 255, 0.1);
-  border-color: rgba(255, 255, 255, 0.4);
-}
