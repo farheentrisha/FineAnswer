@@ -2,16 +2,6 @@
 
 A full-stack web application for study abroad consultancy, helping students explore universities, manage their applications, and access expert guidance for studying overseas.
 
-## Tech Stack
-
-| Layer      | Technology                          |
-| ---------- | ----------------------------------- |
-| Frontend   | React 19, Vite 7, React Router 7    |
-| Backend    | Node.js, Express 5                  |
-| Database   | MongoDB (Atlas)                     |
-| Auth       | Firebase (Google OAuth), JWT, bcrypt |
-| Email      | Nodemailer (password reset)         |
-
 ## Project Structure
 
 ```
