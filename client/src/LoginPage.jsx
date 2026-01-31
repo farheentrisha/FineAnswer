@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom"; // for redirect
+import { useNavigate, Link } from "react-router-dom";
 import "./LoginPage.css";
 import { AuthContext } from "./pages/Provider/ContextProvider";
 
@@ -215,7 +215,7 @@ export default function LoginPage() {
                 <label>
                   <input type="checkbox" /> Remember me
                 </label>
-                <a href="#">Forgot password?</a>
+                <Link to="/forgot-password">Forgot password?</Link>
               </div>
               <button type="submit" className="login-btn">
                 LOGIN
