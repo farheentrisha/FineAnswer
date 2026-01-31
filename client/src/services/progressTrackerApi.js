@@ -85,7 +85,6 @@ export const getMyProgressTracker = async (token) => {
     return { timeline: [] };
   }
 };
-
 // Update progress tracker for a specific user (admin only)
 export const updateUserProgressTracker = async (userId, timeline, token) => {
   try {
