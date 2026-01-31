@@ -235,7 +235,7 @@ export default function LandingPage() {
         </div>
         <div className="form-options">
           <label>
-            <input type="checkbox" /> Remember me
+            <input type="checkbox" /> Remember me 
           </label>
           <a href="#">Forgot Password?</a>
         </div>
@@ -275,12 +275,11 @@ export default function LandingPage() {
             <p>info@fineanswer.com</p>
           </div>
         </div>
-
         <div className="contact-item">
           <span>🕒</span>
           <div>
             <h4>Work Hours</h4>
-            <p>Sun - Thu: 10 AM – 6 PM</p>
+            <p>Sun - Thu: 10 AM - 6 PM</p>
           </div>
         </div>
       </div>
