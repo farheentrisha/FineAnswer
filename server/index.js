@@ -527,13 +527,16 @@ app.post("/api/users", async (req, res) => {
     // Insert user into database
     const result = await usersCollection.insertOne(newUser);
 
-    // Return user (without password)
+    // Return user (without password) and token so they are logged in and can be redirected to dashboard
     const user = await usersCollection.findOne({ _id: result.insertedId });
     const { password: _, ...userWithoutPassword } = user;
+    const token = generateToken(user._id.toString());
 
     res.status(201).json({
       success: true,
       message: "User created successfully",
+      token,
+      isAdmin: user.isAdmin || false,
       data: userWithoutPassword
     });
   } catch (error) {

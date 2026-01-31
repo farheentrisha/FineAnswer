@@ -1,9 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
+import { AuthContext } from "./pages/Provider/ContextProvider";
 import "./RegisterPage.css";
 
-export default function RegisterPage() { 
+export default function RegisterPage() {
   const navigate = useNavigate();
+  const { getCurrentUser } = useContext(AuthContext);
 
   const [formData, setFormData] = useState({
     name: "",
@@ -34,60 +36,27 @@ export default function RegisterPage() {
       const result = await response.json();
 
       if (!response.ok) {
-        // Check if user already exists
-        if (response.status === 409 || response.status === 400) {
-          const errorMessage = result.message || result.error || "User already exists";
-          
-          // Check if error message indicates duplicate user
-          if (
-            errorMessage.toLowerCase().includes("already exists") ||
-            errorMessage.toLowerCase().includes("user exists") ||
-            errorMessage.toLowerCase().includes("email already") ||
-            errorMessage.toLowerCase().includes("duplicate")
-          ) {
-            setMessage({
-              type: "error",
-              text: "❌ This email is already registered. Please log in instead.",
-            });
-            return;
-          }
-        }
-        
-        throw new Error(result.message || result.error || "Registration failed");
+        const errorMessage = result.message || result.error || "Registration failed";
+        setMessage({ type: "error", text: errorMessage });
+        return;
       }
 
-      // Registration successful
-      // Store only token in localStorage - user data comes from backend
+      // Registration successful: store token, refresh auth state, then redirect to dashboard
       if (result.token) {
         localStorage.setItem("token", result.token);
       }
-      
-      // Get admin status from backend response only
-      // Backend can return isAdmin at root level OR in data object
-      let isAdmin = false;
-      
-      if (typeof result.isAdmin === 'boolean') {
-        isAdmin = result.isAdmin;
-      } else if (typeof result.data?.isAdmin === 'boolean') {
-        isAdmin = result.data.isAdmin;
-      }
 
-      setMessage({ 
-        type: "success", 
-        text: "✅ Registration successful! Redirecting..." 
-      });
+      // Refresh auth context so ProtectedRoute sees the user and doesn't redirect to login
+      await getCurrentUser();
 
-      // Reset form
+      const isAdmin = result.isAdmin === true || result.data?.isAdmin === true;
       setFormData({ name: "", email: "", phone: "", password: "" });
 
-      // Redirect based on admin status
-      setTimeout(() => {
-        if (isAdmin) {
-          navigate("/admin/dashboard");
-        } else {
-          navigate("/dashboard");
-        }
-      }, 1500);
+      if (isAdmin) {
+        navigate("/admin/dashboard", { replace: true });
+      } else {
+        navigate("/dashboard", { replace: true });
+      }
 
     } catch (error) {
       console.error("Registration error:", error);
