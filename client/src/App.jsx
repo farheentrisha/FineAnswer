@@ -7,6 +7,8 @@ import IrelandPage from "./IrelandPage";
 
 import Login from "./LoginPage";
 import Register from "./RegisterPage";
+import ForgotPassword from "./ForgotPassword";
+import ResetPassword from "./ResetPassword";
 import DashboardLayout from "./pages/DashboardLayout";
 import DashboardHome from "./pages/DashboardHome";
 import Universities from "./pages/Universities";
@@ -81,6 +83,8 @@ function AppRoutes() {
           )
         } 
       />
+      <Route path="/forgot-password" element={<ForgotPassword />} />
+      <Route path="/reset-password" element={<ResetPassword />} />
 
       {/* User Dashboard - Protected */}
       <Route 
