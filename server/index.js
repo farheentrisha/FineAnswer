@@ -655,6 +655,14 @@ app.use((err, req, res, next) => {
   });
 });
 
-app.listen(port, () => {
-  // Server started on port ${port}
-});
+// Connect to MongoDB, then start the server (so usersCollection is set before any request)
+run()
+  .then(() => {
+    app.listen(port, () => {
+      // Server started on port
+    });
+  })
+  .catch((err) => {
+    console.error("Failed to connect to MongoDB:", err.message);
+    process.exit(1);
+  });
