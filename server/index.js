@@ -1,21 +1,6 @@
-// Suppress dotenvx console tips
-const originalConsoleLog = console.log;
-console.log = function(...args) {
-  const message = args[0];
-  if (message && typeof message === 'string' && message.includes('[dotenv@')) {
-    return; // Suppress dotenvx tips
-  }
-  originalConsoleLog.apply(console, args);
-};
-
 const express = require("express");
 const cors = require("cors");
 require("dotenv").config();
-
-// Restore console.log after dotenv loads
-setTimeout(() => {
-  console.log = originalConsoleLog;
-}, 100);
 
 const { MongoClient, ServerApiVersion, ObjectId } = require("mongodb");
 const bcrypt = require("bcryptjs");
@@ -31,6 +16,8 @@ app.use(cors({
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+// Wraps async route handlers so rejected promises are passed to the error handler
+const asyncHandler = (fn) => (req, res, next) => Promise.resolve(fn(req, res, next)).catch(next);
 
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@cluster1.pvs4l8x.mongodb.net/?appName=Cluster1`;
 
@@ -132,27 +119,13 @@ async function run() {
     usersCollection = client.db("FineAnswer").collection("usersCollection");
     successStoryCollection = client.db("FineAnswer").collection("successStory");
 
-
-
-
-
-
-
-
-
-
-
-
-
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
-  } catch (error) {
-    console.error("MongoDB connection error:", error);
+  } catch (_error) {
+    // Connection errors surface via health check / routes
   }
 }
-run().catch((error) => {
-  console.error("Failed to start MongoDB connection:", error);
-});
+
 
 // Routes
 app.get("/", (req, res) => {
@@ -174,725 +147,512 @@ app.get("/api/health", (req, res) => {
 });
 
 // POST /api/auth/login - Login with email and password
-app.post("/api/auth/login", async (req, res) => {
-  try {
-    const { email, password } = req.body;
+app.post("/api/auth/login", asyncHandler(async (req, res) => {
+  const { email, password } = req.body;
 
-    // Validation
-    if (!email || !password) {
-      return res.status(400).json({
-        success: false,
-        message: "Please provide email and password"
-      });
-    }
-
-    // Find user by email
-    const user = await usersCollection.findOne({ email });
-
-    if (!user) {
-      return res.status(401).json({
-        success: false,
-        message: "Invalid email or password"
-      });
-    }
-
-    // Check if user is using email authentication
-    if (user.authProvider !== "email") {
-      return res.status(400).json({
-        success: false,
-        message: "This email is registered with Google. Please use Google login."
-      });
-    }
-
-    // Check if password exists
-    if (!user.password) {
-      return res.status(401).json({
-        success: false,
-        message: "Invalid email or password"
-      });
-    }
-
-    // Compare password
-    const isPasswordValid = await bcrypt.compare(password, user.password);
-
-    if (!isPasswordValid) {
-      return res.status(401).json({
-        success: false,
-        message: "Invalid email or password"
-      });
-    }
-
-    // Check and update admin status
-    const adminStatus = isAdminUser(user.email);
-    if (user.isAdmin !== adminStatus) {
-      await usersCollection.updateOne(
-        { _id: user._id },
-        { $set: { isAdmin: adminStatus, updatedAt: new Date() } }
-      );
-      user.isAdmin = adminStatus;
-    }
-
-    // Generate token
-    const token = generateToken(user._id.toString());
-
-    // Remove password from user object
-    const { password: _, ...userWithoutPassword } = user;
-
-    res.status(200).json({
-      success: true,
-      message: "Login successful",
-      token,
-      data: userWithoutPassword,
-      isAdmin: user.isAdmin || false
-    });
-  } catch (error) {
-    console.error("Error during login:", error);
-    res.status(500).json({
+  if (!email || !password) {
+    return res.status(400).json({
       success: false,
-      message: "Internal server error",
-      error: error.message
+      message: "Please provide email and password"
     });
   }
-});
+
+  const user = await usersCollection.findOne({ email });
+
+  if (!user) {
+    return res.status(401).json({
+      success: false,
+      message: "Invalid email or password"
+    });
+  }
+
+  if (user.authProvider !== "email") {
+    return res.status(400).json({
+      success: false,
+      message: "This email is registered with Google. Please use Google login."
+    });
+  }
+
+  if (!user.password) {
+    return res.status(401).json({
+      success: false,
+      message: "Invalid email or password"
+    });
+  }
+
+  const isPasswordValid = await bcrypt.compare(password, user.password);
+
+  if (!isPasswordValid) {
+    return res.status(401).json({
+      success: false,
+      message: "Invalid email or password"
+    });
+  }
+
+  const adminStatus = isAdminUser(user.email);
+  if (user.isAdmin !== adminStatus) {
+    await usersCollection.updateOne(
+      { _id: user._id },
+      { $set: { isAdmin: adminStatus, updatedAt: new Date() } }
+    );
+    user.isAdmin = adminStatus;
+  }
+
+  const token = generateToken(user._id.toString());
+  const { password: _, ...userWithoutPassword } = user;
+
+  res.status(200).json({
+    success: true,
+    message: "Login successful",
+    token,
+    data: userWithoutPassword,
+    isAdmin: user.isAdmin || false
+  });
+}));
 
 // POST /api/auth/google - Login/Register with Google OAuth
-app.post("/api/auth/google", async (req, res) => {
-  try {
-    const { email, googleId, name, picture } = req.body;
+app.post("/api/auth/google", asyncHandler(async (req, res) => {
+  const { email, googleId, name, picture } = req.body;
 
-    // Validation
-    if (!email || !googleId) {
-      return res.status(400).json({
-        success: false,
-        message: "Email and googleId are required"
-      });
-    }
+  if (!email || !googleId) {
+    return res.status(400).json({
+      success: false,
+      message: "Email and googleId are required"
+    });
+  }
 
-    // Check if user exists by googleId or email
-    let user = await usersCollection.findOne({ googleId });
-    
-    if (!user) {
-      // Check by email
-      user = await usersCollection.findOne({ email });
-      
-      if (user) {
-        // Check and update admin status
-        const adminStatus = isAdminUser(email);
-        
-        // User exists with email but not Google ID - update to add Google ID
-        await usersCollection.updateOne(
-          { _id: user._id },
-          {
-            $set: {
-              googleId,
-              authProvider: "google",
-              picture: picture || user.picture,
-              isAdmin: adminStatus,
-              updatedAt: new Date()
-            }
-          }
-        );
-        user = await usersCollection.findOne({ _id: user._id });
-      } else {
-        // Check if user is admin
-        const adminStatus = isAdminUser(email);
+  let user = await usersCollection.findOne({ googleId });
 
-        // Create new Google user
-        const newUser = {
-          name: name || email.split("@")[0],
-          email,
-          googleId,
-          authProvider: "google",
-          picture: picture || null,
-          isAdmin: adminStatus,
-          progressTracker: [], // Initialize empty progress tracker
-          createdAt: new Date(),
-          updatedAt: new Date()
-        };
+  if (!user) {
+    user = await usersCollection.findOne({ email });
 
-        const result = await usersCollection.insertOne(newUser);
-        user = await usersCollection.findOne({ _id: result.insertedId });
-      }
-    }
-
-    // Check and update admin status
-    const adminStatus = isAdminUser(user.email);
-    if (user.isAdmin !== adminStatus) {
+    if (user) {
+      const adminStatus = isAdminUser(email);
       await usersCollection.updateOne(
         { _id: user._id },
-        { $set: { isAdmin: adminStatus, updatedAt: new Date() } }
+        {
+          $set: {
+            googleId,
+            authProvider: "google",
+            picture: picture || user.picture,
+            isAdmin: adminStatus,
+            updatedAt: new Date()
+          }
+        }
       );
-      user.isAdmin = adminStatus;
+      user = await usersCollection.findOne({ _id: user._id });
+    } else {
+      const adminStatus = isAdminUser(email);
+      const newUser = {
+        name: name || email.split("@")[0],
+        email,
+        googleId,
+        authProvider: "google",
+        picture: picture || null,
+        isAdmin: adminStatus,
+        progressTracker: [],
+        createdAt: new Date(),
+        updatedAt: new Date()
+      };
+      const result = await usersCollection.insertOne(newUser);
+      user = await usersCollection.findOne({ _id: result.insertedId });
     }
-
-    // Generate token
-    const token = generateToken(user._id.toString());
-
-    // Remove password from user object
-    const { password: _, ...userWithoutPassword } = user;
-
-    res.status(200).json({
-      success: true,
-      message: "Login successful",
-      token,
-      data: userWithoutPassword,
-      isAdmin: user.isAdmin || false
-    });
-  } catch (error) {
-    console.error("Error during Google login:", error);
-    res.status(500).json({
-      success: false,
-      message: "Internal server error",
-      error: error.message
-    });
   }
-});
+
+  const adminStatus = isAdminUser(user.email);
+  if (user.isAdmin !== adminStatus) {
+    await usersCollection.updateOne(
+      { _id: user._id },
+      { $set: { isAdmin: adminStatus, updatedAt: new Date() } }
+    );
+    user.isAdmin = adminStatus;
+  }
+
+  const token = generateToken(user._id.toString());
+  const { password: _, ...userWithoutPassword } = user;
+
+  res.status(200).json({
+    success: true,
+    message: "Login successful",
+    token,
+    data: userWithoutPassword,
+    isAdmin: user.isAdmin || false
+  });
+}));
 
 // GET /api/auth/me - Get current logged-in user (Protected Route)
-app.get("/api/auth/me", authenticateToken, async (req, res) => {
-  try {
-    // User is already attached to req by authenticateToken middleware
-    const { password, ...userWithoutPassword } = req.user;
-
-    res.status(200).json({
-      success: true,
-      data: userWithoutPassword,
-      isAdmin: userWithoutPassword.isAdmin || false
-    });
-  } catch (error) {
-    console.error("Error fetching user:", error);
-    res.status(500).json({
-      success: false,
-      message: "Internal server error",
-      error: error.message
-    });
-  }
+app.get("/api/auth/me", authenticateToken, (req, res) => {
+  const { password, ...userWithoutPassword } = req.user;
+  res.status(200).json({
+    success: true,
+    data: userWithoutPassword,
+    isAdmin: userWithoutPassword.isAdmin || false
+  });
 });
 
 // PUT /api/users/me/profile - Update current user's profile (Protected Route)
-app.put("/api/users/me/profile", authenticateToken, async (req, res) => {
-  try {
-    const userId = req.user._id;
-    const {
-      name,
-      dateOfBirth,
-      phone,
-      country,
-      city,
-      address,
-      postalCode,
-      highestEducation,
-      university,
-      graduationYear,
-      gpa,
-      workExperience,
-      yearsOfExperience,
-      languageTest,
-      picture
-    } = req.body;
+app.put("/api/users/me/profile", authenticateToken, asyncHandler(async (req, res) => {
+  const userId = req.user._id;
+  const {
+    name,
+    dateOfBirth,
+    phone,
+    country,
+    city,
+    address,
+    postalCode,
+    highestEducation,
+    university,
+    graduationYear,
+    gpa,
+    workExperience,
+    yearsOfExperience,
+    languageTest,
+    picture
+  } = req.body;
 
-    const updateFields = { updatedAt: new Date() };
-    if (name !== undefined) updateFields.name = name;
-    if (dateOfBirth !== undefined) updateFields.dateOfBirth = dateOfBirth;
-    if (phone !== undefined) updateFields.phone = phone;
-    if (country !== undefined) updateFields.country = country;
-    if (city !== undefined) updateFields.city = city;
-    if (address !== undefined) updateFields.address = address;
-    if (postalCode !== undefined) updateFields.postalCode = postalCode;
-    if (highestEducation !== undefined) updateFields.highestEducation = highestEducation;
-    if (university !== undefined) updateFields.university = university;
-    if (graduationYear !== undefined) updateFields.graduationYear = graduationYear;
-    if (gpa !== undefined) updateFields.gpa = gpa;
-    if (workExperience !== undefined) updateFields.workExperience = workExperience;
-    if (yearsOfExperience !== undefined) updateFields.yearsOfExperience = yearsOfExperience;
-    if (languageTest !== undefined && typeof languageTest === "object") updateFields.languageTest = languageTest;
-    if (picture !== undefined) updateFields.picture = picture;
+  const updateFields = { updatedAt: new Date() };
+  if (name !== undefined) updateFields.name = name;
+  if (dateOfBirth !== undefined) updateFields.dateOfBirth = dateOfBirth;
+  if (phone !== undefined) updateFields.phone = phone;
+  if (country !== undefined) updateFields.country = country;
+  if (city !== undefined) updateFields.city = city;
+  if (address !== undefined) updateFields.address = address;
+  if (postalCode !== undefined) updateFields.postalCode = postalCode;
+  if (highestEducation !== undefined) updateFields.highestEducation = highestEducation;
+  if (university !== undefined) updateFields.university = university;
+  if (graduationYear !== undefined) updateFields.graduationYear = graduationYear;
+  if (gpa !== undefined) updateFields.gpa = gpa;
+  if (workExperience !== undefined) updateFields.workExperience = workExperience;
+  if (yearsOfExperience !== undefined) updateFields.yearsOfExperience = yearsOfExperience;
+  if (languageTest !== undefined && typeof languageTest === "object") updateFields.languageTest = languageTest;
+  if (picture !== undefined) updateFields.picture = picture;
 
-    const result = await usersCollection.findOneAndUpdate(
-      { _id: userId },
-      { $set: updateFields },
-      { returnDocument: "after" }
-    );
+  const result = await usersCollection.findOneAndUpdate(
+    { _id: userId },
+    { $set: updateFields },
+    { returnDocument: "after" }
+  );
 
-    if (!result) {
-      return res.status(404).json({
-        success: false,
-        message: "User not found"
-      });
-    }
-
-    const { password: _, ...userWithoutPassword } = result;
-
-    res.status(200).json({
-      success: true,
-      message: "Profile updated successfully",
-      data: userWithoutPassword
-    });
-  } catch (error) {
-    console.error("Error updating profile:", error);
-    res.status(500).json({
+  if (!result) {
+    return res.status(404).json({
       success: false,
-      message: "Internal server error",
-      error: error.message
+      message: "User not found"
     });
   }
-});
+
+  const { password: _, ...userWithoutPassword } = result;
+
+  res.status(200).json({
+    success: true,
+    message: "Profile updated successfully",
+    data: userWithoutPassword
+  });
+}));
 
 // POST /api/users - Create a new user
-app.post("/api/users", async (req, res) => {
-  try {
-    const { name, email, phone, password, authProvider = "email", googleId, picture } = req.body;
+app.post("/api/users", asyncHandler(async (req, res) => {
+  const { name, email, phone, password, authProvider = "email", googleId, picture } = req.body;
 
-    // Validate required fields
-    if (!name || !email) {
-      return res.status(400).json({ 
-        success: false, 
-        message: "Name and email are required fields" 
-      });
-    }
-
-    // Validate authProvider
-    if (authProvider !== "google" && authProvider !== "email") {
-      return res.status(400).json({ 
-        success: false, 
-        message: "authProvider must be either 'email' or 'google'" 
-      });
-    }
-
-    // Validation for email/password users
-    if (authProvider === "email") {
-      if (!password) {
-        return res.status(400).json({ 
-          success: false, 
-          message: "Password is required for email authentication" 
-        });
-      }
-      if (password.length < 6) {
-        return res.status(400).json({ 
-          success: false, 
-          message: "Password must be at least 6 characters long" 
-        });
-      }
-    }
-
-    // Check if user already exists
-    if (authProvider === "google" && googleId) {
-      // For Google users, check by googleId first, then email
-      const existingGoogleUser = await usersCollection.findOne({ googleId });
-      if (existingGoogleUser) {
-        return res.status(400).json({ 
-          success: false, 
-          message: "User with this Google account already exists" 
-        });
-      }
-    }
-    
-    // Check by email (for both email and Google users)
-    const existingUser = await usersCollection.findOne({ email });
-    if (existingUser) {
-      return res.status(400).json({ 
-        success: false, 
-        message: "User with this email already exists" 
-      });
-    }
-
-    // Check if user is admin
-    const adminStatus = isAdminUser(email);
-
-    // Create user object
-    const newUser = {
-      name,
-      email,
-      authProvider,
-      isAdmin: adminStatus,
-      progressTracker: [], // Initialize empty progress tracker
-      createdAt: new Date(),
-      updatedAt: new Date()
-    };
-
-    // Add optional fields based on authProvider
-    if (authProvider === "google") {
-      // Google OAuth users: phone and password are optional
-      if (phone) newUser.phone = phone;
-      if (googleId) newUser.googleId = googleId;
-      if (picture) newUser.picture = picture;
-    } else {
-      // Email users: phone is optional, password is required (already validated)
-      if (phone) newUser.phone = phone;
-      // Hash password before saving
-      const salt = await bcrypt.genSalt(10);
-      newUser.password = await bcrypt.hash(password, salt);
-    }
-
-    // Insert user into database
-    const result = await usersCollection.insertOne(newUser);
-
-    // Return user (without password) and token so they are logged in and can be redirected to dashboard
-    const user = await usersCollection.findOne({ _id: result.insertedId });
-    const { password: _, ...userWithoutPassword } = user;
-    const token = generateToken(user._id.toString());
-
-    res.status(201).json({
-      success: true,
-      message: "User created successfully",
-      token,
-      isAdmin: user.isAdmin || false,
-      data: userWithoutPassword
-    });
-  } catch (error) {
-    console.error("Error creating user:", error);
-    res.status(500).json({ 
-      success: false, 
-      message: "Internal server error", 
-      error: error.message
+  if (!name || !email) {
+    return res.status(400).json({
+      success: false,
+      message: "Name and email are required fields"
     });
   }
-});
+
+  if (authProvider !== "google" && authProvider !== "email") {
+    return res.status(400).json({
+      success: false,
+      message: "authProvider must be either 'email' or 'google'"
+    });
+  }
+
+  if (authProvider === "email") {
+    if (!password) {
+      return res.status(400).json({
+        success: false,
+        message: "Password is required for email authentication"
+      });
+    }
+    if (password.length < 6) {
+      return res.status(400).json({
+        success: false,
+        message: "Password must be at least 6 characters long"
+      });
+    }
+  }
+
+  if (authProvider === "google" && googleId) {
+    const existingGoogleUser = await usersCollection.findOne({ googleId });
+    if (existingGoogleUser) {
+      return res.status(400).json({
+        success: false,
+        message: "User with this Google account already exists"
+      });
+    }
+  }
+
+  const existingUser = await usersCollection.findOne({ email });
+  if (existingUser) {
+    return res.status(400).json({
+      success: false,
+      message: "User with this email already exists"
+    });
+  }
+
+  const adminStatus = isAdminUser(email);
+  const newUser = {
+    name,
+    email,
+    authProvider,
+    isAdmin: adminStatus,
+    progressTracker: [],
+    createdAt: new Date(),
+    updatedAt: new Date()
+  };
+
+  if (authProvider === "google") {
+    if (phone) newUser.phone = phone;
+    if (googleId) newUser.googleId = googleId;
+    if (picture) newUser.picture = picture;
+  } else {
+    if (phone) newUser.phone = phone;
+    const salt = await bcrypt.genSalt(10);
+    newUser.password = await bcrypt.hash(password, salt);
+  }
+
+  const result = await usersCollection.insertOne(newUser);
+  const user = await usersCollection.findOne({ _id: result.insertedId });
+  const { password: _, ...userWithoutPassword } = user;
+  const token = generateToken(user._id.toString());
+
+  res.status(201).json({
+    success: true,
+    message: "User created successfully",
+    token,
+    isAdmin: user.isAdmin || false,
+    data: userWithoutPassword
+  });
+}));
 
 
 
 // GET /api/users - Get all users (ADMIN ONLY)
-app.get("/api/users", authenticateToken, requireAdmin, async (req, res) => {
-  try {
-    const users = await usersCollection.find({}).toArray();
-    
-    // Remove password from all users
-    const usersWithoutPassword = users.map(user => {
-      const { password, ...userWithoutPassword } = user;
-      return userWithoutPassword;
-    });
-
-    res.status(200).json({
-      success: true,
-      users: usersWithoutPassword
-    });
-  } catch (error) {
-    console.error("Error fetching users:", error);
-    res.status(500).json({ 
-      success: false, 
-      message: "Failed to fetch users", 
-      error: error.message 
-    });
-  }
-});
+app.get("/api/users", authenticateToken, requireAdmin, asyncHandler(async (req, res) => {
+  const users = await usersCollection.find({}).toArray();
+  const usersWithoutPassword = users.map(user => {
+    const { password, ...userWithoutPassword } = user;
+    return userWithoutPassword;
+  });
+  res.status(200).json({
+    success: true,
+    users: usersWithoutPassword
+  });
+}));
 
 // GET /api/users/google/:googleId - Get a user by Google ID
-app.get("/api/users/google/:googleId", async (req, res) => {
-  try {
-    const { googleId } = req.params;
-
-    const user = await usersCollection.findOne({ googleId });
-
-    if (!user) {
-      return res.status(404).json({ 
-        success: false, 
-        message: "User not found" 
-      });
-    }
-
-    // Remove password from user object
-    const { password, ...userWithoutPassword } = user;
-
-    res.status(200).json({
-      success: true,
-      data: userWithoutPassword
-    });
-  } catch (error) {
-    console.error("Error fetching user by Google ID:", error);
-    res.status(500).json({ 
-      success: false, 
-      message: "Internal server error", 
-      error: error.message 
+app.get("/api/users/google/:googleId", asyncHandler(async (req, res) => {
+  const { googleId } = req.params;
+  const user = await usersCollection.findOne({ googleId });
+  if (!user) {
+    return res.status(404).json({
+      success: false,
+      message: "User not found"
     });
   }
-});
+  const { password, ...userWithoutPassword } = user;
+  res.status(200).json({
+    success: true,
+    data: userWithoutPassword
+  });
+}));
 
 // GET /api/users/email/:email - Get a user by email
-app.get("/api/users/email/:email", async (req, res) => {
-  try {
-    const { email } = req.params;
-
-    const user = await usersCollection.findOne({ email });
-
-    if (!user) {
-      return res.status(404).json({ 
-        success: false, 
-        message: "User not found" 
-      });
-    }
-
-    // Remove password from user object
-    const { password, ...userWithoutPassword } = user;
-
-    res.status(200).json({
-      success: true,
-      data: userWithoutPassword
-    });
-  } catch (error) {
-    console.error("Error fetching user by email:", error);
-    res.status(500).json({ 
-      success: false, 
-      message: "Internal server error", 
-      error: error.message 
+app.get("/api/users/email/:email", asyncHandler(async (req, res) => {
+  const { email } = req.params;
+  const user = await usersCollection.findOne({ email });
+  if (!user) {
+    return res.status(404).json({
+      success: false,
+      message: "User not found"
     });
   }
-});
+  const { password, ...userWithoutPassword } = user;
+  res.status(200).json({
+    success: true,
+    data: userWithoutPassword
+  });
+}));
 
 // GET /api/users/:id - Get a single user by ID
-app.get("/api/users/:id", async (req, res) => {
-  try {
-    const { id } = req.params;
-
-    // Validate ObjectId format
-    if (!ObjectId.isValid(id)) {
-      return res.status(400).json({ 
-        success: false, 
-        message: "Invalid user ID format" 
-      });
-    }
-    const user = await usersCollection.findOne({ _id: new ObjectId(id) });
-
-    if (!user) {
-      return res.status(404).json({ 
-        success: false, 
-        message: "User not found" 
-      });
-    }
-
-    // Remove password from user object
-    const { password, ...userWithoutPassword } = user;
-
-    res.status(200).json({
-      success: true,
-      data: userWithoutPassword
-    });
-  } catch (error) {
-    console.error("Error fetching user:", error);
-    res.status(500).json({ 
-      success: false, 
-      message: "Internal server error", 
-      error: error.message 
+app.get("/api/users/:id", asyncHandler(async (req, res) => {
+  const { id } = req.params;
+  if (!ObjectId.isValid(id)) {
+    return res.status(400).json({
+      success: false,
+      message: "Invalid user ID format"
     });
   }
-});
+  const user = await usersCollection.findOne({ _id: new ObjectId(id) });
+  if (!user) {
+    return res.status(404).json({
+      success: false,
+      message: "User not found"
+    });
+  }
+  const { password, ...userWithoutPassword } = user;
+  res.status(200).json({
+    success: true,
+    data: userWithoutPassword
+  });
+}));
 
 // ==================== PROGRESS TRACKER ROUTES ====================
 
 // GET /api/users/me/progress-tracker - Get own progress tracker (USER - Any authenticated user)
 // IMPORTANT: This route must be defined BEFORE /api/users/:userId/progress-tracker
-// Otherwise Express will match "me" as a userId parameter
-app.get("/api/users/me/progress-tracker", authenticateToken, async (req, res) => {
-  try {
-    // req.user is set by authenticateToken middleware with user._id
-    // Fetch fresh user data from database to ensure we have latest progressTracker
-    const user = await usersCollection.findOne({ _id: req.user._id });
-
-    if (!user) {
-      return res.status(404).json({
-        message: "User not found"
-      });
-    }
-
-    // Return the user's own progress tracker
-    res.status(200).json({
-      timeline: user.progressTracker || []
-    });
-  } catch (error) {
-    console.error("Error fetching progress tracker:", error);
-    res.status(500).json({
-      message: "Failed to fetch progress tracker",
-      error: error.message
+app.get("/api/users/me/progress-tracker", authenticateToken, asyncHandler(async (req, res) => {
+  const user = await usersCollection.findOne({ _id: req.user._id });
+  if (!user) {
+    return res.status(404).json({
+      message: "User not found"
     });
   }
-});
+  res.status(200).json({
+    timeline: user.progressTracker || []
+  });
+}));
 
 // GET /api/users/:userId/progress-tracker - Get user's progress tracker (ADMIN ONLY)
-app.get("/api/users/:userId/progress-tracker", authenticateToken, requireAdmin, async (req, res) => {
-  try {
-    const { userId } = req.params;
-
-    // Validate ObjectId format
-    if (!ObjectId.isValid(userId)) {
-      return res.status(400).json({
-        message: "Invalid user ID format"
-      });
-    }
-
-    const user = await usersCollection.findOne({ _id: new ObjectId(userId) });
-
-    if (!user) {
-      return res.status(404).json({
-        message: "User not found"
-      });
-    }
-
-    res.status(200).json({
-      timeline: user.progressTracker || []
-    });
-  } catch (error) {
-    console.error("Error fetching progress tracker:", error);
-    res.status(500).json({
-      message: "Failed to fetch progress tracker",
-      error: error.message
+app.get("/api/users/:userId/progress-tracker", authenticateToken, requireAdmin, asyncHandler(async (req, res) => {
+  const { userId } = req.params;
+  if (!ObjectId.isValid(userId)) {
+    return res.status(400).json({
+      message: "Invalid user ID format"
     });
   }
-});
+  const user = await usersCollection.findOne({ _id: new ObjectId(userId) });
+  if (!user) {
+    return res.status(404).json({
+      message: "User not found"
+    });
+  }
+  res.status(200).json({
+    timeline: user.progressTracker || []
+  });
+}));
 
 // PUT /api/users/:userId/progress-tracker - Update user's progress tracker (ADMIN ONLY)
-app.put("/api/users/:userId/progress-tracker", authenticateToken, requireAdmin, async (req, res) => {
-  try {
-    const { userId } = req.params;
-    const { timeline } = req.body;
-
-    // Validate ObjectId format
-    if (!ObjectId.isValid(userId)) {
-      return res.status(400).json({
-        message: "Invalid user ID format"
-      });
-    }
-
-    // Validate timeline is provided
-    if (!Array.isArray(timeline)) {
-      return res.status(400).json({
-        message: "Timeline must be an array"
-      });
-    }
-
-    // Update user's progress tracker
-    const result = await usersCollection.findOneAndUpdate(
-      { _id: new ObjectId(userId) },
-      {
-        $set: {
-          progressTracker: timeline,
-          updatedAt: new Date()
-        }
-      },
-      { returnDocument: "after" }
-    );
-
-    if (!result) {
-      return res.status(404).json({
-        message: "User not found"
-      });
-    }
-
-    res.status(200).json({
-      message: "Progress tracker updated successfully",
-      user: {
-        _id: result._id,
-        progressTracker: result.progressTracker
-      }
-    });
-  } catch (error) {
-    console.error("Error updating progress tracker:", error);
-    res.status(500).json({
-      message: "Failed to update progress tracker",
-      error: error.message
+app.put("/api/users/:userId/progress-tracker", authenticateToken, requireAdmin, asyncHandler(async (req, res) => {
+  const { userId } = req.params;
+  const { timeline } = req.body;
+  if (!ObjectId.isValid(userId)) {
+    return res.status(400).json({
+      message: "Invalid user ID format"
     });
   }
-});
+  if (!Array.isArray(timeline)) {
+    return res.status(400).json({
+      message: "Timeline must be an array"
+    });
+  }
+  const result = await usersCollection.findOneAndUpdate(
+    { _id: new ObjectId(userId) },
+    {
+      $set: {
+        progressTracker: timeline,
+        updatedAt: new Date()
+      }
+    },
+    { returnDocument: "after" }
+  );
+  if (!result) {
+    return res.status(404).json({
+      message: "User not found"
+    });
+  }
+  res.status(200).json({
+    message: "Progress tracker updated successfully",
+    user: {
+      _id: result._id,
+      progressTracker: result.progressTracker
+    }
+  });
+}));
 
 // ==================== SUCCESS STORIES ROUTES ====================
 
 // GET /api/success-stories - Get all success stories (PUBLIC)
-app.get("/api/success-stories", async (req, res) => {
-  try {
-    const stories = await successStoryCollection
-      .find({})
-      .sort({ createdAt: -1 })
-      .toArray();
-
-    res.status(200).json(stories);
-  } catch (error) {
-    console.error("Error fetching success stories:", error);
-    res.status(500).json({
-      message: "Failed to fetch success stories",
-      error: error.message
-    });
-  }
-});
+app.get("/api/success-stories", asyncHandler(async (req, res) => {
+  const stories = await successStoryCollection
+    .find({})
+    .sort({ createdAt: -1 })
+    .toArray();
+  res.status(200).json(stories);
+}));
 
 // POST /api/success-stories - Create a new success story (ADMIN ONLY)
-app.post("/api/success-stories", authenticateToken, requireAdmin, async (req, res) => {
-  try {
-    const { name, university, country, program, story, image } = req.body;
-
-    // Validation - ALL fields are required
-    if (!name || !university || !country || !program || !story || !image) {
-      return res.status(400).json({
-        message: "Name, university, country, program, story, and image are required"
-      });
-    }
-
-    // Validate URL format for image
-    try {
-      new URL(image);
-    } catch (urlError) {
-      return res.status(400).json({
-        message: "Invalid image URL format"
-      });
-    }
-
-    // Create new success story
-    const newStory = {
-      name: name.trim(),
-      university: university.trim(),
-      country: country.trim(),
-      program: program.trim(),
-      story: story.trim(),
-      image: image.trim(),
-      createdAt: new Date(),
-      updatedAt: new Date()
-    };
-
-    const result = await successStoryCollection.insertOne(newStory);
-    const savedStory = await successStoryCollection.findOne({ _id: result.insertedId });
-
-    res.status(201).json({
-      message: "Success story created successfully",
-      story: savedStory
-    });
-  } catch (error) {
-    console.error("Error creating success story:", error);
-    res.status(500).json({
-      message: "Failed to create success story",
-      error: error.message
+app.post("/api/success-stories", authenticateToken, requireAdmin, asyncHandler(async (req, res) => {
+  const { name, university, country, program, story, image } = req.body;
+  if (!name || !university || !country || !program || !story || !image) {
+    return res.status(400).json({
+      message: "Name, university, country, program, story, and image are required"
     });
   }
-});
+  try {
+    new URL(image);
+  } catch (_urlError) {
+    return res.status(400).json({
+      message: "Invalid image URL format"
+    });
+  }
+  const newStory = {
+    name: name.trim(),
+    university: university.trim(),
+    country: country.trim(),
+    program: program.trim(),
+    story: story.trim(),
+    image: image.trim(),
+    createdAt: new Date(),
+    updatedAt: new Date()
+  };
+  const result = await successStoryCollection.insertOne(newStory);
+  const savedStory = await successStoryCollection.findOne({ _id: result.insertedId });
+  res.status(201).json({
+    message: "Success story created successfully",
+    story: savedStory
+  });
+}));
 
 // DELETE /api/success-stories/:id - Delete a success story (ADMIN ONLY)
-app.delete("/api/success-stories/:id", authenticateToken, requireAdmin, async (req, res) => {
-  try {
-    const { id } = req.params;
-
-    // Validate ObjectId format
-    if (!ObjectId.isValid(id)) {
-      return res.status(400).json({
-        message: "Invalid success story ID format"
-      });
-    }
-
-    const deletedStory = await successStoryCollection.findOneAndDelete({
-      _id: new ObjectId(id)
-    });
-
-    if (!deletedStory) {
-      return res.status(404).json({
-        message: "Success story not found"
-      });
-    }
-
-    res.status(200).json({
-      message: "Success story deleted successfully"
-    });
-  } catch (error) {
-    console.error("Error deleting success story:", error);
-    res.status(500).json({
-      message: "Failed to delete success story",
-      error: error.message
+app.delete("/api/success-stories/:id", authenticateToken, requireAdmin, asyncHandler(async (req, res) => {
+  const { id } = req.params;
+  if (!ObjectId.isValid(id)) {
+    return res.status(400).json({
+      message: "Invalid success story ID format"
     });
   }
+  const deletedStory = await successStoryCollection.findOneAndDelete({
+    _id: new ObjectId(id)
+  });
+  if (!deletedStory) {
+    return res.status(404).json({
+      message: "Success story not found"
+    });
+  }
+  res.status(200).json({
+    message: "Success story deleted successfully"
+  });
+}));
+
+// Global error handler (catches errors from asyncHandler-wrapped routes)
+app.use((err, req, res, next) => {
+  res.status(500).json({
+    success: false,
+    message: err.message || "Internal server error",
+    error: err.message
+  });
 });
 
 app.listen(port, () => {
