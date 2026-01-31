@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { FaTimes } from "react-icons/fa";
+import { FaUniversity, FaMapMarkerAlt } from "react-icons/fa";
 import "./SuccessStories.css";
 import { getSuccessStories } from "../services/successStoriesApi";
 
@@ -7,7 +7,6 @@ export default function SuccessStories() {
   const [stories, setStories] = useState([]);
   const [loading, setLoading] = useState(true);
   const [active, setActive] = useState(0);
-  const [selectedImage, setSelectedImage] = useState(null);
 
   const autoSlideRef = useRef(null);
   const touchStartX = useRef(0);
@@ -101,28 +100,6 @@ export default function SuccessStories() {
   const prevSlide = () => setActive((prev) => prev - 1);
   const nextSlide = () => setActive((prev) => prev + 1);
 
-  // Modal handlers
-  const openModal = (story) => {
-    setSelectedImage(story);
-    document.body.style.overflow = 'hidden'; // Prevent background scrolling
-  };
-
-  const closeModal = () => {
-    setSelectedImage(null);
-    document.body.style.overflow = 'unset'; // Restore scrolling
-  };
-
-  // Close modal on Escape key
-  useEffect(() => {
-    const handleEscape = (e) => {
-      if (e.key === 'Escape' && selectedImage) {
-        closeModal();
-      }
-    };
-    window.addEventListener('keydown', handleEscape);
-    return () => window.removeEventListener('keydown', handleEscape);
-  }, [selectedImage]);
-
   if (loading) {
     return (
       <div className="success-wrapper">
@@ -156,6 +133,20 @@ export default function SuccessStories() {
         {originalLength === 1 ? (
           // Carousel for single story (duplicated)
           <div className="carousel-container">
+            <button
+              className="carousel-nav carousel-nav-prev"
+              onClick={prevSlide}
+              aria-label="Previous story"
+            >
+              ‹
+            </button>
+            <button
+              className="carousel-nav carousel-nav-next"
+              onClick={nextSlide}
+              aria-label="Next story"
+            >
+              ›
+            </button>
             <div
               className="carousel"
               onTouchStart={onTouchStart}
@@ -163,9 +154,8 @@ export default function SuccessStories() {
             >
               {stories.map((story, i) => {
                 const offset = i - active;
-                const scale = 1 - Math.min(Math.abs(offset) * 0.15, 0.6);
-                const blur = Math.min(Math.abs(offset) * 2, 6);
-                const opacity = Math.abs(offset) > 4 ? 0 : 1;
+                const scale = offset === 0 ? 1 : 1 - Math.min(Math.abs(offset) * 0.12, 0.25);
+                const opacity = offset === 0 ? 1 : Math.max(0.4, 1 - Math.abs(offset) * 0.25);
 
                 return (
                   <div
@@ -173,16 +163,11 @@ export default function SuccessStories() {
                     key={`${story._id || story.id}-${i}`}
                     style={{
                       transform: `translateX(${offset * 320}px) scale(${scale})`,
-                      filter: `blur(${blur}px)`,
                       opacity,
                       zIndex: 100 - Math.abs(offset),
                     }}
                   >
-                    <div 
-                      className="card"
-                      onClick={() => openModal(story)}
-                      style={{ cursor: 'pointer' }}
-                    >
+                    <div className="card">
                       <div className="card-image-wrapper">
                         <img 
                           src={story.image} 
@@ -192,10 +177,16 @@ export default function SuccessStories() {
                       </div>
                       <div className="card-content">
                         <h3>{story.name}</h3>
-                        <p className="card-university">{story.university}</p>
-                        <p className="card-country">{story.country}</p>
-                        <p className="card-program">{story.program}</p>
-                        <p className="card-story">{story.story}</p>
+                        <p className="card-meta">
+                          <FaUniversity className="card-icon" />
+                          <span>{story.university}</span>
+                        </p>
+                        <p className="card-meta">
+                          <FaMapMarkerAlt className="card-icon" />
+                          <span>{story.country}</span>
+                        </p>
+                        <span className="card-program">{story.program}</span>
+                        <p className="card-story">{story.story?.trim() || "Their journey to studying abroad."}</p>
                       </div>
                     </div>
                   </div>
@@ -207,12 +198,7 @@ export default function SuccessStories() {
           // Grid layout for 2+ stories
           <div className="stories-grid-layout">
             {stories.map((story) => (
-              <div 
-                key={story._id || story.id}
-                className="card"
-                onClick={() => openModal(story)}
-                style={{ cursor: 'pointer' }}
-              >
+              <div key={story._id || story.id} className="card">
                 <div className="card-image-wrapper">
                   <img 
                     src={story.image} 
@@ -222,43 +208,22 @@ export default function SuccessStories() {
                 </div>
                 <div className="card-content">
                   <h3>{story.name}</h3>
-                  <p className="card-university">{story.university}</p>
-                  <p className="card-country">{story.country}</p>
-                  <p className="card-program">{story.program}</p>
-                  <p className="card-story">{story.story}</p>
+                  <p className="card-meta">
+                    <FaUniversity className="card-icon" />
+                    <span>{story.university}</span>
+                  </p>
+                  <p className="card-meta">
+                    <FaMapMarkerAlt className="card-icon" />
+                    <span>{story.country}</span>
+                  </p>
+                  <span className="card-program">{story.program}</span>
+                  <p className="card-story">{story.story?.trim() || "Their journey to studying abroad."}</p>
                 </div>
               </div>
             ))}
           </div>
         )}
       </div>
-
-      {/* Modal */}
-      {selectedImage && (
-        <div className="story-modal-overlay" onClick={closeModal}>
-          <div className="story-modal-content" onClick={(e) => e.stopPropagation()}>
-            <button className="story-modal-close" onClick={closeModal}>
-              <FaTimes />
-            </button>
-            <div className="story-modal-body">
-              <div className="story-modal-image-wrapper">
-                <img 
-                  src={selectedImage.image} 
-                  alt={selectedImage.name || "Success story"} 
-                  className="story-modal-image"
-                />
-              </div>
-              <div className="story-modal-details">
-                <h2>{selectedImage.name}</h2>
-                <p className="modal-university"><strong>University:</strong> {selectedImage.university}</p>
-                <p className="modal-country"><strong>Country:</strong> {selectedImage.country}</p>
-                <p className="modal-program"><strong>Program:</strong> {selectedImage.program}</p>
-                <p className="modal-story">{selectedImage.story}</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
     </>
   );
 }
