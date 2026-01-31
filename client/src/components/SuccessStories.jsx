@@ -69,7 +69,6 @@ export default function SuccessStories() {
   // RESET LOOP (only for duplicated stories with exactly 1 item)
   useEffect(() => {
     if (stories.length === 0) return;
-    
     // Only reset loop if we duplicated (when originalLength is exactly 1)
     if (originalLength === 1 && stories.length > originalLength) {
       if (active >= stories.length - mid) {
