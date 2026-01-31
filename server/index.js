@@ -369,6 +369,75 @@ app.get("/api/auth/me", authenticateToken, async (req, res) => {
   }
 });
 
+// PUT /api/users/me/profile - Update current user's profile (Protected Route)
+app.put("/api/users/me/profile", authenticateToken, async (req, res) => {
+  try {
+    const userId = req.user._id;
+    const {
+      name,
+      dateOfBirth,
+      phone,
+      country,
+      city,
+      address,
+      postalCode,
+      highestEducation,
+      university,
+      graduationYear,
+      gpa,
+      workExperience,
+      yearsOfExperience,
+      languageTest,
+      picture
+    } = req.body;
+
+    const updateFields = { updatedAt: new Date() };
+    if (name !== undefined) updateFields.name = name;
+    if (dateOfBirth !== undefined) updateFields.dateOfBirth = dateOfBirth;
+    if (phone !== undefined) updateFields.phone = phone;
+    if (country !== undefined) updateFields.country = country;
+    if (city !== undefined) updateFields.city = city;
+    if (address !== undefined) updateFields.address = address;
+    if (postalCode !== undefined) updateFields.postalCode = postalCode;
+    if (highestEducation !== undefined) updateFields.highestEducation = highestEducation;
+    if (university !== undefined) updateFields.university = university;
+    if (graduationYear !== undefined) updateFields.graduationYear = graduationYear;
+    if (gpa !== undefined) updateFields.gpa = gpa;
+    if (workExperience !== undefined) updateFields.workExperience = workExperience;
+    if (yearsOfExperience !== undefined) updateFields.yearsOfExperience = yearsOfExperience;
+    if (languageTest !== undefined && typeof languageTest === "object") updateFields.languageTest = languageTest;
+    if (picture !== undefined) updateFields.picture = picture;
+
+    const result = await usersCollection.findOneAndUpdate(
+      { _id: userId },
+      { $set: updateFields },
+      { returnDocument: "after" }
+    );
+
+    if (!result) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found"
+      });
+    }
+
+    const { password: _, ...userWithoutPassword } = result;
+
+    res.status(200).json({
+      success: true,
+      message: "Profile updated successfully",
+      data: userWithoutPassword
+    });
+  } catch (error) {
+    console.error("Error updating profile:", error);
+    res.status(500).json({
+      success: false,
+      message: "Internal server error",
+      error: error.message
+    });
+  }
+});
+
 // POST /api/users - Create a new user
 app.post("/api/users", async (req, res) => {
   try {

@@ -111,6 +111,28 @@ select {
   margin-top: 4px;
 }
 
+input.readonly {
+  background: #f3f4f6;
+  cursor: not-allowed;
+}
+
+.profile-message {
+  margin-bottom: 16px;
+  padding: 10px 14px;
+  border-radius: 8px;
+  font-size: 14px;
+}
+
+.profile-message.success {
+  background: #d1fae5;
+  color: #065f46;
+}
+
+.profile-message.error {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
 /* Language */
 .language-section {
   margin-top: 20px;
