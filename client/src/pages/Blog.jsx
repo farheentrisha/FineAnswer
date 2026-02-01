@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import "../styles/Blog.css";
 
 const API_BASE = "http://localhost:5000/api";
@@ -79,7 +80,7 @@ export default function Blog() {
                 <span>{formatDate(blog.createdAt)}</span>
                 <h3>{blog.title}</h3>
                 <p>{truncateText(blog.content, 120)}</p>
-                <button>Read More</button>
+                <Link to={`/blog/${blog._id}`} className="blog-read-more-btn">Read More</Link>
               </div>
             </div>
           ))}
