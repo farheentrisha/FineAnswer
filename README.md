@@ -22,12 +22,14 @@ FineAnswer/
 ## Features
 
 ### Public
+
 - **Landing page** – Hero, services, countries, success stories, contact
 - **Country pages** – Australia, UK, Ireland
 - **Blog** – Public blog
 - **Contact** – Contact form/section
 
 ### User (student)
+
 - **Auth** – Email/password & Google Sign-In
 - **Forgot password** – OTP via email
 - **Dashboard** – Overview, universities, documents, sessions, messages
@@ -35,6 +37,7 @@ FineAnswer/
 - **Progress tracker** – Visa/application progress
 
 ### Admin
+
 - **Dashboard** – Overview
 - **Analytics** – Metrics
 - **Success stories** – Add/edit stories shown on landing page
@@ -106,8 +109,8 @@ cd server && npm run dev
 cd client && npm run dev
 ```
 
-- Frontend: http://localhost:5173  
-- Backend: http://localhost:5000  
+- Frontend: http://localhost:5173
+- Backend: fine-answer.vercel.app
 
 ### 4. Build for production
 
@@ -118,26 +121,26 @@ cd ../server && npm start
 
 ## API Overview
 
-| Method | Endpoint                          | Description                |
-| ------ | --------------------------------- | -------------------------- |
-| POST   | `/api/auth/login`                 | Email/password login       |
-| POST   | `/api/auth/google`                | Google OAuth login         |
-| GET    | `/api/auth/me`                    | Current user (auth)        |
-| POST   | `/api/auth/forgot-password`       | Request OTP                |
-| POST   | `/api/auth/reset-password`        | Reset password with OTP    |
-| POST   | `/api/users`                      | Register                   |
-| PUT    | `/api/users/me/profile`           | Update profile (auth)      |
-| GET    | `/api/users`                      | List users (admin)         |
-| GET    | `/api/users/me/progress-tracker`  | Own progress (auth)        |
-| PUT    | `/api/users/:id/progress-tracker` | Update progress (admin)    |
-| GET    | `/api/success-stories`            | Public success stories     |
-| POST   | `/api/success-stories`            | Create story (admin)       |
-| DELETE | `/api/success-stories/:id`        | Delete story (admin)       |
+| Method | Endpoint                          | Description             |
+| ------ | --------------------------------- | ----------------------- |
+| POST   | `/api/auth/login`                 | Email/password login    |
+| POST   | `/api/auth/google`                | Google OAuth login      |
+| GET    | `/api/auth/me`                    | Current user (auth)     |
+| POST   | `/api/auth/forgot-password`       | Request OTP             |
+| POST   | `/api/auth/reset-password`        | Reset password with OTP |
+| POST   | `/api/users`                      | Register                |
+| PUT    | `/api/users/me/profile`           | Update profile (auth)   |
+| GET    | `/api/users`                      | List users (admin)      |
+| GET    | `/api/users/me/progress-tracker`  | Own progress (auth)     |
+| PUT    | `/api/users/:id/progress-tracker` | Update progress (admin) |
+| GET    | `/api/success-stories`            | Public success stories  |
+| POST   | `/api/success-stories`            | Create story (admin)    |
+| DELETE | `/api/success-stories/:id`        | Delete story (admin)    |
 
 ## Scripts
 
-| Location | Command   | Description          |
-| -------- | --------- | -------------------- |
+| Location | Command         | Description           |
+| -------- | --------------- | --------------------- |
 | client   | `npm run dev`   | Start Vite dev server |
 | client   | `npm run build` | Production build      |
 | server   | `npm run dev`   | Start with nodemon    |

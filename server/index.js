@@ -13,8 +13,14 @@ const port = process.env.PORT || 5000;
 // Middleware
 app.use(
   cors({
-    origin: process.env.FRONTEND_URL || "*", // Allow all origins in development
+    origin: [
+      "http://localhost:5173",
+      "https://fine-answer-wcij.vercel.app",
+      "https://fine-answer-wcij.vercel.app/",
+    ],
     credentials: true,
+    methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
   }),
 );
 app.use(express.json());
@@ -225,10 +231,20 @@ app.post(
 
 // Helper: Send OTP email (uses SMTP_USER / SMTP_PASS or EMAIL_USER / EMAIL_PASS from .env)
 const sendOTPemail = async (email, otp) => {
-  const emailUser = (process.env.SMTP_USER || process.env.EMAIL_USER || "").trim();
-  const emailPass = (process.env.SMTP_PASS || process.env.EMAIL_PASS || "").replace(/\s/g, "");
+  const emailUser = (
+    process.env.SMTP_USER ||
+    process.env.EMAIL_USER ||
+    ""
+  ).trim();
+  const emailPass = (
+    process.env.SMTP_PASS ||
+    process.env.EMAIL_PASS ||
+    ""
+  ).replace(/\s/g, "");
   if (!emailUser || !emailPass) {
-    throw new Error("Email credentials not configured. Add SMTP_USER and SMTP_PASS to .env");
+    throw new Error(
+      "Email credentials not configured. Add SMTP_USER and SMTP_PASS to .env",
+    );
   }
   const transporter = nodemailer.createTransport({
     host: "smtp.gmail.com",
@@ -260,12 +276,15 @@ app.post(
   asyncHandler(async (req, res) => {
     const { email } = req.body;
     if (!email) {
-      return res.status(400).json({ success: false, message: "Email is required" });
+      return res
+        .status(400)
+        .json({ success: false, message: "Email is required" });
     }
 
     const successResponse = {
       success: true,
-      message: "If an account exists with this email, you will receive an OTP shortly.",
+      message:
+        "If an account exists with this email, you will receive an OTP shortly.",
       redirectTo: `/reset-password?email=${encodeURIComponent(email)}`,
     };
 
@@ -275,7 +294,8 @@ app.post(
       return res.status(200).json({
         success: true,
         googleAccount: true,
-        message: "This account uses Google Sign-In. To change your password, go to your Google Account settings (myaccount.google.com).",
+        message:
+          "This account uses Google Sign-In. To change your password, go to your Google Account settings (myaccount.google.com).",
       });
     }
     const otp = String(Math.floor(100000 + Math.random() * 900000)); // 6-digit OTP
@@ -283,7 +303,7 @@ app.post(
 
     await usersCollection.updateOne(
       { _id: user._id },
-      { $set: { resetOtp: otp, resetOtpExpiry, updatedAt: new Date() } }
+      { $set: { resetOtp: otp, resetOtpExpiry, updatedAt: new Date() } },
     );
 
     try {
@@ -291,7 +311,8 @@ app.post(
     } catch (err) {
       return res.status(500).json({
         success: false,
-        message: "Failed to send email. Please try again or contact support. Check server logs for details.",
+        message:
+          "Failed to send email. Please try again or contact support. Check server logs for details.",
       });
     }
     res.status(200).json(successResponse);
@@ -344,7 +365,8 @@ app.post(
 
     res.status(200).json({
       success: true,
-      message: "Password reset successful. You can now log in with your new password.",
+      message:
+        "Password reset successful. You can now log in with your new password.",
     });
   }),
 );
@@ -955,7 +977,7 @@ app.put(
     const updatedBlog = await blogCollection.findOneAndUpdate(
       { _id: new ObjectId(id) },
       { $set: updateFields },
-      { returnDocument: "after" }
+      { returnDocument: "after" },
     );
 
     if (!updatedBlog) {
