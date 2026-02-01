@@ -75,7 +75,7 @@ export default function Profile() {
         return;
       }
 
-      const response = await fetch("fine-answer.vercel.app/api/users/me/profile", {
+      const response = await fetch("https://fine-answer.vercel.app/api/users/me/profile", {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",

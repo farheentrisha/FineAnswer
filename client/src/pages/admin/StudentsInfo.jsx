@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { FaCalendar, FaEnvelope, FaEye, FaGraduationCap, FaPhone, FaTimes, FaUser } from "react-icons/fa";
 import "./StudentsInfo.css";
 
-const API_BASE = "fine-answer.vercel.app/api";
+const API_BASE = "https://fine-answer.vercel.app/api";
 
 function StudentCard({ student, onViewDetails }) {
   const getInitials = () => {

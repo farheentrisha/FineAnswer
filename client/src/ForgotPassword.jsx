@@ -14,7 +14,7 @@ export default function ForgotPassword() {
     setLoading(true);
 
     try {
-      const response = await fetch("fine-answer.vercel.app/api/auth/forgot-password", {
+      const response = await fetch("https://fine-answer.vercel.app/api/auth/forgot-password", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email }),

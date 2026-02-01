@@ -2,7 +2,7 @@
   "name": "my-react-app",
   "private": true,
   "version": "0.0.0",
-  "proxy": "fine-answer.vercel.app",
+  "proxy": "https://fine-answer.vercel.app",
   "type": "module",
   "scripts": {
     "dev": "vite",

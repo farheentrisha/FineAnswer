@@ -22,7 +22,7 @@ export default function TrackerUpdate() {
         const token = localStorage.getItem("token");
         if (!token) return;
 
-        const response = await fetch("fine-answer.vercel.app/api/users", {
+        const response = await fetch("https://fine-answer.vercel.app/api/users", {
           headers: {
             'Authorization': `Bearer ${token}`,
           },

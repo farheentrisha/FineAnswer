@@ -65,7 +65,7 @@ const ContextProvider = ({ children }) => {
         return null;
       }
 
-      const response = await fetch("fine-answer.vercel.app/api/auth/me", {
+      const response = await fetch("https://fine-answer.vercel.app/api/auth/me", {
         headers: { Authorization: `Bearer ${token}` },
       });
 

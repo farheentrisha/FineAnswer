@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { FaArrowRight, FaCalendar, FaNewspaper, FaUser } from "react-icons/fa";
 import "./BlogSection.css";
 
-const API_BASE = "fine-answer.vercel.app/api";
+const API_BASE = "https://fine-answer.vercel.app/api";
 
 export default function BlogSection() {
   const [blogs, setBlogs] = useState([]);

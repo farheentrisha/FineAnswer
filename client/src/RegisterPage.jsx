@@ -27,7 +27,7 @@ export default function RegisterPage() {
     setMessage(null);
 
     try {
-      const response = await fetch("fine-answer.vercel.app/api/users", {
+      const response = await fetch("https://fine-answer.vercel.app/api/users", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),

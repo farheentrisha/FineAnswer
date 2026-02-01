@@ -12,7 +12,7 @@ import {
 import { uploadImageToCloudinary } from "../../utils/cloudinary";
 import "./Blog.css";
 
-const API_BASE = "fine-answer.vercel.app/api";
+const API_BASE = "https://fine-answer.vercel.app/api";
 
 export default function Blog() {
   const [blogs, setBlogs] = useState([]);

@@ -38,7 +38,7 @@ export default function LoginPage() {
     setMessage(null);
 
     try {
-      const response = await fetch("fine-answer.vercel.app/api/auth/login", {
+      const response = await fetch("https://fine-answer.vercel.app/api/auth/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email: formData.email, password: formData.password }),
@@ -99,7 +99,7 @@ export default function LoginPage() {
       console.log("Google Firebase auth successful:", result.user);
 
       // Step 2: Send to backend /api/auth/google endpoint
-      const response = await fetch("fine-answer.vercel.app/api/auth/google", {
+      const response = await fetch("https://fine-answer.vercel.app/api/auth/google", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
