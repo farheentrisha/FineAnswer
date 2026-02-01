@@ -9,10 +9,9 @@ import {
     FaTrash,
     FaUser,
 } from "react-icons/fa";
+import { API_BASE_URL } from "../../config/api";
 import { uploadImageToCloudinary } from "../../utils/cloudinary";
 import "./Blog.css";
-
-const API_BASE = "https://fine-answer.vercel.app/api";
 
 export default function Blog() {
   const [blogs, setBlogs] = useState([]);
@@ -42,7 +41,7 @@ export default function Blog() {
   const fetchBlogs = async () => {
     try {
       setLoading(true);
-      const response = await fetch(`${API_BASE}/blogs`);
+      const response = await fetch(`${API_BASE_URL}/blogs`);
       const data = await response.json();
       if (data.success) {
         setBlogs(data.data);
@@ -152,8 +151,8 @@ export default function Blog() {
 
       const token = localStorage.getItem("token");
       const url = editingBlog
-        ? `${API_BASE}/blogs/${editingBlog._id}`
-        : `${API_BASE}/blogs`;
+        ? `${API_BASE_URL}/blogs/${editingBlog._id}`
+        : `${API_BASE_URL}/blogs`;
       const method = editingBlog ? "PUT" : "POST";
 
       const response = await fetch(url, {
@@ -187,7 +186,7 @@ export default function Blog() {
 
     try {
       const token = localStorage.getItem("token");
-      const response = await fetch(`${API_BASE}/blogs/${id}`, {
+      const response = await fetch(`${API_BASE_URL}/blogs/${id}`, {
         method: "DELETE",
         headers: {
           Authorization: `Bearer ${token}`,

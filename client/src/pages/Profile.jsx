@@ -1,5 +1,6 @@
 import { useContext, useEffect, useState } from "react";
 import { FaCamera, FaGraduationCap, FaSave, FaUser } from "react-icons/fa";
+import { API_BASE_URL } from "../config/api";
 import "./Profile.css";
 import { AuthContext } from "./Provider/ContextProvider";
 
@@ -75,7 +76,7 @@ export default function Profile() {
         return;
       }
 
-      const response = await fetch("https://fine-answer.vercel.app/api/users/me/profile", {
+      const response = await fetch(`${API_BASE_URL}/users/me/profile`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",

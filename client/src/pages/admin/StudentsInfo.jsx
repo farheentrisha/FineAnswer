@@ -1,8 +1,7 @@
 import { useEffect, useState } from "react";
 import { FaCalendar, FaEnvelope, FaEye, FaGraduationCap, FaPhone, FaTimes, FaUser } from "react-icons/fa";
+import { API_BASE_URL } from "../../config/api";
 import "./StudentsInfo.css";
-
-const API_BASE = "https://fine-answer.vercel.app/api";
 
 function StudentCard({ student, onViewDetails }) {
   const getInitials = () => {
@@ -241,7 +240,7 @@ export default function StudentsInfo() {
           return;
         }
 
-        const response = await fetch(`${API_BASE}/users`, {
+        const response = await fetch(`${API_BASE_URL}/users`, {
           headers: { Authorization: `Bearer ${token}` },
         });
 

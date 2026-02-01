@@ -1,5 +1,5 @@
 // API service for Progress Tracker
-const API_BASE_URL = 'https://fine-answer.vercel.app/api';
+import { API_BASE_URL } from "../config/api";
 
 // Helper function to parse JSON response or handle HTML errors
 const parseResponse = async (response) => {

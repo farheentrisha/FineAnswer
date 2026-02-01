@@ -110,7 +110,7 @@ cd client && npm run dev
 ```
 
 - Frontend: http://localhost:5173
-- Backend: fine-answer.vercel.app
+- Backend: https://fine-answer.vercel.app
 
 ### 4. Build for production
 

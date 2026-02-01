@@ -1,8 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
+import { API_BASE_URL } from "../config/api";
 import "../styles/Blog.css";
-
-const API_BASE = "https://fine-answer.vercel.app/api";
 
 export default function BlogDetail() {
   const { id } = useParams();
@@ -20,7 +19,7 @@ export default function BlogDetail() {
     try {
       setLoading(true);
       setError(null);
-      const response = await fetch(`${API_BASE}/blogs/${id}`);
+      const response = await fetch(`${API_BASE_URL}/blogs/${id}`);
       const data = await response.json();
 
       if (data.success) {

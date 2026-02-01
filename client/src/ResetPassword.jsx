@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
+import { API_BASE_URL } from "./config/api";
 import "./ResetPassword.css";
 
 export default function ResetPassword() {
@@ -42,7 +43,7 @@ export default function ResetPassword() {
     setLoading(true);
 
     try {
-      const response = await fetch("https://fine-answer.vercel.app/api/auth/reset-password", {
+      const response = await fetch(`${API_BASE_URL}/auth/reset-password`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, otp, newPassword: password }),

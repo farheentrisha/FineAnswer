@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { FaEdit, FaPlus, FaSave, FaSpinner, FaTimes, FaTrash } from "react-icons/fa";
+import { API_BASE_URL } from "../../config/api";
 import "../../components/ProgressTracker.css";
 import { getUserProgressTracker, updateUserProgressTracker } from "../../services/progressTrackerApi";
 import "./TrackerUpdate.css";
@@ -22,7 +23,7 @@ export default function TrackerUpdate() {
         const token = localStorage.getItem("token");
         if (!token) return;
 
-        const response = await fetch("https://fine-answer.vercel.app/api/users", {
+        const response = await fetch(`${API_BASE_URL}/users`, {
           headers: {
             'Authorization': `Bearer ${token}`,
           },

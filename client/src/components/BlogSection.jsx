@@ -1,8 +1,7 @@
 import { useEffect, useState } from "react";
 import { FaArrowRight, FaCalendar, FaNewspaper, FaUser } from "react-icons/fa";
+import { API_BASE_URL } from "../config/api";
 import "./BlogSection.css";
-
-const API_BASE = "https://fine-answer.vercel.app/api";
 
 export default function BlogSection() {
   const [blogs, setBlogs] = useState([]);
@@ -14,7 +13,7 @@ export default function BlogSection() {
 
   const fetchBlogs = async () => {
     try {
-      const response = await fetch(`${API_BASE}/blogs`);
+      const response = await fetch(`${API_BASE_URL}/blogs`);
       const data = await response.json();
       if (data.success) {
         // Show only the latest 3 blogs
