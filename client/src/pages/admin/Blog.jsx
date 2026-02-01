@@ -1,18 +1,18 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import {
-  FaPlus,
-  FaTimes,
-  FaImage,
-  FaEdit,
-  FaTrash,
-  FaUser,
-  FaFileAlt,
-  FaSpinner,
+    FaEdit,
+    FaFileAlt,
+    FaImage,
+    FaPlus,
+    FaSpinner,
+    FaTimes,
+    FaTrash,
+    FaUser,
 } from "react-icons/fa";
 import { uploadImageToCloudinary } from "../../utils/cloudinary";
 import "./Blog.css";
 
-const API_BASE = "http://localhost:5000/api";
+const API_BASE = "fine-answer.vercel.app/api";
 
 export default function Blog() {
   const [blogs, setBlogs] = useState([]);

@@ -9,7 +9,7 @@ import {
 } from "firebase/auth";
 
 
-import { createContext, useEffect, useState, useCallback } from "react";
+import { createContext, useCallback, useEffect, useState } from "react";
 
 import auth from "../../Firebase/firebase.config";
 
@@ -65,7 +65,7 @@ const ContextProvider = ({ children }) => {
         return null;
       }
 
-      const response = await fetch("http://localhost:5000/api/auth/me", {
+      const response = await fetch("fine-answer.vercel.app/api/auth/me", {
         headers: { Authorization: `Bearer ${token}` },
       });
 

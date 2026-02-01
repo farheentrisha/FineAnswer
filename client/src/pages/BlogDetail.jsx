@@ -1,8 +1,8 @@
-import { useState, useEffect } from "react";
-import { useParams, Link } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { Link, useParams } from "react-router-dom";
 import "../styles/Blog.css";
 
-const API_BASE = "http://localhost:5000/api";
+const API_BASE = "fine-answer.vercel.app/api";
 
 export default function BlogDetail() {
   const { id } = useParams();
