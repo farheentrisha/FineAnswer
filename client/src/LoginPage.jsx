@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import "./LoginPage.css";
 import { AuthContext } from "./pages/Provider/ContextProvider";
 
@@ -38,7 +38,7 @@ export default function LoginPage() {
     setMessage(null);
 
     try {
-      const response = await fetch("http://localhost:5000/api/auth/login", {
+      const response = await fetch("fine-answer.vercel.app/api/auth/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email: formData.email, password: formData.password }),
@@ -99,7 +99,7 @@ export default function LoginPage() {
       console.log("Google Firebase auth successful:", result.user);
 
       // Step 2: Send to backend /api/auth/google endpoint
-      const response = await fetch("http://localhost:5000/api/auth/google", {
+      const response = await fetch("fine-answer.vercel.app/api/auth/google", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

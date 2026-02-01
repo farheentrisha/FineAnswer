@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "./pages/Provider/ContextProvider";
 import "./RegisterPage.css";
@@ -27,7 +27,7 @@ export default function RegisterPage() {
     setMessage(null);
 
     try {
-      const response = await fetch("http://localhost:5000/api/users", {
+      const response = await fetch("fine-answer.vercel.app/api/users", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),

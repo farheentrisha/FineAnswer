@@ -1,5 +1,5 @@
 // API service for Success Stories
-const API_BASE_URL = 'http://localhost:5000/api';
+const API_BASE_URL = 'fine-answer.vercel.app/api';
 
 // Helper function to parse JSON response or handle HTML errors
 const parseResponse = async (response) => {

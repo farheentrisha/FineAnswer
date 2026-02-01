@@ -1,8 +1,8 @@
-import { useState, useEffect } from "react";
-import { FaUser, FaEye, FaTimes, FaEnvelope, FaPhone, FaGraduationCap, FaCalendar } from "react-icons/fa";
+import { useEffect, useState } from "react";
+import { FaCalendar, FaEnvelope, FaEye, FaGraduationCap, FaPhone, FaTimes, FaUser } from "react-icons/fa";
 import "./StudentsInfo.css";
 
-const API_BASE = "http://localhost:5000/api";
+const API_BASE = "fine-answer.vercel.app/api";
 
 function StudentCard({ student, onViewDetails }) {
   const getInitials = () => {
