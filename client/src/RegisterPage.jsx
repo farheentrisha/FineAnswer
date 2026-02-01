@@ -1,5 +1,5 @@
 import React, { useContext, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { API_BASE_URL } from "./config/api";
 import { AuthContext } from "./pages/Provider/ContextProvider";
 import "./RegisterPage.css";
@@ -124,7 +124,7 @@ export default function RegisterPage() {
               </button>
 
               <p className="login-link">
-                Already have an account? <a href="/login">Log in</a>
+                Already have an account? <Link to="/login">Log in</Link>
               </p>
 
               {/* Success / Error message */}
