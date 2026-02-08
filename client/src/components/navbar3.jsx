@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { useNavigate, NavLink } from "react-router-dom";
 import { AuthContext } from "../pages/Provider/ContextProvider";
 import "../css/navbar3.css";
@@ -7,7 +7,16 @@ import logo from "../images/logo.png";
 export default function Navbar() {
   const navigate = useNavigate();
   const [menuOpen, setMenuOpen] = useState(false);
-  const { user, isAdmin } = useContext(AuthContext);
+  const [imgError, setImgError] = useState(false);
+  const { user, isAdmin, loading } = useContext(AuthContext);
+
+  const profileImageUrl = user?.picture || user?.photoURL;
+  const showImage = profileImageUrl && !imgError;
+  const showProfileArea = user || loading;
+
+  useEffect(() => {
+    setImgError(false);
+  }, [user?.picture, user?.photoURL]);
 
   const getInitials = () => {
     if (user?.name) {
@@ -47,14 +56,23 @@ export default function Navbar() {
           <NavLink to="/career" onClick={() => setMenuOpen(false)}>Career</NavLink>
           <NavLink to="/blog" onClick={() => setMenuOpen(false)}>Blog</NavLink>
           
-          {user ? (
+          {showProfileArea ? (
             <button
               className="nav-profile-btn"
               onClick={handleProfileClick}
-              title={`Go to ${isAdmin ? "Admin" : "User"} Dashboard`}
+              title={user ? `Go to ${isAdmin ? "Admin" : "User"} Dashboard` : "Loading..."}
+              disabled={loading}
             >
-              {user.picture ? (
-                <img src={user.picture} alt={user.name || "Profile"} className="nav-profile-img" />
+              {loading ? (
+                <span className="nav-profile-loading"></span>
+              ) : showImage ? (
+                <img
+                  src={profileImageUrl}
+                  alt={user.name || "Profile"}
+                  className="nav-profile-img"
+                  referrerPolicy="no-referrer"
+                  onError={() => setImgError(true)}
+                />
               ) : (
                 <span className="nav-profile-initials">{getInitials()}</span>
               )}

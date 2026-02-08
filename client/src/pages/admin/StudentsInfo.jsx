@@ -1,9 +1,13 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FaCalendar, FaEnvelope, FaEye, FaGraduationCap, FaPhone, FaTimes, FaUser } from "react-icons/fa";
 import { API_BASE_URL } from "../../config/api";
 import "./StudentsInfo.css";
 
 function StudentCard({ student, onViewDetails }) {
+  const [imgError, setImgError] = useState(false);
+  const profileImageUrl = student?.picture || student?.photoURL;
+  const showImage = profileImageUrl && !imgError;
+
   const getInitials = () => {
     if (student?.name) {
       return student.name
@@ -29,8 +33,13 @@ function StudentCard({ student, onViewDetails }) {
     <div className="student-info-card">
       <div className="student-card-header">
         <div className="student-card-avatar">
-          {student.picture ? (
-            <img src={student.picture} alt="" />
+          {showImage ? (
+            <img
+              src={profileImageUrl}
+              alt=""
+              referrerPolicy="no-referrer"
+              onError={() => setImgError(true)}
+            />
           ) : (
             <span>{getInitials()}</span>
           )}
@@ -59,6 +68,10 @@ function StudentCard({ student, onViewDetails }) {
 }
 
 function StudentDetailModal({ student, onClose }) {
+  const [imgError, setImgError] = useState(false);
+  const profileImageUrl = student?.picture || student?.photoURL;
+  const showImage = profileImageUrl && !imgError;
+
   if (!student) return null;
 
   const getInitials = () => {
@@ -94,8 +107,13 @@ function StudentDetailModal({ student, onClose }) {
           {/* Profile summary */}
           <div className="detail-section detail-profile-summary">
             <div className="detail-avatar">
-              {student.picture ? (
-                <img src={student.picture} alt="" />
+              {showImage ? (
+                <img
+                  src={profileImageUrl}
+                  alt=""
+                  referrerPolicy="no-referrer"
+                  onError={() => setImgError(true)}
+                />
               ) : (
                 <span>{getInitials()}</span>
               )}

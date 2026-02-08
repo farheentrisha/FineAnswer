@@ -386,6 +386,14 @@ app.post(
 
     let user = await usersCollection.findOne({ googleId });
 
+    if (user && picture) {
+      await usersCollection.updateOne(
+        { _id: user._id },
+        { $set: { picture, updatedAt: new Date() } }
+      );
+      user = await usersCollection.findOne({ _id: user._id });
+    }
+
     if (!user) {
       user = await usersCollection.findOne({ email });
 
