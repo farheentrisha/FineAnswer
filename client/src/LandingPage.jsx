@@ -1,5 +1,6 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef, useContext } from "react";
 import { useNavigate } from "react-router-dom";
+import { AuthContext } from "./pages/Provider/ContextProvider";
 import SuccessStories from "./components/SuccessStories";
 import ContactSection from "./components/ContactSection";
 import Services from "./components/Services";
@@ -20,13 +21,14 @@ import {
 } from "react-icons/fa";
 
 export default function LandingPage() {
+  const navigate = useNavigate();
+  const { user, loading } = useContext(AuthContext);
   const [aboutRef, aboutVisible] = useFadeIn();
   const [servicesRef, servicesVisible] = useFadeIn();
   const [storiesRef, storiesVisible] = useFadeIn();
   const [countryRef, countryVisible] = useFadeIn();
   const [ceoRef, ceoVisible] = useFadeIn();
   const [contactRef, contactVisible] = useFadeIn();
-  const navigate = useNavigate();
   const images = [uni1, uni2, uni3];
   const [currentImage, setCurrentImage] = useState(0);
 
@@ -96,14 +98,17 @@ export default function LandingPage() {
     });
   }, []);
 
-  // Show popup after 10 seconds (every visit)
+  // Show popup after 10 seconds only when user is not logged in
   useEffect(() => {
-    const timer = setTimeout(() => {
-      setShowPopup(true);
-    }, 10000);
-
+    if (loading || user) return;
+    const timer = setTimeout(() => setShowPopup(true), 10000);
     return () => clearTimeout(timer);
-  }, []);
+  }, [loading, user]);
+
+  // Hide popup when user logs in
+  useEffect(() => {
+    if (user) setShowPopup(false);
+  }, [user]);
 
 
 
@@ -262,7 +267,7 @@ export default function LandingPage() {
         <p>© 2025 FineAnswer Study Abroad Consultancy. All rights reserved.</p>
       </footer>
 
- {showPopup && (
+ {showPopup && !loading && !user && (
   <div className="popup-overlay">
     <div className="modern-popup">
       <button className="popup-close" onClick={() => setShowPopup(false)}>×</button>
