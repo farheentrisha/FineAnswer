@@ -1,7 +1,264 @@
+import { useState, useEffect } from "react";
+import { FaPlus, FaTimes, FaEdit, FaTrash, FaYoutube, FaSpinner } from "react-icons/fa";
+import { API_BASE_URL } from "../../config/api";
+import "./AdminSession.css";
+
 export default function AdminSession() {
+  const [videos, setVideos] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [showForm, setShowForm] = useState(false);
+  const [editingVideo, setEditingVideo] = useState(null);
+  const [submitting, setSubmitting] = useState(false);
+
+  const [formData, setFormData] = useState({
+    title: "",
+    youtubeUrl: "",
+    description: "",
+  });
+
+  useEffect(() => {
+    fetchVideos();
+  }, []);
+
+  const fetchVideos = async () => {
+    try {
+      setLoading(true);
+      const response = await fetch(`${API_BASE_URL}/videos`);
+      const data = await response.json();
+      if (data.success) {
+        setVideos(data.data);
+      }
+      setError(null);
+    } catch (err) {
+      setError("Failed to load videos");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleOpenForm = (video = null) => {
+    if (video) {
+      setEditingVideo(video);
+      setFormData({
+        title: video.title,
+        youtubeUrl: video.youtubeUrl,
+        description: video.description || "",
+      });
+    } else {
+      setEditingVideo(null);
+      setFormData({
+        title: "",
+        youtubeUrl: "",
+        description: "",
+      });
+    }
+    setShowForm(true);
+  };
+
+  const handleCloseForm = () => {
+    setShowForm(false);
+    setEditingVideo(null);
+    setFormData({
+      title: "",
+      youtubeUrl: "",
+      description: "",
+    });
+  };
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setSubmitting(true);
+
+    try {
+      const token = localStorage.getItem("token");
+      const url = editingVideo
+        ? `${API_BASE_URL}/videos/${editingVideo._id}`
+        : `${API_BASE_URL}/videos`;
+      const method = editingVideo ? "PUT" : "POST";
+
+      const response = await fetch(url, {
+        method,
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(formData),
+      });
+
+      const data = await response.json();
+
+      if (data.success) {
+        await fetchVideos();
+        handleCloseForm();
+      } else {
+        alert(data.message || "Failed to save video");
+      }
+    } catch (err) {
+      alert("An error occurred while saving the video");
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  const handleDelete = async (id) => {
+    if (!window.confirm("Are you sure you want to delete this video?")) {
+      return;
+    }
+
+    try {
+      const token = localStorage.getItem("token");
+      const response = await fetch(`${API_BASE_URL}/videos/${id}`, {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      const data = await response.json();
+
+      if (data.success) {
+        await fetchVideos();
+      } else {
+        alert(data.message || "Failed to delete video");
+      }
+    } catch (err) {
+      alert("An error occurred while deleting the video");
+    }
+  };
+
+  const handleWatchVideo = (youtubeUrl) => {
+    window.open(youtubeUrl, "_blank", "noopener,noreferrer");
+  };
+
   return (
-    <div>
-      <h2>Hello from Session</h2>
+    <div className="admin-session-page">
+      <div className="admin-session-header">
+        <h2>Session Videos</h2>
+        <button className="add-video-btn" onClick={() => handleOpenForm()}>
+          <FaPlus /> Add YouTube Video
+        </button>
+      </div>
+
+      {loading && (
+        <div className="video-loading">
+          <FaSpinner className="spinner" />
+          <p>Loading videos...</p>
+        </div>
+      )}
+
+      {error && <div className="video-error">{error}</div>}
+
+      {!loading && !error && videos.length === 0 && (
+        <div className="video-empty">
+          <FaYoutube />
+          <h3>No videos yet</h3>
+          <p>Add your first YouTube video to get started</p>
+        </div>
+      )}
+
+      {!loading && !error && videos.length > 0 && (
+        <div className="video-grid">
+          {videos.map((video) => (
+            <div key={video._id} className="video-card" onClick={() => handleWatchVideo(video.youtubeUrl)}>
+              <div className="video-thumbnail-wrapper">
+                <img src={video.thumbnailUrl} alt={video.title} />
+                <div className="video-overlay">
+                  <FaYoutube className="youtube-icon" />
+                </div>
+              </div>
+              <div className="video-card-content">
+                <h3>{video.title}</h3>
+                {video.description && <p>{video.description}</p>}
+                <div className="video-card-actions" onClick={(e) => e.stopPropagation()}>
+                  <button
+                    className="edit-video-btn"
+                    onClick={() => handleOpenForm(video)}
+                  >
+                    <FaEdit /> Edit
+                  </button>
+                  <button
+                    className="delete-video-btn"
+                    onClick={() => handleDelete(video._id)}
+                  >
+                    <FaTrash /> Delete
+                  </button>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {showForm && (
+        <div className="video-form-modal">
+          <div className="video-form-container">
+            <div className="video-form-header">
+              <h3>{editingVideo ? "Edit Video" : "Add YouTube Video"}</h3>
+              <button className="close-modal-btn" onClick={handleCloseForm}>
+                <FaTimes />
+              </button>
+            </div>
+
+            <form className="video-form" onSubmit={handleSubmit}>
+              <div className="form-group">
+                <label htmlFor="title">Video Title *</label>
+                <input
+                  type="text"
+                  id="title"
+                  name="title"
+                  value={formData.title}
+                  onChange={handleInputChange}
+                  placeholder="e.g., SOP Writing Workshop"
+                  required
+                />
+              </div>
+
+              <div className="form-group">
+                <label htmlFor="youtubeUrl">YouTube URL *</label>
+                <input
+                  type="url"
+                  id="youtubeUrl"
+                  name="youtubeUrl"
+                  value={formData.youtubeUrl}
+                  onChange={handleInputChange}
+                  placeholder="https://www.youtube.com/watch?v=..."
+                  required
+                />
+                <small className="form-hint">
+                  Supports: youtube.com/watch?v=..., youtu.be/..., youtube.com/embed/...
+                </small>
+              </div>
+
+              <div className="form-group">
+                <label htmlFor="description">Description</label>
+                <textarea
+                  id="description"
+                  name="description"
+                  value={formData.description}
+                  onChange={handleInputChange}
+                  placeholder="Brief description about the video (optional)"
+                  rows="3"
+                />
+              </div>
+
+              <div className="form-actions">
+                <button type="button" className="cancel-btn" onClick={handleCloseForm}>
+                  Cancel
+                </button>
+                <button type="submit" className="submit-btn" disabled={submitting}>
+                  {submitting ? "Saving..." : editingVideo ? "Update Video" : "Add Video"}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

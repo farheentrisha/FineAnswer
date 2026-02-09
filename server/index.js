@@ -45,6 +45,7 @@ const client = new MongoClient(uri, {
 let usersCollection;
 let successStoryCollection;
 let blogCollection;
+let sessionCollection;
 
 // JWT Secret (should be in .env file)
 const JWT_SECRET =
@@ -134,6 +135,7 @@ async function run() {
     usersCollection = client.db("FineAnswer").collection("usersCollection");
     successStoryCollection = client.db("FineAnswer").collection("successStory");
     blogCollection = client.db("FineAnswer").collection("blog");
+    sessionCollection = client.db("FineAnswer").collection("session");
 
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
@@ -1031,6 +1033,202 @@ app.delete(
     res.status(200).json({
       success: true,
       message: "Blog post deleted successfully",
+    });
+  }),
+);
+
+// ==================== VIDEO ENDPOINTS ====================
+
+// Helper function to extract YouTube video ID from various URL formats
+const extractYouTubeVideoId = (url) => {
+  if (!url) return null;
+  
+  // Standard format: https://www.youtube.com/watch?v=VIDEO_ID
+  let match = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([^&\?\/]+)/);
+  if (match) return match[1];
+  
+  // Embedded format: https://www.youtube.com/embed/VIDEO_ID
+  match = url.match(/youtube\.com\/embed\/([^&\?\/]+)/);
+  if (match) return match[1];
+  
+  // Short format: https://youtu.be/VIDEO_ID
+  match = url.match(/youtu\.be\/([^&\?\/]+)/);
+  if (match) return match[1];
+  
+  return null;
+};
+
+// GET /api/videos - Get all videos (Public)
+app.get(
+  "/api/videos",
+  asyncHandler(async (req, res) => {
+    const videos = await sessionCollection
+      .find({})
+      .sort({ createdAt: -1 })
+      .toArray();
+    res.status(200).json({
+      success: true,
+      data: videos,
+    });
+  }),
+);
+
+// GET /api/videos/:id - Get a single video (Public)
+app.get(
+  "/api/videos/:id",
+  asyncHandler(async (req, res) => {
+    const { id } = req.params;
+    if (!ObjectId.isValid(id)) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid video ID format",
+      });
+    }
+    const video = await sessionCollection.findOne({ _id: new ObjectId(id) });
+    if (!video) {
+      return res.status(404).json({
+        success: false,
+        message: "Video not found",
+      });
+    }
+    res.status(200).json({
+      success: true,
+      data: video,
+    });
+  }),
+);
+
+// POST /api/videos - Create a new video (ADMIN ONLY)
+app.post(
+  "/api/videos",
+  authenticateToken,
+  requireAdmin,
+  asyncHandler(async (req, res) => {
+    const { title, youtubeUrl, description } = req.body;
+
+    if (!title || !youtubeUrl) {
+      return res.status(400).json({
+        success: false,
+        message: "Title and YouTube URL are required",
+      });
+    }
+
+    const videoId = extractYouTubeVideoId(youtubeUrl);
+    if (!videoId) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid YouTube URL. Please provide a valid YouTube video link.",
+      });
+    }
+
+    const thumbnailUrl = `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`;
+
+    const newVideo = {
+      title: title.trim(),
+      youtubeUrl: youtubeUrl.trim(),
+      youtubeVideoId: videoId,
+      thumbnailUrl,
+      description: description?.trim() || "",
+      createdBy: req.user._id,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    };
+
+    const result = await sessionCollection.insertOne(newVideo);
+    const savedVideo = await sessionCollection.findOne({
+      _id: result.insertedId,
+    });
+
+    res.status(201).json({
+      success: true,
+      message: "Video added successfully",
+      data: savedVideo,
+    });
+  }),
+);
+
+// PUT /api/videos/:id - Update a video (ADMIN ONLY)
+app.put(
+  "/api/videos/:id",
+  authenticateToken,
+  requireAdmin,
+  asyncHandler(async (req, res) => {
+    const { id } = req.params;
+    if (!ObjectId.isValid(id)) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid video ID format",
+      });
+    }
+
+    const { title, youtubeUrl, description } = req.body;
+    const updateFields = { updatedAt: new Date() };
+
+    if (title) updateFields.title = title.trim();
+    if (description !== undefined) updateFields.description = description?.trim() || "";
+    
+    if (youtubeUrl) {
+      const videoId = extractYouTubeVideoId(youtubeUrl);
+      if (!videoId) {
+        return res.status(400).json({
+          success: false,
+          message: "Invalid YouTube URL",
+        });
+      }
+      updateFields.youtubeUrl = youtubeUrl.trim();
+      updateFields.youtubeVideoId = videoId;
+      updateFields.thumbnailUrl = `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`;
+    }
+
+    const updatedVideo = await sessionCollection.findOneAndUpdate(
+      { _id: new ObjectId(id) },
+      { $set: updateFields },
+      { returnDocument: "after" }
+    );
+
+    if (!updatedVideo) {
+      return res.status(404).json({
+        success: false,
+        message: "Video not found",
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      message: "Video updated successfully",
+      data: updatedVideo,
+    });
+  }),
+);
+
+// DELETE /api/videos/:id - Delete a video (ADMIN ONLY)
+app.delete(
+  "/api/videos/:id",
+  authenticateToken,
+  requireAdmin,
+  asyncHandler(async (req, res) => {
+    const { id } = req.params;
+    if (!ObjectId.isValid(id)) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid video ID format",
+      });
+    }
+
+    const deletedVideo = await sessionCollection.findOneAndDelete({
+      _id: new ObjectId(id),
+    });
+
+    if (!deletedVideo) {
+      return res.status(404).json({
+        success: false,
+        message: "Video not found",
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      message: "Video deleted successfully",
     });
   }),
 );

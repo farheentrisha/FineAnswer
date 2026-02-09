@@ -1,32 +1,7 @@
-import { FaPlay, FaCalendarAlt } from "react-icons/fa";
+import { useEffect, useState } from "react";
+import { FaPlay, FaCalendarAlt, FaYoutube } from "react-icons/fa";
+import { API_BASE_URL } from "../config/api";
 import "./Sessions.css";
-
-const pastSessions = [
-  {
-    title: "SOP Writing Workshop",
-    speaker: "Dr. Sarah Miller",
-    date: "Nov 20, 2025",
-    duration: "45 min",
-    image:
-      "https://images.unsplash.com/photo-1522202176988-66273c2fd55f",
-  },
-  {
-    title: "University Selection Guide",
-    speaker: "Prof. John Davis",
-    date: "Nov 15, 2025",
-    duration: "60 min",
-    image:
-      "https://images.unsplash.com/photo-1521737604893-d14cc237f11d",
-  },
-  {
-    title: "Visa Process Overview",
-    speaker: "Ms. Emily Chen",
-    date: "Nov 10, 2025",
-    duration: "30 min",
-    image:
-      "https://images.unsplash.com/photo-1503428593586-e225b39bddfe",
-  },
-];
 
 const slots = [
   {
@@ -52,6 +27,40 @@ const slots = [
 ];
 
 export default function Sessions() {
+  const [videos, setVideos] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetchVideos();
+  }, []);
+
+  const fetchVideos = async () => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/videos`);
+      const data = await response.json();
+      if (data.success) {
+        setVideos(data.data);
+      }
+    } catch (err) {
+      console.error("Failed to load videos:", err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    return date.toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+    });
+  };
+
+  const handleWatchVideo = (youtubeUrl) => {
+    window.open(youtubeUrl, "_blank", "noopener,noreferrer");
+  };
+
   return (
     <div className="sessions-page">
       {/* Past Sessions */}
@@ -60,26 +69,44 @@ export default function Sessions() {
           <FaPlay /> Past Sessions & Recordings
         </h3>
 
-        <div className="recordings-grid">
-          {pastSessions.map((s, i) => (
-            <div className="recording-card" key={i}>
-              <div className="thumbnail">
-                <img src={s.image} alt={s.title} />
-                <span className="duration">{s.duration}</span>
-              </div>
+        {loading && (
+          <div className="sessions-loading">
+            <div className="sessions-spinner"></div>
+            <p>Loading sessions...</p>
+          </div>
+        )}
 
-              <div className="recording-content">
-                <h4>{s.title}</h4>
-                <p>with {s.speaker}</p>
-                <span className="date">{s.date}</span>
+        {!loading && videos.length === 0 && (
+          <div className="sessions-empty">
+            <FaYoutube />
+            <p>No session recordings available yet.</p>
+          </div>
+        )}
 
-                <button className="watch-btn">
-                  <FaPlay /> Watch Recording
-                </button>
+        {!loading && videos.length > 0 && (
+          <div className="recordings-grid">
+            {videos.map((video) => (
+              <div className="recording-card" key={video._id}>
+                <div className="thumbnail" onClick={() => handleWatchVideo(video.youtubeUrl)}>
+                  <img src={video.thumbnailUrl} alt={video.title} />
+                  <div className="play-overlay">
+                    <FaYoutube className="youtube-play-icon" />
+                  </div>
+                </div>
+
+                <div className="recording-content">
+                  <h4>{video.title}</h4>
+                  {video.description && <p className="video-description">{video.description}</p>}
+                  <span className="date">{formatDate(video.createdAt)}</span>
+
+                  <button className="watch-btn" onClick={() => handleWatchVideo(video.youtubeUrl)}>
+                    <FaPlay /> Watch on YouTube
+                  </button>
+                </div>
               </div>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        )}
       </section>
 
       {/* Available Slots */}
