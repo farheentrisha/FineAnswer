@@ -45,7 +45,8 @@ const client = new MongoClient(uri, {
 let usersCollection;
 let successStoryCollection;
 let blogCollection;
-let sessionCollection;
+let sessionCollection; // stores YouTube session videos
+let eventsCollection; // stores external session/event links (e.g., Facebook)
 
 // JWT Secret (should be in .env file)
 const JWT_SECRET =
@@ -136,6 +137,7 @@ async function run() {
     successStoryCollection = client.db("FineAnswer").collection("successStory");
     blogCollection = client.db("FineAnswer").collection("blog");
     sessionCollection = client.db("FineAnswer").collection("session");
+    eventsCollection = client.db("FineAnswer").collection("events");
 
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
@@ -1229,6 +1231,133 @@ app.delete(
     res.status(200).json({
       success: true,
       message: "Video deleted successfully",
+    });
+  }),
+);
+
+// GET /api/events - Get all external session events (Public)
+app.get(
+  "/api/events",
+  asyncHandler(async (req, res) => {
+    const events = await eventsCollection
+      .find({})
+      .sort({ createdAt: -1 })
+      .toArray();
+    res.status(200).json({
+      success: true,
+      data: events,
+    });
+  }),
+);
+
+// POST /api/events - Create a new event (ADMIN ONLY)
+app.post(
+  "/api/events",
+  authenticateToken,
+  requireAdmin,
+  asyncHandler(async (req, res) => {
+    const { title, eventUrl, description } = req.body;
+
+    if (!title || !eventUrl) {
+      return res.status(400).json({
+        success: false,
+        message: "Title and event URL are required",
+      });
+    }
+
+    const newEvent = {
+      title: title.trim(),
+      eventUrl: eventUrl.trim(),
+      description: description?.trim() || "",
+      createdBy: req.user._id,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    };
+
+    const result = await eventsCollection.insertOne(newEvent);
+    const savedEvent = await eventsCollection.findOne({
+      _id: result.insertedId,
+    });
+
+    res.status(201).json({
+      success: true,
+      message: "Event added successfully",
+      data: savedEvent,
+    });
+  }),
+);
+
+// PUT /api/events/:id - Update an event (ADMIN ONLY)
+app.put(
+  "/api/events/:id",
+  authenticateToken,
+  requireAdmin,
+  asyncHandler(async (req, res) => {
+    const { id } = req.params;
+    if (!ObjectId.isValid(id)) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid event ID format",
+      });
+    }
+
+    const { title, eventUrl, description } = req.body;
+    const updateFields = { updatedAt: new Date() };
+
+    if (title) updateFields.title = title.trim();
+    if (description !== undefined)
+      updateFields.description = description?.trim() || "";
+    if (eventUrl) updateFields.eventUrl = eventUrl.trim();
+
+    const updatedEvent = await eventsCollection.findOneAndUpdate(
+      { _id: new ObjectId(id) },
+      { $set: updateFields },
+      { returnDocument: "after" },
+    );
+
+    if (!updatedEvent) {
+      return res.status(404).json({
+        success: false,
+        message: "Event not found",
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      message: "Event updated successfully",
+      data: updatedEvent,
+    });
+  }),
+);
+
+// DELETE /api/events/:id - Delete an event (ADMIN ONLY)
+app.delete(
+  "/api/events/:id",
+  authenticateToken,
+  requireAdmin,
+  asyncHandler(async (req, res) => {
+    const { id } = req.params;
+    if (!ObjectId.isValid(id)) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid event ID format",
+      });
+    }
+
+    const deletedEvent = await eventsCollection.findOneAndDelete({
+      _id: new ObjectId(id),
+    });
+
+    if (!deletedEvent) {
+      return res.status(404).json({
+        success: false,
+        message: "Event not found",
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      message: "Event deleted successfully",
     });
   }),
 );

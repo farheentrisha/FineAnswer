@@ -3,35 +3,15 @@ import { FaPlay, FaCalendarAlt, FaYoutube } from "react-icons/fa";
 import { API_BASE_URL } from "../config/api";
 import "./Sessions.css";
 
-const slots = [
-  {
-    date: "Jan 18, 2026",
-    time: "10:00 AM",
-    consultant: "Dr. Sarah Miller",
-  },
-  {
-    date: "Jan 18, 2026",
-    time: "2:00 PM",
-    consultant: "Prof. John Davis",
-  },
-  {
-    date: "Jan 19, 2026",
-    time: "11:00 AM",
-    consultant: "Ms. Emily Chen",
-  },
-  {
-    date: "Jan 19, 2026",
-    time: "3:00 PM",
-    consultant: "Dr. Sarah Miller",
-  },
-];
-
 export default function Sessions() {
   const [videos, setVideos] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [events, setEvents] = useState([]);
+  const [eventsLoading, setEventsLoading] = useState(true);
 
   useEffect(() => {
     fetchVideos();
+    fetchEvents();
   }, []);
 
   const fetchVideos = async () => {
@@ -48,6 +28,20 @@ export default function Sessions() {
     }
   };
 
+  const fetchEvents = async () => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/events`);
+      const data = await response.json();
+      if (data.success) {
+        setEvents(data.data);
+      }
+    } catch (err) {
+      console.error("Failed to load events:", err);
+    } finally {
+      setEventsLoading(false);
+    }
+  };
+
   const formatDate = (dateString) => {
     const date = new Date(dateString);
     return date.toLocaleDateString("en-US", {
@@ -59,6 +53,10 @@ export default function Sessions() {
 
   const handleWatchVideo = (youtubeUrl) => {
     window.open(youtubeUrl, "_blank", "noopener,noreferrer");
+  };
+
+  const handleOpenEvent = (eventUrl) => {
+    window.open(eventUrl, "_blank", "noopener,noreferrer");
   };
 
   return (
@@ -93,7 +91,6 @@ export default function Sessions() {
                     <FaYoutube className="youtube-play-icon" />
                   </div>
                 </div>
-
                 <div className="recording-content">
                   <h4>{video.title}</h4>
                   {video.description && <p className="video-description">{video.description}</p>}
@@ -115,17 +112,43 @@ export default function Sessions() {
           <FaCalendarAlt /> Available Time Slots
         </h3>
 
-        <div className="slots-grid">
-          {slots.map((slot, i) => (
-            <div className="slot-card" key={i}>
-              <p className="slot-date">{slot.date}</p>
-              <p className="slot-time">{slot.time}</p>
-              <p className="slot-name">{slot.consultant}</p>
+        {eventsLoading && (
+          <div className="sessions-loading">
+            <div className="sessions-spinner"></div>
+            <p>Loading events...</p>
+          </div>
+        )}
 
-              <button className="book-btn">Book</button>
-            </div>
-          ))}
-        </div>
+        {!eventsLoading && events.length === 0 && (
+          <div className="sessions-empty">
+            <FaCalendarAlt />
+            <p>No upcoming events yet.</p>
+          </div>
+        )}
+
+        {!eventsLoading && events.length > 0 && (
+          <div className="slots-grid">
+            {events.map((eventItem) => (
+              <div
+                className="slot-card"
+                key={eventItem._id}
+                onClick={() => handleOpenEvent(eventItem.eventUrl)}
+              >
+                <p className="slot-date">
+                  {eventItem.createdAt
+                    ? formatDate(eventItem.createdAt)
+                    : "New Event"}
+                </p>
+                <p className="slot-time">{eventItem.title}</p>
+                {eventItem.description && (
+                  <p className="slot-name">{eventItem.description}</p>
+                )}
+
+                <button className="book-btn">View Event</button>
+              </div>
+            ))}
+          </div>
+        )}
       </section>
     </div>
   );
