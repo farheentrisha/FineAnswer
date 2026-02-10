@@ -8,6 +8,7 @@ import {
   FaVideo,
   FaEnvelope,
   FaUser,
+  FaBriefcase,
   FaSignOutAlt,
 } from "react-icons/fa";
 import { AuthContext } from "../pages/Provider/ContextProvider";
@@ -46,6 +47,10 @@ export default function Sidebar() {
 
         <NavLink to="/dashboard/sessions">
           <FaVideo /> <span>Sessions</span>
+        </NavLink>
+
+        <NavLink to="/dashboard/career">
+          <FaBriefcase /> <span>Career</span>
         </NavLink>
 
         <NavLink to="/dashboard/messages">

@@ -1,5 +1,5 @@
-// const BASE_URL = "http://localhost:5000";
-const BASE_URL = "https://fine-answer.vercel.app"; 
+const BASE_URL = "http://localhost:5000";
+// const BASE_URL = "https://fine-answer.vercel.app";   
 
 const getApiBaseUrl = () => {
   const envUrl = import.meta.env.VITE_API_URL;

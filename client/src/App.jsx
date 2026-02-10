@@ -22,7 +22,7 @@ import AdminDashboard from "./pages/admin/AdminDashboard";
 import Analytics from "./pages/admin/Analytics";
 import SuccessStories from "./pages/admin/SuccessStories";
 import Blog from "./pages/admin/Blog";
-import Career from "./pages/admin/Career";
+import AdminCareer from "./pages/admin/Career";
 import TrackerUpdate from "./pages/admin/TrackerUpdate";
 import AdminSession from "./pages/admin/AdminSession";
 import StudentsInfo from "./pages/admin/StudentsInfo";
@@ -30,6 +30,7 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import { AuthContext } from "./pages/Provider/ContextProvider";
 import PublicBlog from "./pages/Blog";
 import BlogDetail from "./pages/BlogDetail";
+import Career from "./pages/Career";
 
 import "./App.css";
 
@@ -105,6 +106,7 @@ function AppRoutes() {
         <Route path="universities" element={<Universities />} />
         <Route path="documentchecklist" element={<DocumentChecklist />} />
         <Route path="sessions" element={<Sessions />} />
+        <Route path="career" element={<Career />} />
         <Route path="profile" element={<Profile />} />
         <Route path="messages" element={<Messages />} />
       </Route>
@@ -122,7 +124,7 @@ function AppRoutes() {
         <Route path="analytics" element={<Analytics />} />
         <Route path="success-stories" element={<SuccessStories />} />
         <Route path="blog" element={<Blog />} />
-        <Route path="career" element={<Career />} />
+        <Route path="career" element={<AdminCareer />} />
         <Route path="tracker-update" element={<TrackerUpdate />} />
         <Route path="sessions" element={<AdminSession />} />
         <Route path="students-info" element={<StudentsInfo />} />
