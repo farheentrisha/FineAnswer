@@ -9,6 +9,7 @@ import {
   FaTasks,
   FaVideo,
   FaUsers,
+  FaFileAlt,
   FaSignOutAlt,
 } from "react-icons/fa";
 import { AuthContext } from "../../pages/Provider/ContextProvider";
@@ -68,6 +69,10 @@ export default function Sidebar() {
 
         <NavLink to="/admin/students-info">
           <FaUsers /> <span>Students Info</span>
+        </NavLink>
+
+        <NavLink to="/admin/documents">
+          <FaFileAlt /> <span>Documents</span>
         </NavLink>
       </nav>
 

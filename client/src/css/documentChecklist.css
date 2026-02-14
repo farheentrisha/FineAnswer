@@ -1,8 +1,9 @@
 .doc-wrapper {
-  width: 420px;
+  width: 100%;
+  max-width: 900px;
   background: #fff;
   border-radius: 14px;
-  padding: 18px;
+  padding: 24px;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
 }
 
@@ -12,42 +13,66 @@
   gap: 10px;
   font-weight: 600;
   color: #2f3ea8;
-  margin-bottom: 12px;
+  margin-bottom: 16px;
+  font-size: 1.3rem;
+}
+
+.doc-loading,
+.doc-error {
+  text-align: center;
+  padding: 24px;
+  color: #666;
+}
+
+.doc-error {
+  color: #e53935;
+}
+
+.spinner {
+  animation: spin 1s linear infinite;
+  font-size: 1.2rem;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
 }
 
 .doc-list {
   border-top: 1px solid #eee;
-  padding-top: 12px;
+  padding-top: 16px;
 }
 
 .doc-item {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 12px 14px;
+  padding: 14px 16px;
   border: 1px solid #e5e7eb;
   border-radius: 10px;
-  margin-bottom: 10px;
+  margin-bottom: 12px;
 }
 
 .doc-left {
   display: flex;
   gap: 12px;
   align-items: center;
+  flex: 1;
 }
 
 .doc-name {
   font-size: 14px;
   font-weight: 500;
+  margin-bottom: 2px;
 }
 
 .required {
-  font-size: px;
+  font-size: 12px;
   color: #e53935;
 }
 
 .icon {
-  font-size: 12px;
+  font-size: 18px;
 }
 
 .icon.done {
@@ -62,10 +87,99 @@
   color: #f39c12;
 }
 
+.doc-actions {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.view-link {
+  font-size: 13px;
+  color: #4f5bd5;
+  text-decoration: none;
+  padding: 4px 10px;
+  border: 1px solid #4f5bd5;
+  border-radius: 6px;
+}
+
+.view-link:hover,
+.doc-view-btn:hover:not(:disabled) {
+  background: #4f5bd5;
+  color: #fff;
+}
+
+.doc-view-btn,
+.doc-download-btn {
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: 13px;
+  cursor: pointer;
+  border: 1px solid;
+  background: transparent;
+}
+
+.doc-view-btn {
+  border-color: #4f5bd5;
+  color: #4f5bd5;
+}
+
+.doc-download-btn {
+  border-color: #059669;
+  color: #059669;
+}
+
+.doc-download-btn:hover:not(:disabled) {
+  background: #059669;
+  color: #fff;
+}
+
+.doc-view-btn:disabled,
+.doc-download-btn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.doc-feedback {
+  padding: 12px 16px;
+  border-radius: 10px;
+  margin-bottom: 16px;
+  font-size: 0.9rem;
+}
+
+.doc-feedback-approved {
+  background: #d1fae5;
+  color: #065f46;
+  border: 1px solid #10b981;
+}
+
+.doc-feedback-rejected {
+  background: #fee2e2;
+  color: #991b1b;
+  border: 1px solid #dc2626;
+}
+
+.doc-feedback-pending {
+  background: #fef3c7;
+  color: #92400e;
+  border: 1px solid #f59e0b;
+}
+
+.doc-feedback-text {
+  margin-top: 8px;
+  margin-bottom: 0;
+}
+
+.upload-label {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
 .upload-icon {
-  font-size: 18px;
+  font-size: 22px;
   color: #8b8b8b;
   cursor: pointer;
+  transition: color 0.2s;
 }
 
 .upload-icon:hover {
