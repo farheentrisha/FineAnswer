@@ -26,6 +26,7 @@ import AdminCareer from "./pages/admin/Career";
 import TrackerUpdate from "./pages/admin/TrackerUpdate";
 import AdminSession from "./pages/admin/AdminSession";
 import StudentsInfo from "./pages/admin/StudentsInfo";
+import AdminDocuments from "./pages/admin/Documents";
 import ProtectedRoute from "./components/ProtectedRoute";
 import { AuthContext } from "./pages/Provider/ContextProvider";
 import PublicBlog from "./pages/Blog";
@@ -128,6 +129,7 @@ function AppRoutes() {
         <Route path="tracker-update" element={<TrackerUpdate />} />
         <Route path="sessions" element={<AdminSession />} />
         <Route path="students-info" element={<StudentsInfo />} />
+        <Route path="documents" element={<AdminDocuments />} />
       </Route>
 
       {/* Default redirect */}
