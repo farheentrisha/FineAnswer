@@ -10,9 +10,9 @@ import CEOQuote from "./components/CEOQuote";
 import useFadeIn from "./hooks/useFadeIn";
 
 import "./LandingPage.css";
-import uni1 from "./images/uni1.jpg";
-import uni2 from "./images/uni2.jpg";
-import uni3 from "./images/uni3.jpg";
+import uni1 from "./assets/DCU.jpg";
+import uni2 from "./assets/UL.jpg";
+import uni3 from "./assets/setu.jpg";
 import {
   FaGlobe,
   FaLaptopCode,
