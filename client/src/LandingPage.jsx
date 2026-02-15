@@ -198,14 +198,21 @@ export default function LandingPage() {
   <div className="about-left">
     <h2>ABOUT US</h2>
     <p>
-      We help students discover global academic opportunities with seamless 
-      guidance, expert mentoring, and complete end-to-end support.
-      From choosing a country to landing on campus — we’re with you every step.
+      Headquartered in Ireland, with an operating branch in Dhaka, we empower students to access global academic opportunities through tailored guidance, expert mentoring, and comprehensive end-to-end support. From selecting the right destination to successfully arriving on campus, we provide trusted guidance at every stage of the journey
     </p>
 
     <div className="about-buttons">
       <button className="btn-primary">Learn More</button>
-      <button className="btn-outline">Watch Video ▶</button>
+      <a
+  href="https://www.youtube.com/@FineAnswerStudyAbroad/videos"
+  target="_blank"
+  rel="noopener noreferrer"
+>
+  <button className="btn-outline">
+    Watch Video ▶
+  </button>
+</a>
+
     </div>
   </div>
 
