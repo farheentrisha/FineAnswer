@@ -23,7 +23,7 @@ export default function ContactSection() {
 
           <div className="contact-info">
             <p>📍 House 76/A, Road 11, Banani, Dhaka 1213, Bangladesh</p>
-            <p>📞 +880 1725-982743</p>
+            <p>📞 +880 1725-980472, +880 1725-971833 </p>
             <p>📧 studyabroad@fineanswer.net</p>
           </div>
 
