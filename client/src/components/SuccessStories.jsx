@@ -13,6 +13,16 @@ export default function SuccessStories() {
 
   const [originalStories, setOriginalStories] = useState([]);
 
+  const [carouselOffset, setCarouselOffset] = useState(320);
+  useEffect(() => {
+    const updateOffset = () => {
+      setCarouselOffset(window.innerWidth <= 480 ? 260 : window.innerWidth <= 768 ? 280 : 320);
+    };
+    updateOffset();
+    window.addEventListener("resize", updateOffset);
+    return () => window.removeEventListener("resize", updateOffset);
+  }, []);
+
   // Fetch success stories from API
   useEffect(() => {
     const fetchStories = async () => {
@@ -161,7 +171,7 @@ export default function SuccessStories() {
                     className="card-container"
                     key={`${story._id || story.id}-${i}`}
                     style={{
-                      transform: `translateX(${offset * 320}px) scale(${scale})`,
+                      transform: `translateX(${offset * carouselOffset}px) scale(${scale})`,
                       opacity,
                       zIndex: 100 - Math.abs(offset),
                     }}
