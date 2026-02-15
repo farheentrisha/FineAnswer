@@ -1,6 +1,7 @@
 const express = require("express");
 const cors = require("cors");
 const crypto = require("crypto");
+const axios = require("axios");
 require("dotenv").config();
 
 const { MongoClient, ServerApiVersion, ObjectId } = require("mongodb");
@@ -47,6 +48,9 @@ let successStoryCollection;
 let blogCollection;
 let sessionCollection; // stores YouTube session videos
 let eventsCollection; // stores external session/event links (e.g., Facebook)
+let careerCollection; // stores career/job posts
+let careerApplicationsCollection; // stores job applications
+let documentsCollection; // stores user uploaded documents
 
 // JWT Secret (should be in .env file)
 const JWT_SECRET =
@@ -138,6 +142,11 @@ async function run() {
     blogCollection = client.db("FineAnswer").collection("blog");
     sessionCollection = client.db("FineAnswer").collection("session");
     eventsCollection = client.db("FineAnswer").collection("events");
+    careerCollection = client.db("FineAnswer").collection("careerCollection");
+    careerApplicationsCollection = client
+      .db("FineAnswer")
+      .collection("careerApplications");
+    documentsCollection = client.db("FineAnswer").collection("documentsCollection");
 
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
@@ -1358,6 +1367,594 @@ app.delete(
     res.status(200).json({
       success: true,
       message: "Event deleted successfully",
+    });
+  }),
+);
+
+// GET /api/jobs - Public list of job posts (Career)
+app.get(
+  "/api/jobs",
+  asyncHandler(async (req, res) => {
+    const jobs = await careerCollection
+      .find({})
+      .sort({ createdAt: -1 })
+      .toArray();
+    res.status(200).json({
+      success: true,
+      data: jobs,
+    });
+  }),
+);
+
+// GET /api/jobs/:id - Single job (Public)
+app.get(
+  "/api/jobs/:id",
+  asyncHandler(async (req, res) => {
+    const { id } = req.params;
+    if (!ObjectId.isValid(id)) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid job ID format",
+      });
+    }
+    const job = await careerCollection.findOne({ _id: new ObjectId(id) });
+    if (!job) {
+      return res.status(404).json({
+        success: false,
+        message: "Job not found",
+      });
+    }
+    res.status(200).json({
+      success: true,
+      data: job,
+    });
+  }),
+);
+
+// POST /api/jobs - Create a job post (ADMIN ONLY)
+app.post(
+  "/api/jobs",
+  authenticateToken,
+  requireAdmin,
+  asyncHandler(async (req, res) => {
+    const {
+      title,
+      company,
+      location,
+      employmentType,
+      description,
+      requirements,
+      applicationUrl,
+      deadline,
+    } = req.body;
+
+    if (!title || !company || !location || !description) {
+      return res.status(400).json({
+        success: false,
+        message: "Title, company, location, and description are required",
+      });
+    }
+
+    const newJob = {
+      title: title.trim(),
+      company: company.trim(),
+      location: location.trim(),
+      employmentType: employmentType?.trim() || "Full-time",
+      description: description.trim(),
+      requirements: requirements?.trim() || "",
+      applicationUrl: applicationUrl?.trim() || "",
+      deadline: deadline ? new Date(deadline) : null,
+      createdBy: req.user._id,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    };
+
+    const result = await careerCollection.insertOne(newJob);
+    const savedJob = await careerCollection.findOne({
+      _id: result.insertedId,
+    });
+
+    res.status(201).json({
+      success: true,
+      message: "Job created successfully",
+      data: savedJob,
+    });
+  }),
+);
+
+// PUT /api/jobs/:id - Update a job post (ADMIN ONLY)
+app.put(
+  "/api/jobs/:id",
+  authenticateToken,
+  requireAdmin,
+  asyncHandler(async (req, res) => {
+    const { id } = req.params;
+    if (!ObjectId.isValid(id)) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid job ID format",
+      });
+    }
+
+    const {
+      title,
+      company,
+      location,
+      employmentType,
+      description,
+      requirements,
+      applicationUrl,
+      deadline,
+    } = req.body;
+
+    const updateFields = { updatedAt: new Date() };
+    if (title) updateFields.title = title.trim();
+    if (company) updateFields.company = company.trim();
+    if (location) updateFields.location = location.trim();
+    if (employmentType) updateFields.employmentType = employmentType.trim();
+    if (description) updateFields.description = description.trim();
+    if (requirements !== undefined)
+      updateFields.requirements = requirements?.trim() || "";
+    if (applicationUrl !== undefined)
+      updateFields.applicationUrl = applicationUrl?.trim() || "";
+    if (deadline !== undefined)
+      updateFields.deadline = deadline ? new Date(deadline) : null;
+
+    const updatedJob = await careerCollection.findOneAndUpdate(
+      { _id: new ObjectId(id) },
+      { $set: updateFields },
+      { returnDocument: "after" },
+    );
+
+    if (!updatedJob) {
+      return res.status(404).json({
+        success: false,
+        message: "Job not found",
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      message: "Job updated successfully",
+      data: updatedJob,
+    });
+  }),
+);
+
+// DELETE /api/jobs/:id - Delete a job post (ADMIN ONLY)
+app.delete(
+  "/api/jobs/:id",
+  authenticateToken,
+  requireAdmin,
+  asyncHandler(async (req, res) => {
+    const { id } = req.params;
+    if (!ObjectId.isValid(id)) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid job ID format",
+      });
+    }
+
+    const deletedJob = await careerCollection.findOneAndDelete({
+      _id: new ObjectId(id),
+    });
+
+    if (!deletedJob) {
+      return res.status(404).json({
+        success: false,
+        message: "Job not found",
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      message: "Job deleted successfully",
+    });
+  }),
+);
+
+// GET /api/jobs/:id/applications - View applications for a job (ADMIN ONLY)
+app.get(
+  "/api/jobs/:id/applications",
+  authenticateToken,
+  requireAdmin,
+  asyncHandler(async (req, res) => {
+    const { id } = req.params;
+    if (!ObjectId.isValid(id)) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid job ID format",
+      });
+    }
+
+    const applications = await careerApplicationsCollection
+      .aggregate([
+        { $match: { jobId: new ObjectId(id) } },
+        {
+          $lookup: {
+            from: "usersCollection",
+            localField: "userId",
+            foreignField: "_id",
+            as: "user",
+          },
+        },
+        { $unwind: { path: "$user", preserveNullAndEmptyArrays: true } },
+        {
+          $project: {
+            _id: 1,
+            documents: 1,
+            notes: 1,
+            createdAt: 1,
+            "user._id": 1,
+            "user.name": 1,
+            "user.email": 1,
+          },
+        },
+      ])
+      .toArray();
+
+    res.status(200).json({
+      success: true,
+      data: applications,
+    });
+  }),
+);
+
+// POST /api/jobs/:id/apply - User applies to a job (Protected)
+app.post(
+  "/api/jobs/:id/apply",
+  authenticateToken,
+  asyncHandler(async (req, res) => {
+    const { id } = req.params;
+    if (!ObjectId.isValid(id)) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid job ID format",
+      });
+    }
+
+    const job = await careerCollection.findOne({ _id: new ObjectId(id) });
+    if (!job) {
+      return res.status(404).json({
+        success: false,
+        message: "Job not found",
+      });
+    }
+
+    // Check deadline
+    if (job.deadline && new Date(job.deadline) < new Date()) {
+      return res.status(400).json({
+        success: false,
+        message: "Applications for this job are closed.",
+      });
+    }
+
+    const { documents, notes } = req.body;
+
+    const application = {
+      jobId: job._id,
+      userId: req.user._id,
+      documents: documents?.trim() || "",
+      notes: notes?.trim() || "",
+      createdAt: new Date(),
+    };
+
+    await careerApplicationsCollection.insertOne(application);
+
+    res.status(201).json({
+      success: true,
+      message: "Application submitted successfully.",
+    });
+  }),
+);
+
+// GET /api/documents/proxy - Must be before /api/documents to avoid match conflicts
+app.get(
+  "/api/documents/proxy",
+  asyncHandler(async (req, res) => {
+    const { url, download } = req.query;
+    if (!url || typeof url !== "string") {
+      return res.status(400).json({
+        success: false,
+        message: "URL is required",
+      });
+    }
+    if (!url.startsWith("https://res.cloudinary.com/")) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid document URL",
+      });
+    }
+
+    try {
+      const axiosRes = await axios.get(url, {
+        responseType: "arraybuffer",
+        maxRedirects: 5,
+        headers: {
+          "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36",
+          Accept: "application/pdf,*/*",
+        },
+      });
+
+      const buffer = Buffer.from(axiosRes.data);
+
+      res.set("Content-Type", "application/pdf");
+      res.set(
+        "Content-Disposition",
+        download === "1" ? "attachment; filename=document.pdf" : "inline",
+      );
+      res.send(buffer);
+    } catch (error) {
+      return res.status(502).json({
+        success: false,
+        message: `Failed to fetch document: ${error.message}`,
+      });
+    }
+  }),
+);
+
+// GET /api/documents - Get current user's documents (Protected)
+app.get(
+  "/api/documents",
+  authenticateToken,
+  asyncHandler(async (req, res) => {
+    const userId = req.user._id;
+    const docs = await documentsCollection.findOne({ userId });
+    
+    res.status(200).json({
+      success: true,
+      data: docs || null,
+    });
+  }),
+);
+
+// POST /api/documents - Upload user documents (Protected)
+app.post(
+  "/api/documents",
+  authenticateToken,
+  asyncHandler(async (req, res) => {
+    const userId = req.user._id;
+    const {
+      passportCopy,
+      cv,
+      sop,
+      englishProficiency,
+      sscCertificate,
+      hscCertificate,
+      bachelorsCertificate,
+      mastersCertificate,
+      sscTranscript,
+      hscTranscript,
+      bachelorsTranscript,
+      mastersTranscript,
+      workExperience,
+      lors,
+    } = req.body;
+
+    // Check if documents already exist for this user
+    const existing = await documentsCollection.findOne({ userId });
+    if (existing) {
+      return res.status(400).json({
+        success: false,
+        message: "Documents already uploaded. Use PUT to update.",
+      });
+    }
+
+    const newDoc = {
+      userId,
+      passportCopy: passportCopy || "",
+      cv: cv || "",
+      sop: sop || "",
+      englishProficiency: englishProficiency || "",
+      sscCertificate: sscCertificate || "",
+      hscCertificate: hscCertificate || "",
+      bachelorsCertificate: bachelorsCertificate || "",
+      mastersCertificate: mastersCertificate || "",
+      sscTranscript: sscTranscript || "",
+      hscTranscript: hscTranscript || "",
+      bachelorsTranscript: bachelorsTranscript || "",
+      mastersTranscript: mastersTranscript || "",
+      workExperience: workExperience || "",
+      lors: lors || "",
+      validationStatus: "pending",
+      feedback: "",
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    };
+
+    await documentsCollection.insertOne(newDoc);
+
+    res.status(201).json({
+      success: true,
+      message: "Documents uploaded successfully",
+      data: newDoc,
+    });
+  }),
+);
+
+// PUT /api/documents - Update user documents (Protected)
+app.put(
+  "/api/documents",
+  authenticateToken,
+  asyncHandler(async (req, res) => {
+    const userId = req.user._id;
+    const {
+      passportCopy,
+      cv,
+      sop,
+      englishProficiency,
+      sscCertificate,
+      hscCertificate,
+      bachelorsCertificate,
+      mastersCertificate,
+      sscTranscript,
+      hscTranscript,
+      bachelorsTranscript,
+      mastersTranscript,
+      workExperience,
+      lors,
+    } = req.body;
+
+    const updateFields = { updatedAt: new Date() };
+    if (passportCopy !== undefined) updateFields.passportCopy = passportCopy;
+    if (cv !== undefined) updateFields.cv = cv;
+    if (sop !== undefined) updateFields.sop = sop;
+    if (englishProficiency !== undefined) updateFields.englishProficiency = englishProficiency;
+    if (sscCertificate !== undefined) updateFields.sscCertificate = sscCertificate;
+    if (hscCertificate !== undefined) updateFields.hscCertificate = hscCertificate;
+    if (bachelorsCertificate !== undefined) updateFields.bachelorsCertificate = bachelorsCertificate;
+    if (mastersCertificate !== undefined) updateFields.mastersCertificate = mastersCertificate;
+    if (sscTranscript !== undefined) updateFields.sscTranscript = sscTranscript;
+    if (hscTranscript !== undefined) updateFields.hscTranscript = hscTranscript;
+    if (bachelorsTranscript !== undefined) updateFields.bachelorsTranscript = bachelorsTranscript;
+    if (mastersTranscript !== undefined) updateFields.mastersTranscript = mastersTranscript;
+    if (workExperience !== undefined) updateFields.workExperience = workExperience;
+    if (lors !== undefined) updateFields.lors = lors;
+
+    const updated = await documentsCollection.findOneAndUpdate(
+      { userId },
+      { $set: updateFields },
+      { returnDocument: "after", upsert: true }
+    );
+
+    res.status(200).json({
+      success: true,
+      message: "Documents updated successfully",
+      data: updated,
+    });
+  }),
+);
+
+// DELETE /api/documents - Delete user documents (Protected)
+app.delete(
+  "/api/documents",
+  authenticateToken,
+  asyncHandler(async (req, res) => {
+    const userId = req.user._id;
+    const deleted = await documentsCollection.findOneAndDelete({ userId });
+
+    if (!deleted) {
+      return res.status(404).json({
+        success: false,
+        message: "No documents found to delete",
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      message: "Documents deleted successfully",
+    });
+  }),
+);
+
+// GET /api/admin/documents - Get all user documents (ADMIN ONLY)
+app.get(
+  "/api/admin/documents",
+  authenticateToken,
+  requireAdmin,
+  asyncHandler(async (req, res) => {
+    const allDocs = await documentsCollection
+      .aggregate([
+        {
+          $lookup: {
+            from: "usersCollection",
+            localField: "userId",
+            foreignField: "_id",
+            as: "user",
+          },
+        },
+        { $unwind: { path: "$user", preserveNullAndEmptyArrays: true } },
+        {
+          $project: {
+            _id: 1,
+            userId: 1,
+            passportCopy: 1,
+            cv: 1,
+            sop: 1,
+            englishProficiency: 1,
+            sscCertificate: 1,
+            hscCertificate: 1,
+            bachelorsCertificate: 1,
+            mastersCertificate: 1,
+            sscTranscript: 1,
+            hscTranscript: 1,
+            bachelorsTranscript: 1,
+            mastersTranscript: 1,
+            workExperience: 1,
+            lors: 1,
+            validationStatus: 1,
+            feedback: 1,
+            createdAt: 1,
+            updatedAt: 1,
+            "user._id": 1,
+            "user.name": 1,
+            "user.email": 1,
+          },
+        },
+      ])
+      .toArray();
+
+    res.status(200).json({
+      success: true,
+      data: allDocs,
+    });
+  }),
+);
+
+// PUT /api/admin/documents/feedback - Admin sets validation status and feedback
+app.put(
+  "/api/admin/documents/feedback",
+  authenticateToken,
+  requireAdmin,
+  asyncHandler(async (req, res) => {
+    const { userId, status, feedback } = req.body;
+
+    if (!userId) {
+      return res.status(400).json({
+        success: false,
+        message: "User ID is required",
+      });
+    }
+
+    if (!ObjectId.isValid(userId)) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid user ID",
+      });
+    }
+
+    const validStatuses = ["pending", "approved", "rejected"];
+    if (!validStatuses.includes(status)) {
+      return res.status(400).json({
+        success: false,
+        message: "Status must be pending, approved, or rejected",
+      });
+    }
+
+    const updated = await documentsCollection.findOneAndUpdate(
+      { userId: new ObjectId(userId) },
+      {
+        $set: {
+          validationStatus: status,
+          feedback: feedback?.trim() || "",
+          feedbackUpdatedAt: new Date(),
+          updatedAt: new Date(),
+        },
+      },
+      { returnDocument: "after" },
+    );
+
+    if (!updated) {
+      return res.status(404).json({
+        success: false,
+        message: "No documents found for this user",
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      message: "Feedback submitted successfully",
+      data: updated,
     });
   }),
 );
