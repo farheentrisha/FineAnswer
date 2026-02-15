@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { API_BASE_URL } from "../config/api";
-import "../styles/Blog.css";
+import "../styles/blogdetails.css";
 
 export default function BlogDetail() {
   const { id } = useParams();
@@ -28,7 +28,8 @@ export default function BlogDetail() {
         setError(data.message || "Blog not found");
       }
     } catch (err) {
-      setError("Failed to load blog");
+      console.error("Error fetching blog:", err);
+      setError("Failed to load blog article");
     } finally {
       setLoading(false);
     }
@@ -44,60 +45,93 @@ export default function BlogDetail() {
     });
   };
 
+  // Loading State
   if (loading) {
     return (
-      <div className="blog-page blog-detail-page">
-        <div className="blog-loading-state">
-          <div className="blog-spinner"></div>
-          <p>Loading blog...</p>
+      <div className="blog-detail-page">
+        <div className="blog-detail-loading">
+          <div className="loading-spinner"></div>
+          <p>Loading article...</p>
         </div>
       </div>
     );
   }
 
+  // Error State
   if (error || !blog) {
     return (
-      <div className="blog-page blog-detail-page">
-        <div className="blog-error-state">
-          <p>{error || "Blog not found"}</p>
-          <Link to="/blog" className="blog-back-link">
-            ← Back to Blogs
+      <div className="blog-detail-page">
+        <div className="blog-detail-error">
+          <div className="error-icon">⚠️</div>
+          <h2>Oops! Something went wrong</h2>
+          <p>{error || "Blog article not found"}</p>
+          <Link to="/blog" className="error-back-btn">
+            <span>←</span> Back to All Articles
           </Link>
         </div>
       </div>
     );
   }
 
+  // Main Content
   return (
-    <div className="blog-page blog-detail-page">
-      <article className="blog-detail">
-        <Link to="/blog" className="blog-back-link">
-          ← Back to Blogs
-        </Link>
-
-        <div className="blog-detail-header">
-          <span className="blog-detail-date">{formatDate(blog.createdAt)}</span>
-          {blog.author && (
-            <span className="blog-detail-author">By {blog.author}</span>
-          )}
-          <h1 className="blog-detail-title">{blog.title}</h1>
+    <div className="blog-detail-page">
+      {/* Navigation */}
+      <nav className="blog-detail-nav">
+        <div className="blog-detail-nav-container">
+          <Link to="/blog" className="blog-detail-back">
+            <span className="back-arrow">←</span>
+            <span>All Articles</span>
+          </Link>
         </div>
+      </nav>
 
+      {/* Article Container */}
+      <article className="blog-detail-article">
+        {/* Header Section */}
+        <header className="blog-detail-header">
+          <div className="blog-detail-meta">
+            <time className="blog-detail-date" dateTime={blog.createdAt}>
+              {formatDate(blog.createdAt)}
+            </time>
+            {blog.author && (
+              <>
+                <span className="meta-separator">•</span>
+                <span className="blog-detail-author">{blog.author}</span>
+              </>
+            )}
+            {blog.readTime && (
+              <>
+                <span className="meta-separator">•</span>
+                <span className="blog-detail-readtime">{blog.readTime} min read</span>
+              </>
+            )}
+          </div>
+          <h1 className="blog-detail-title">{blog.title}</h1>
+        </header>
+
+        {/* Featured Image */}
         {blog.image && (
-          <div className="blog-detail-image-wrapper">
-            <img src={blog.image} alt={blog.title} className="blog-detail-image" />
+          <div className="blog-detail-image-container">
+            <img
+              src={blog.image}
+              alt={blog.title}
+              className="blog-detail-image"
+            />
           </div>
         )}
 
+        {/* Content Section */}
         <div className="blog-detail-content">
-          <p className="blog-detail-body">{blog.content}</p>
+          <div className="blog-detail-body">
+            {blog.content.split('\n').map((paragraph, index) => (
+              paragraph.trim() && <p key={index}>{paragraph}</p>
+            ))}
+          </div>
         </div>
 
-        <div className="blog-detail-footer">
-          <Link to="/blog" className="blog-back-btn">
-            ← Back to All Blogs
-          </Link>
-        </div>
+        {/* Footer Section */}
+        
       </article>
     </div>
   );

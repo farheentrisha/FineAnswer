@@ -6,6 +6,7 @@ import "../styles/Blog.css";
 export default function Blog() {
   const [blogs, setBlogs] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -18,111 +19,116 @@ export default function Blog() {
       const data = await response.json();
       if (data.success) {
         setBlogs(data.data);
+      } else {
+        setError("Failed to load blogs");
       }
     } catch (err) {
       console.error("Failed to load blogs:", err);
+      setError("Unable to connect to the server");
     } finally {
       setLoading(false);
     }
   };
 
   const formatDate = (dateString) => {
-    const date = new Date(dateString);
-    return date.toLocaleDateString("en-US", {
-      year: "numeric",
+    return new Date(dateString).toLocaleDateString("en-US", {
       month: "short",
       day: "numeric",
+      year: "numeric",
     });
   };
 
-  const calculateReadTime = (content = "") => {
-    const words = content.split(" ").length;
-    return Math.max(1, Math.ceil(words / 200));
+  const truncateContent = (content, maxLength = 120) => {
+    if (!content) return "No preview available...";
+    return content.length > maxLength
+      ? content.substring(0, maxLength) + "..."
+      : content;
   };
 
-  /* ---------------- Loading ---------------- */
   if (loading) {
     return (
-      <div className="blog-page blog-page-offset">
-        <div className="blog-loading-state">
-          <div className="blog-spinner"></div>
-          <p>Loading blogs...</p>
+      <div className="blog-page">
+        <div className="blog-loader">Loading articles</div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="blog-page">
+        <div className="blog-nav-container">
+          <button className="blog-back-btn" onClick={() => navigate("/")}>
+            <span className="arrow">←</span> Back to Home
+          </button>
+        </div>
+        <div className="blog-empty">
+          <p>{error}</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="blog-page blog-page-offset">
-      {/* Back Button */}
-      <button
-        className="blog-back-nav"
-        onClick={() => navigate(-1)}
-      >
-        ← Back
-      </button>
-
-      {/* Header */}
-      <div className="blog-header animated-fade-down">
-        <h1>
-          <span>Study Abroad</span> Insights & Stories
-        </h1>
-        <p>
-          Smart guides, expert opinions, and student success stories — all in one place.
-        </p>
+    <div className="blog-page">
+      {/* Navigation Layer */}
+      <div className="blog-nav-container">
+        <button className="blog-back-btn" onClick={() => navigate("/")}>
+          <span className="arrow">←</span> Back to Home
+        </button>
       </div>
 
-      {/* Empty State */}
-      {blogs.length === 0 ? (
-        <div className="blog-empty-state">
-          <p>No blog posts yet. Check back soon!</p>
-        </div>
-      ) : (
-        <div className="blog-list">
-          {blogs.map((blog, index) => (
-            <div
-              className="blog-list-item animated-reveal"
-              style={{ animationDelay: `${index * 0.08}s` }}
-              key={blog._id}
-            >
-              {/* Image */}
-              <div className="blog-thumb">
-                {blog.image ? (
-                  <img src={blog.image} alt={blog.title} />
-                ) : (
-                  <div className="blog-thumb-placeholder" />
-                )}
-              </div>
+      {/* Header Section */}
+      <header className="blog-header">
+        <h1>Blog Articles</h1>
+        <p>
+          Stay informed and inspired with our blog, featuring insightful
+          articles, expert perspectives, and the latest updates on topics that matter.
+        </p>
+      </header>
 
-              {/* Content */}
-              <div className="blog-info">
-                <h2 className="blog-title">{blog.title}</h2>
-
-                <div className="blog-meta">
-                  <span>{formatDate(blog.createdAt)}</span>
-                  <span>• {calculateReadTime(blog.content)} min read</span>
-                  {blog.views && (
-                    <span className="blog-views">{blog.views} Views</span>
+      {/* Blog Grid */}
+      <main className="blog-container">
+        {blogs.length === 0 ? (
+          <div className="blog-empty">
+            <p>No articles published yet. Check back soon!</p>
+          </div>
+        ) : (
+          <div className="blog-grid">
+            {blogs.map((blog) => (
+              <article className="blog-card" key={blog._id}>
+                <div className="blog-card-image">
+                  {blog.image ? (
+                    <img
+                      src={blog.image}
+                      alt={blog.title}
+                      loading="lazy"
+                    />
+                  ) : (
+                    <div className="blog-placeholder" />
                   )}
                 </div>
-
-                {blog.category && (
-                  <div className="blog-category-pill">
-                    {blog.category}
-                  </div>
-                )}
-
-                <Link
-                  to={`/blog/${blog._id}`}
-                  className="blog-read-link gradient-hover"
-                >
-                  Read article →
-                </Link>
-              </div>
-            </div>
-          ))}
-        </div>
-      )}
+                <div className="blog-card-content">
+                  <time className="blog-date" dateTime={blog.createdAt}>
+                    {formatDate(blog.createdAt)}
+                  </time>
+                  <h2 className="blog-title">{blog.title}</h2>
+                  <p className="blog-excerpt">
+                    {truncateContent(blog.content)}
+                  </p>
+                  <Link
+                    to={`/blog/${blog._id}`}
+                    className="blog-read-more"
+                    aria-label={`Read more about ${blog.title}`}
+                  >
+                    <span>Read More</span>
+                    <span className="read-arrow">→</span>
+                  </Link>
+                </div>
+              </article>
+            ))}
+          </div>
+        )}
+      </main>
     </div>
   );
 }
