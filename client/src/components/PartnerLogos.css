@@ -1,0 +1,112 @@
+/* Caption container */
+.partners-caption {
+  text-align: center;
+  margin-bottom: 40px;
+  overflow: hidden; /* For smooth animation */
+}
+
+/* Animated caption */
+.animated-caption {
+  font-size: 30px;
+  font-weight: 700;
+  color: #1f2937; /* Professional dark gray */
+  opacity: 0;
+  transform: translateY(20px);
+  animation: fadeSlideUp 1.5s ease-out forwards;
+}
+
+/* Animation keyframes */
+@keyframes fadeSlideUp {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  50% {
+    opacity: 0.6;
+    transform: translateY(10px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Optional: Add a subtle gradient underline for premium look */
+.animated-caption::after {
+  content: '';
+  display: block;
+  width: 60px;
+  height: 3px;
+  margin: 10px auto 0;
+  background: linear-gradient(90deg, #4f46e5, #06b6d4); /* Indigo to cyan */
+  border-radius: 2px;
+  opacity: 0;
+  animation: fadeSlideUp 1.5s ease-out forwards;
+  animation-delay: 0.5s;
+}
+
+.partners-section {
+  padding: 60px 0;
+  background-color: #f9fafb; /* Light grey background to make white cards pop */
+  overflow: hidden;
+}
+
+.logos-container {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+
+.logo-row {
+  display: flex;
+  user-select: none;
+}
+
+.logo-track {
+  display: flex;
+  flex-shrink: 0;
+  gap: 30px;
+  padding-right: 30px;
+}
+
+/* The Card Style from your image */
+.logo-card {
+  background: white;
+  padding: 20px 40px;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 200px;
+}
+
+.logo-card img {
+  height: 45px;
+  width: auto;
+  object-fit: contain;
+}
+
+/* Animations */
+@keyframes scroll-left {
+  from { transform: translateX(0); }
+  to { transform: translateX(-100%); }
+}
+
+@keyframes scroll-right {
+  from { transform: translateX(-100%); }
+  to { transform: translateX(0); }
+}
+
+.animate-left {
+  animation: scroll-left linear infinite;
+}
+
+.animate-right {
+  animation: scroll-right linear infinite;
+}
+
+/* Pause on hover for better UX */
+.logo-row:hover .logo-track {
+  animation-play-state: paused;
+}

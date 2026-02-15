@@ -8,6 +8,7 @@ import CountrySlider from "./components/CountrySlider";
 import Navbar3 from "./components/navbar3";
 import CEOQuote from "./components/CEOQuote";
 import useFadeIn from "./hooks/useFadeIn";
+import PartnerLogos from "./components/PartnerLogos";
 
 import "./LandingPage.css";
 import uni1 from "./assets/DCU.jpg";
@@ -244,6 +245,10 @@ export default function LandingPage() {
 
 <div ref={servicesRef} className={`fade-section ${servicesVisible ? "show" : ""}`}>
   <Services />
+</div>
+
+<div ref={storiesRef} className={`fade-section ${storiesVisible ? "show" : ""}`}>
+  <PartnerLogos />
 </div>
 
 <div ref={storiesRef} className={`fade-section ${storiesVisible ? "show" : ""}`}>
