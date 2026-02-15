@@ -73,3 +73,90 @@
   letter-spacing: 0.7px;
   text-transform: uppercase;
 }
+
+/* Responsive */
+@media (max-width: 768px) {
+  .ceo-quote-wrapper {
+    padding: 40px 16px;
+  }
+
+  .ceo-card {
+    width: 95%;
+    padding: 40px 28px;
+  }
+
+  .quote-icon-left {
+    font-size: 50px;
+    top: 60px;
+    left: 20px;
+  }
+
+  .quote-icon-right {
+    font-size: 50px;
+    right: 20px;
+    bottom: 60px;
+  }
+
+  .ceo-image-box img {
+    width: 90px;
+    height: 90px;
+    margin-bottom: 20px;
+  }
+
+  .ceo-quote-text {
+    font-size: 16px;
+    line-height: 1.7;
+    margin-bottom: 20px;
+  }
+
+  .ceo-name {
+    font-size: 18px;
+  }
+}
+
+@media (max-width: 480px) {
+  .ceo-quote-wrapper {
+    padding: 32px 12px;
+  }
+
+  .ceo-card {
+    width: 100%;
+    padding: 32px 20px;
+    border-radius: 16px;
+  }
+
+  .quote-icon-left,
+  .quote-icon-right {
+    font-size: 36px;
+    opacity: 0.15;
+  }
+
+  .quote-icon-left {
+    top: 40px;
+    left: 16px;
+  }
+
+  .quote-icon-right {
+    right: 16px;
+    bottom: 40px;
+  }
+
+  .ceo-image-box img {
+    width: 80px;
+    height: 80px;
+    margin-bottom: 16px;
+  }
+
+  .ceo-quote-text {
+    font-size: 15px;
+    line-height: 1.65;
+  }
+
+  .ceo-name {
+    font-size: 17px;
+  }
+
+  .ceo-desg {
+    font-size: 12px;
+  }
+}
