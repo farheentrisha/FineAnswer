@@ -6,6 +6,7 @@ import {
   FaCloudUploadAlt,
   FaFileAlt,
   FaSpinner,
+  FaEye,
 } from "react-icons/fa";
 import { API_BASE_URL } from "../config/api";
 import { uploadDocumentToCloudinary } from "../utils/cloudinary";
@@ -165,86 +166,140 @@ export default function DocumentChecklist() {
     );
   }
 
-  return (
-    <div className="doc-wrapper">
+return (
+  <div className="portal-container">
+    {/* LEFT SIDE: MAIN WRAPPER CARD */}
+    <div className="main-bg-card">
       <div className="doc-header">
-        <FaFileAlt />
-        <h3>Document Checklist</h3>
+        <FaFileAlt className="header-icon" />
+        <h3>Standardized Tests & Documents</h3>
       </div>
 
-      {error && <div className="doc-error">{error}</div>}
-
-      {documents.validationStatus && (
-        <div className={`doc-feedback doc-feedback-${documents.validationStatus}`}>
-          <strong>Admin status:</strong>{" "}
-          {documents.validationStatus === "approved"
-            ? "All documents are valid."
-            : documents.validationStatus === "rejected"
-            ? "Some documents need attention."
-            : "Pending review."}
-          {documents.feedback && (
-            <p className="doc-feedback-text">{documents.feedback}</p>
-          )}
-        </div>
-      )}
-
-      <div className="doc-list">
+      <div className="doc-card-list">
         {documentFields.map((field) => {
           const status = getDocStatus(field.key);
+          const hasFile = !!documents[field.key];
+
           return (
-            <div className="doc-item" key={field.key}>
-              <div className="doc-left">
-                <StatusIcon status={status} />
-                <div>
-                  <p className="doc-name">{field.label}</p>
-                  {field.required && <span className="required">Required</span>}
+            <div className="doc-card" key={field.key}>
+              <div className="card-top-row">
+                <div className="card-left-content">
+                  <div className="card-status-icon">
+                    {status === "done" ? (
+                      <FaCheckCircle className="icon-tick" />
+                    ) : (
+                      <FaExclamationCircle className="icon-pending-ash" />
+                    )}
+                  </div>
+
+                  <div className="card-text-details">
+                    <div className="card-title-row">
+                      <h4>{field.label}</h4>
+                      {field.required && <span className="badge-required">REQUIRED</span>}
+                      {status === "done" ? (
+                        <span className="badge-completed">Completed</span>
+                      ) : (
+                        <span className="badge-pending-text">Pending</span>
+                      )}
+                    </div>
+                    <p className="card-subtitle">Standardized document/test score for your application</p>
+                  </div>
+                </div>
+
+                <div className="card-actions">
+                  {hasFile ? (
+                    <div className="action-button-group">
+  <button 
+  className="btn-icon view" // Must be "view", not "view-btn"
+  onClick={() => openPdf(documents[field.key], "view", field.key)}
+  title="View Document"
+>
+  <FaEye />
+</button>
+                      <label className="btn-icon upload-alt">
+                        <FaCloudUploadAlt />
+                        <input 
+                          type="file" 
+                          hidden 
+                          accept="application/pdf"
+                          onChange={(e) => handleFileUpload(field.key, e.target.files[0])} 
+                        />
+                      </label>
+                    </div>
+                  ) : (
+                    <label className="primary-upload-btn">
+                      <FaCloudUploadAlt /> <span>Upload</span>
+                      <input 
+                        type="file" 
+                        hidden 
+                        accept="application/pdf"
+                        onChange={(e) => handleFileUpload(field.key, e.target.files[0])} 
+                      />
+                    </label>
+                  )}
                 </div>
               </div>
 
-              <div className="doc-actions">
-                {documents[field.key] && (
-                  <>
-                    <button
-                      type="button"
-                      className="view-link doc-view-btn"
-                      onClick={() => openPdf(documents[field.key], "view", field.key)}
-                      disabled={loadingPdf === field.key}
-                    >
-                      {loadingPdf === field.key ? (
-                        <FaSpinner className="spinner" />
-                      ) : (
-                        "View"
-                      )}
-                    </button>
-                    <button
-                      type="button"
-                      className="doc-download-btn"
-                      onClick={() => openPdf(documents[field.key], "download", field.key)}
-                      disabled={loadingPdf === field.key}
-                    >
-                      Download
-                    </button>
-                  </>
-                )}
-                <label className="upload-label">
-                  {uploading[field.key] ? (
-                    <FaSpinner className="spinner" />
-                  ) : (
-                    <FaCloudUploadAlt className="upload-icon" />
-                  )}
-                  <input
-                    type="file"
-                    accept="application/pdf"
-                    onChange={(e) => handleFileUpload(field.key, e.target.files[0])}
-                    disabled={uploading[field.key]}
-                    style={{ display: "none" }}
-                  />
-                </label>
+              {/* Dynamic Alert Banner: Yellow for Pending, Green for Uploaded */}
+              <div className={`card-alert-banner ${hasFile ? "banner-completed" : "banner-pending"}`}>
+                <FaExclamationCircle className="alert-mini-icon" />
+                <span>
+                  {hasFile 
+                    ? `Uploaded on ${documents.updatedAt || new Date().toLocaleDateString()}` 
+                    : field.key === "englishProficiency" 
+                      ? "Test scheduled for Jan 25, 2026" 
+                      : "Please upload the latest PDF version."}
+                </span>
               </div>
             </div>
           );
         })}
       </div>
     </div>
-  );
+
+    {/* RIGHT SIDE: SIDEBAR GUIDELINES */}
+    <aside className="doc-sidebar">
+      <div className="guidelines-card">
+        <div className="guidelines-header">
+          <FaFileAlt className="book-icon" />
+          <h4>Document Guidelines & Tips</h4>
+        </div>
+        
+        <div className="guideline-list">
+          <div className="guideline-item">
+            <FaCheckCircle className="g-icon green" />
+            <div>
+              <p className="g-title">File Format</p>
+              <p className="g-desc">Upload documents in PDF format (max 5MB per file)</p>
+            </div>
+          </div>
+
+          <div className="guideline-item">
+            <FaExclamationCircle className="g-icon orange" />
+            <div>
+              <p className="g-title">Document Quality</p>
+              <p className="g-desc">Ensure all documents are clear, legible, and properly scanned</p>
+            </div>
+          </div>
+
+          <div className="guideline-item">
+            <FaFileAlt className="g-icon blue" />
+            <div>
+              <p className="g-title">Verification</p>
+              <p className="g-desc">All academic documents must be attested by authorized officials</p>
+            </div>
+          </div>
+
+          <div className="guideline-item">
+            <FaClock className="g-icon purple" />
+            <div>
+              <p className="g-title">Processing Time</p>
+              <p className="g-desc">Document verification may take 2-3 business days</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </aside>
+  </div>
+);
 }

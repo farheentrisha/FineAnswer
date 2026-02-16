@@ -1,202 +1,239 @@
-.doc-wrapper {
-  width: 100%;
-  max-width: 900px;
-  background: #fff;
-  border-radius: 14px;
+/* Layout Container */
+.portal-container {
+  display: flex;
+  align-items: flex-start;
+  gap: 24px;
+  padding: 20px;
+  background-color: #fcfdfe;
+  min-height: 100vh;
+}
+
+/* Main Content BG Card */
+.main-bg-card {
+  flex: 1;
+  background: #ffffff;
+  border-radius: 16px;
   padding: 24px;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+  border: 1px solid #eef0f2;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03);
 }
 
 .doc-header {
   display: flex;
   align-items: center;
-  gap: 10px;
-  font-weight: 600;
-  color: #2f3ea8;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.header-icon { font-size: 20px; color: #334155; }
+.doc-header h3 { margin: 0; font-size: 1.25rem; color: #1e293b; font-weight: 700; }
+
+/* Document Cards */
+.doc-card {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 20px;
   margin-bottom: 16px;
-  font-size: 1.3rem;
+}
+/* Action Area Fixes */
+.action-button-group {
+  display: flex;
+  gap: 12px; /* Increased gap for better spacing */
+  align-items: center;
 }
 
-.doc-loading,
-.doc-error {
-  text-align: center;
-  padding: 24px;
-  color: #666;
+/* Base button fix to ensure icon is visible and centered */
+.btn-icon {
+  width: 42px;  /* Slightly larger for better clickability */
+  height: 42px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+  border: 1px solid #e2e8f0;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  padding: 0;   /* Remove any default padding that shifts the icon */
 }
 
-.doc-error {
-  color: #e53935;
+/* Ensure the SVG icon itself is a visible size */
+.btn-icon svg {
+  width: 18px;
+  height: 18px;
+  display: block;
 }
 
-.spinner {
-  animation: spin 1s linear infinite;
-  font-size: 1.2rem;
+/* View Button Specifics - Matches your screenshot's light blue style */
+.btn-icon.view { 
+  background-color: #f0f7ff !important; 
+  color: #125fcb !important; 
+  border-color: #d0e7ff;
 }
 
-@keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+.btn-icon.view:hover {
+  background-color: #125fcb !important;
+  color: #ffffff !important;
 }
 
-.doc-list {
-  border-top: 1px solid #eee;
-  padding-top: 16px;
+/* Upload/Replace Button Specifics - Matches your screenshot's light red style */
+.btn-icon.upload-alt { 
+  background-color: #fff5f5 !important; 
+  color: #ef4444 !important; 
+  border-color: #fecaca; 
 }
 
-.doc-item {
+.btn-icon.upload-alt:hover {
+  background-color: #ef4444 !important;
+  color: #ffffff !important;
+}
+.card-top-row {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 14px 16px;
-  border: 1px solid #e5e7eb;
-  border-radius: 10px;
-  margin-bottom: 12px;
 }
 
-.doc-left {
+.card-left-content {
   display: flex;
-  gap: 12px;
   align-items: center;
-  flex: 1;
+  gap: 16px;
 }
 
-.doc-name {
-  font-size: 14px;
-  font-weight: 500;
-  margin-bottom: 2px;
-}
+/* Icon Colors & Sizing */
+.icon-tick { color: #10b981; font-size: 26px !important; }
+.icon-pending-ash { color: #94a3b8; font-size: 26px !important; }
 
-.required {
-  font-size: 12px;
-  color: #e53935;
-}
-
-.icon {
-  font-size: 18px;
-}
-
-.icon.done {
-  color: #2ecc71;
-}
-
-.icon.pending {
-  color: #b0b0b0;
-}
-
-.icon.progress {
-  color: #f39c12;
-}
-
-.doc-actions {
+.card-title-row {
   display: flex;
-  gap: 12px;
   align-items: center;
+  gap: 10px;
 }
 
-.view-link {
+.card-title-row h4 { margin: 0; font-size: 15px; color: #334155; font-weight: 600; }
+
+.card-subtitle {
   font-size: 13px;
-  color: #4f5bd5;
-  text-decoration: none;
-  padding: 4px 10px;
-  border: 1px solid #4f5bd5;
-  border-radius: 6px;
+  color: #64748b;
+  margin: 4px 0 0 0;
 }
 
-.view-link:hover,
-.doc-view-btn:hover:not(:disabled) {
-  background: #4f5bd5;
-  color: #fff;
+/* Badges */
+.badge-required {
+  background: #fee2e2;
+  color: #ef4444;
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 4px;
 }
 
-.doc-view-btn,
-.doc-download-btn {
-  padding: 4px 10px;
-  border-radius: 6px;
-  font-size: 13px;
-  cursor: pointer;
-  border: 1px solid;
-  background: transparent;
-}
-
-.doc-view-btn {
-  border-color: #4f5bd5;
-  color: #4f5bd5;
-}
-
-.doc-download-btn {
-  border-color: #059669;
-  color: #059669;
-}
-
-.doc-download-btn:hover:not(:disabled) {
-  background: #059669;
-  color: #fff;
-}
-
-.doc-view-btn:disabled,
-.doc-download-btn:disabled {
-  opacity: 0.7;
-  cursor: not-allowed;
-}
-
-.doc-feedback {
-  padding: 12px 16px;
-  border-radius: 10px;
-  margin-bottom: 16px;
-  font-size: 0.9rem;
-}
-
-.doc-feedback-approved {
+.badge-completed {
   background: #d1fae5;
   color: #065f46;
-  border: 1px solid #10b981;
+  font-size: 11px;
+  padding: 2px 10px;
+  border-radius: 20px;
+  font-weight: 500;
 }
 
-.doc-feedback-rejected {
-  background: #fee2e2;
-  color: #991b1b;
-  border: 1px solid #dc2626;
+.badge-pending-text {
+  background: #f1f5f9;
+  color: #64748b;
+  font-size: 11px;
+  padding: 2px 10px;
+  border-radius: 20px;
 }
 
-.doc-feedback-pending {
-  background: #fef3c7;
-  color: #92400e;
-  border: 1px solid #f59e0b;
+/* Action Area */
+.action-button-group {
+  display: flex;
+  gap: 8px;
 }
 
-.doc-feedback-text {
-  margin-top: 8px;
-  margin-bottom: 0;
-}
-
-.upload-label {
+.btn-icon {
+  width: 38px;
+  height: 38px;
   display: flex;
   align-items: center;
-  cursor: pointer;
-}
-
-.upload-icon {
-  font-size: 22px;
-  color: #8b8b8b;
-  cursor: pointer;
-  transition: color 0.2s;
-}
-
-.upload-icon:hover {
-  color: #4f5bd5;
-}
-
-.upload-btn-main {
-  width: 100%;
-  margin-top: 14px;
-  padding: 12px;
-  border: none;
-  border-radius: 10px;
-  background: linear-gradient(135deg, #4f5bd5, #6c7cff);
-  color: white;
-  font-size: 14px;
-  display: flex;
   justify-content: center;
-  gap: 8px;
+  border-radius: 8px;
+  border: 1px solid #e2e8f0;
   cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-icon.view { background: #f8fafc; color: #125fcb; }
+.btn-icon.upload-alt { background: #fee2e2; color: #ef4444; border-color: #fecaca; }
+
+.primary-upload-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #fff;
+  border: 1px dashed #cbd5e1;
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-size: 13px;
+  color: #64748b;
+  cursor: pointer;
+}
+
+/* Dynamic Banners */
+.card-alert-banner {
+  margin-top: 16px;
+  padding: 10px 16px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 13px;
+}
+
+.banner-pending {
+  background: #fffbeb;
+  border: 1px solid #fef3c7;
+  color: #92400e;
+}
+
+.banner-completed {
+  background: #f0fdf4;
+  border: 1px solid #dcfce7;
+  color: #166534;
+}
+
+/* Sidebar Guidelines */
+.doc-sidebar { width: 320px; }
+
+.guidelines-card {
+  background: #f8faff;
+  border: 1px solid #e5eaf5;
+  border-radius: 12px;
+  padding: 24px;
+}
+
+.guidelines-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 20px;
+  color: #1e293b;
+}
+
+.guideline-item {
+  display: flex;
+  gap: 14px;
+  margin-bottom: 18px;
+}
+
+.g-title { font-weight: 600; font-size: 14px; margin: 0; color: #1e293b; }
+.g-desc { font-size: 11px; color: #64748b; margin: 2px 0 0 0; line-height: 1.5; }
+
+.green { color: #10b981; }
+.orange { color: #f59e0b; }
+.blue { color: #3b82f6; }
+.purple { color: #8b5cf6; }
+
+@media (max-width: 1024px) {
+  .portal-container { flex-direction: column; }
+  .doc-sidebar { width: 100%; }
 }
