@@ -5,7 +5,7 @@ import SuccessStories from "./components/SuccessStories";
 import ContactSection from "./components/ContactSection";
 import Services from "./components/Services";
 import CountrySlider from "./components/CountrySlider";
-import Navbar3 from "./components/navbar3";
+import Navbar3 from "./components/navbar3"; 
 import CEOQuote from "./components/CEOQuote";
 import useFadeIn from "./hooks/useFadeIn";
 import PartnerLogos from "./components/PartnerLogos";

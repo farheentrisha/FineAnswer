@@ -1,15 +1,13 @@
 import React from "react";
 import "./Services.css";
-import { motion } from "framer-motion";
 
 import {
-  FaGlobe,
-  FaUniversity,
   FaFileAlt,
+  FaGlobe,
+  FaHandsHelping,
   FaPassport,
   FaPlaneDeparture,
-  FaHeartbeat,
-  FaHandsHelping,
+  FaUniversity
 } from "react-icons/fa";
 
 
@@ -68,15 +66,11 @@ const Services = () => {
 
       <div className="services-grid">
         {cards.map((card, index) => (
-          <motion.div
-  className="service-card"
-  key={index}
-  initial={{ opacity: 0, y: 40 }}
-  whileInView={{ opacity: 1, y: 0 }}
-  transition={{ duration: 0.5, delay: index * 0.1 }}
-  viewport={{ once: true }}
->
-
+          <div
+            className="service-card service-card-animate"
+            key={index}
+            style={{ animationDelay: `${index * 0.1}s` }}
+          >
             <div
               className="icon"
               style={{
@@ -88,8 +82,7 @@ const Services = () => {
             </div>
             <h4>{card.title}</h4>
             <p>{card.text}</p>
-          </motion.div>
-
+          </div>
         ))}
       </div>
     </section>
