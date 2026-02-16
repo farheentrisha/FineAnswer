@@ -53,6 +53,7 @@ export default function Navbar() {
           <NavLink to="/services" onClick={() => setMenuOpen(false)}>Services</NavLink>
           <NavLink to="/countries" onClick={() => setMenuOpen(false)}>Countries</NavLink>
           <NavLink to="/contact" onClick={() => setMenuOpen(false)}>Contact</NavLink>
+          <NavLink to="/payment" onClick={() => setMenuOpen(false)}>Payment</NavLink>
           <NavLink to="/career" onClick={() => setMenuOpen(false)}>Career</NavLink>
           <NavLink to="/blog" onClick={() => setMenuOpen(false)}>Blog</NavLink>
           

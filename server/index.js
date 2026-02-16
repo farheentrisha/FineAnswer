@@ -146,7 +146,9 @@ async function run() {
     careerApplicationsCollection = client
       .db("FineAnswer")
       .collection("careerApplications");
-    documentsCollection = client.db("FineAnswer").collection("documentsCollection");
+    documentsCollection = client
+      .db("FineAnswer")
+      .collection("documentsCollection");
 
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
@@ -402,7 +404,7 @@ app.post(
     if (user && picture) {
       await usersCollection.updateOne(
         { _id: user._id },
-        { $set: { picture, updatedAt: new Date() } }
+        { $set: { picture, updatedAt: new Date() } },
       );
       user = await usersCollection.findOne({ _id: user._id });
     }
@@ -726,7 +728,6 @@ app.get(
 );
 
 // ==================== PROGRESS TRACKER ROUTES ====================
-
 // GET /api/users/me/progress-tracker - Get own progress tracker (USER - Any authenticated user)
 // IMPORTANT: This route must be defined BEFORE /api/users/:userId/progress-tracker
 app.get(
@@ -1053,19 +1054,19 @@ app.delete(
 // Helper function to extract YouTube video ID from various URL formats
 const extractYouTubeVideoId = (url) => {
   if (!url) return null;
-  
+
   // Standard format: https://www.youtube.com/watch?v=VIDEO_ID
   let match = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([^&\?\/]+)/);
   if (match) return match[1];
-  
+
   // Embedded format: https://www.youtube.com/embed/VIDEO_ID
   match = url.match(/youtube\.com\/embed\/([^&\?\/]+)/);
   if (match) return match[1];
-  
+
   // Short format: https://youtu.be/VIDEO_ID
   match = url.match(/youtu\.be\/([^&\?\/]+)/);
   if (match) return match[1];
-  
+
   return null;
 };
 
@@ -1128,7 +1129,8 @@ app.post(
     if (!videoId) {
       return res.status(400).json({
         success: false,
-        message: "Invalid YouTube URL. Please provide a valid YouTube video link.",
+        message:
+          "Invalid YouTube URL. Please provide a valid YouTube video link.",
       });
     }
 
@@ -1176,8 +1178,9 @@ app.put(
     const updateFields = { updatedAt: new Date() };
 
     if (title) updateFields.title = title.trim();
-    if (description !== undefined) updateFields.description = description?.trim() || "";
-    
+    if (description !== undefined)
+      updateFields.description = description?.trim() || "";
+
     if (youtubeUrl) {
       const videoId = extractYouTubeVideoId(youtubeUrl);
       if (!videoId) {
@@ -1194,7 +1197,7 @@ app.put(
     const updatedVideo = await sessionCollection.findOneAndUpdate(
       { _id: new ObjectId(id) },
       { $set: updateFields },
-      { returnDocument: "after" }
+      { returnDocument: "after" },
     );
 
     if (!updatedVideo) {
@@ -1671,7 +1674,8 @@ app.get(
         responseType: "arraybuffer",
         maxRedirects: 5,
         headers: {
-          "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36",
+          "User-Agent":
+            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36",
           Accept: "application/pdf,*/*",
         },
       });
@@ -1700,7 +1704,7 @@ app.get(
   asyncHandler(async (req, res) => {
     const userId = req.user._id;
     const docs = await documentsCollection.findOne({ userId });
-    
+
     res.status(200).json({
       success: true,
       data: docs || null,
@@ -1799,22 +1803,30 @@ app.put(
     if (passportCopy !== undefined) updateFields.passportCopy = passportCopy;
     if (cv !== undefined) updateFields.cv = cv;
     if (sop !== undefined) updateFields.sop = sop;
-    if (englishProficiency !== undefined) updateFields.englishProficiency = englishProficiency;
-    if (sscCertificate !== undefined) updateFields.sscCertificate = sscCertificate;
-    if (hscCertificate !== undefined) updateFields.hscCertificate = hscCertificate;
-    if (bachelorsCertificate !== undefined) updateFields.bachelorsCertificate = bachelorsCertificate;
-    if (mastersCertificate !== undefined) updateFields.mastersCertificate = mastersCertificate;
+    if (englishProficiency !== undefined)
+      updateFields.englishProficiency = englishProficiency;
+    if (sscCertificate !== undefined)
+      updateFields.sscCertificate = sscCertificate;
+    if (hscCertificate !== undefined)
+      updateFields.hscCertificate = hscCertificate;
+    if (bachelorsCertificate !== undefined)
+      updateFields.bachelorsCertificate = bachelorsCertificate;
+    if (mastersCertificate !== undefined)
+      updateFields.mastersCertificate = mastersCertificate;
     if (sscTranscript !== undefined) updateFields.sscTranscript = sscTranscript;
     if (hscTranscript !== undefined) updateFields.hscTranscript = hscTranscript;
-    if (bachelorsTranscript !== undefined) updateFields.bachelorsTranscript = bachelorsTranscript;
-    if (mastersTranscript !== undefined) updateFields.mastersTranscript = mastersTranscript;
-    if (workExperience !== undefined) updateFields.workExperience = workExperience;
+    if (bachelorsTranscript !== undefined)
+      updateFields.bachelorsTranscript = bachelorsTranscript;
+    if (mastersTranscript !== undefined)
+      updateFields.mastersTranscript = mastersTranscript;
+    if (workExperience !== undefined)
+      updateFields.workExperience = workExperience;
     if (lors !== undefined) updateFields.lors = lors;
 
     const updated = await documentsCollection.findOneAndUpdate(
       { userId },
       { $set: updateFields },
-      { returnDocument: "after", upsert: true }
+      { returnDocument: "after", upsert: true },
     );
 
     res.status(200).json({
@@ -1958,6 +1970,44 @@ app.put(
     });
   }),
 );
+
+// ==================== Payment Gateway ROUTES ====================
+app.post("/api/create-payment", async (req, res) => {
+  const paymentInfo = req.body;
+  const paymentData = {
+    store_id: "finea6992eec523c33",
+    store_passwd: "finea6992eec523c33@ssl",
+    total_amount: paymentInfo.amount,
+    currency: "EUR",
+    tran_id: "REF123", // unique transaction id
+    success_url: "http://yoursite.com/success.php",
+    fail_url: "http://yoursite.com/fail.php",
+    cancel_url: "http://yoursite.com/cancel.php",
+    cus_name: "Customer Name",
+    cus_email: "cust@yahoo.com",
+    cus_add1: "Dhaka",
+    cus_add2: "Dhaka",
+    cus_city: "Dhaka",
+    cus_state: "Dhaka",
+    cus_postcode: "1000",
+    cus_country: "Bangladesh",
+    cus_phone: "01711111111",
+    cus_fax: "01711111111",
+    ship_name: "Customer Name",
+    ship_add1: "Dhaka",
+    ship_add2: "Dhaka",
+    ship_city: "Dhaka",
+    ship_state: "Dhaka",
+    ship_postcode: "1000",
+    ship_country: "Bangladesh",
+    multi_card_name: "mastercard,visacard,amexcard",
+    value_a: "ref001_A",
+    value_b: "ref002_B",
+    value_c: "ref003_C",
+    value_d: "ref004_D"
+  };
+  
+});
 
 // Global error handler (catches errors from asyncHandler-wrapped routes)
 app.use((err, req, res, next) => {
