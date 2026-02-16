@@ -1,15 +1,17 @@
 import React, { useEffect, useState } from "react";
+import { 
+  FaArrowLeft, FaBriefcase, FaHeartbeat, 
+  FaUtensils, FaClock, FaChevronRight 
+} from "react-icons/fa";
+import { useNavigate } from "react-router-dom"; // Assuming you use react-router
 import { API_BASE_URL } from "../config/api";
 import "./admin/Career.css";
 
 export default function Career() {
+  const navigate = useNavigate();
   const [jobs, setJobs] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [applyingJob, setApplyingJob] = useState(null);
-  const [applicationText, setApplicationText] = useState("");
-  const [submitting, setSubmitting] = useState(false);
-  const [successMessage, setSuccessMessage] = useState("");
 
   useEffect(() => {
     const fetchJobs = async () => {
@@ -18,193 +20,95 @@ export default function Career() {
         const data = await res.json();
         if (data.success) {
           setJobs(data.data);
-          setError(null);
         } else {
           setError("Failed to load jobs");
         }
       } catch (_err) {
-        setError("Failed to load jobs");
+        setError("Network error occurred");
       } finally {
         setLoading(false);
       }
     };
-
     fetchJobs();
   }, []);
 
-  const formatDate = (value) => {
-    if (!value) return "Open until filled";
-    const d = new Date(value);
-    return d.toLocaleDateString("en-US", {
-      year: "numeric",
-      month: "short",
-      day: "numeric",
-    });
-  };
-
-  const isClosed = (deadline) => {
-    if (!deadline) return false;
-    return new Date(deadline) < new Date();
-  };
-
-  const handleOpenApply = (job) => {
-    setApplyingJob(job);
-    setApplicationText("");
-    setSuccessMessage("");
-  };
-
-  const handleCloseApply = () => {
-    setApplyingJob(null);
-    setApplicationText("");
-  };
-
-  const handleSubmitApplication = async (e) => {
-    e.preventDefault();
-    if (!applyingJob) return;
-    setSubmitting(true);
-    setSuccessMessage("");
-
-    try {
-      const token = localStorage.getItem("token");
-      const res = await fetch(`${API_BASE_URL}/jobs/${applyingJob._id}/apply`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({
-          documents: applicationText,
-        }),
-      });
-      const data = await res.json();
-      if (data.success) {
-        setSuccessMessage("Application submitted successfully.");
-        setTimeout(() => {
-          handleCloseApply();
-        }, 1200);
-      } else {
-        alert(data.message || "Failed to submit application");
-      }
-    } catch (_err) {
-      alert("An error occurred while submitting the application");
-    } finally {
-      setSubmitting(false);
-    }
-  };
-
   return (
-    <div className="user-career-page">
-      <h2 className="career-title">Career Opportunities</h2>
+    <div className="career-container">
+      {/* 1. BACK TO HOME BUTTON */}
+      <nav className="career-nav">
+        <button onClick={() => navigate("/")} className="back-home-btn">
+          <FaArrowLeft /> Back to Home
+        </button>
+      </nav>
 
-      {loading && (
-        <div className="career-loading">
-          <div className="spinner" />
-          <p>Loading jobs...</p>
-        </div>
-      )}
+      {/* 2. HERO SECTION (Why Work With Us) */}
+      <header className="career-hero">
+        <h1 className="hero-title2">Careers</h1>
+        <p className="hero-subtitle33">
+          Join our mission to transform education and career building. 
+          We’re looking for passionate individuals to join our growing team.
+        </p>
 
-      {error && !loading && <div className="career-error">{error}</div>}
-
-      {!loading && !error && jobs.length === 0 && (
-        <div className="career-empty">
-          <p>No job posts available at the moment. Please check back later.</p>
-        </div>
-      )}
-
-      {!loading && !error && jobs.length > 0 && (
-        <div className="career-job-grid">
-          {jobs.map((job) => {
-            const closed = isClosed(job.deadline);
-            return (
-              <div key={job._id} className="career-job-card">
-                <h3>{job.title}</h3>
-                <p className="career-job-meta">
-                  {job.company} • {job.location} •{" "}
-                  {job.employmentType || "Full-time"}
-                </p>
-                <p className="career-job-deadline">
-                  Deadline: {formatDate(job.deadline)}
-                </p>
-                <p className="career-job-desc">{job.description}</p>
-                {job.requirements && (
-                  <p className="career-job-req">
-                    <strong>Requirements:</strong> {job.requirements}
-                  </p>
-                )}
-                {job.applicationUrl && (
-                  <a
-                    href={job.applicationUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="career-apply-link"
-                  >
-                    View Job Details
-                  </a>
-                )}
-                <button
-                  className="career-submit-btn"
-                  disabled={closed}
-                  onClick={() => !closed && handleOpenApply(job)}
-                >
-                  {closed ? "Applications Closed" : "Apply for this Job"}
-                </button>
+        <div className="value-props-section">
+          <h2 className="section-title">Why work with us?</h2>
+          <div className="values-grid">
+            <div className="value-item">
+              <div className="value-icon green"><FaUtensils /></div>
+              <div className="value-text">
+                <h3>Global Impact </h3>
+                <p>Change lives by facilitating access to world-class universities across the UK, USA, and Canada.</p>
               </div>
-            );
-          })}
-        </div>
-      )}
-
-      {applyingJob && (
-        <div className="career-modal-overlay">
-          <div className="career-modal">
-            <div className="career-modal-header">
-              <h3>Apply for {applyingJob.title}</h3>
-              <button className="career-close-btn" onClick={handleCloseApply}>
-                ×
-              </button>
             </div>
-
-            <form className="career-form" onSubmit={handleSubmitApplication}>
-              <div className="career-form-group">
-                <label htmlFor="documents">
-                  Necessary documents / links (CV, cover letter, portfolio,
-                  etc.)
-                </label>
-                <textarea
-                  id="documents"
-                  rows="4"
-                  value={applicationText}
-                  onChange={(e) => setApplicationText(e.target.value)}
-                  placeholder="Provide links or details to your required documents"
-                  required
-                />
+            <div className="value-item">
+              <div className="value-icon blue"><FaHeartbeat /></div>
+              <div className="value-text">
+                <h3>Student Success</h3>
+                <p>Be part of a culture that celebrates every student visa approval and successful enrollment.</p>
               </div>
-
-              {successMessage && (
-                <p className="career-success-message">{successMessage}</p>
-              )}
-
-              <div className="career-form-actions">
-                <button
-                  type="button"
-                  className="career-cancel-btn"
-                  onClick={handleCloseApply}
-                >
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  className="career-submit-btn"
-                  disabled={submitting}
-                >
-                  {submitting ? "Submitting..." : "Submit Application"}
-                </button>
+            </div>
+            <div className="value-item">
+              <div className="value-icon purple"><FaClock /></div>
+              <div className="value-text">
+                <h3>Exposure & Travel</h3>
+                <p>Opportunities for international training and university networking events across the globe</p>
               </div>
-            </form>
+            </div>
           </div>
         </div>
-      )}
+      </header>
+
+      {/* 3. JOB OPENINGS SECTION */}
+      <section className="openings-section">
+        <h2 className="section-title center">Currently Open Positions</h2>
+        
+        {loading ? (
+          <div className="career-loading">
+            <div className="spinner" />
+            <p>Scanning for opportunities...</p>
+          </div>
+        ) : (
+          <div className="career-job-grid">
+            {jobs.map((job) => (
+              <div key={job._id} className="job-card-premium">
+                <div className="job-card-header">
+                  <div>
+                    <h3>{job.title}</h3>
+                    <p>{job.location} • {job.employmentType || "Remote"}</p>
+                  </div>
+                  <span className="job-badge">NEW</span>
+                </div>
+                
+                <button 
+                  className="job-action-link"
+                  onClick={() => navigate(`/jobs/${job._id}`)}
+                >
+                  Free to Apply <FaChevronRight />
+                </button>
+              </div>
+            ))}
+          </div>
+        )}
+      </section>
     </div>
   );
 }
-
