@@ -65,7 +65,8 @@ function AppRoutes() {
       <Route path="/uk" element={<UKPage />} />
       <Route path="/ireland" element={<IrelandPage />} />
       <Route path="/blog" element={<PublicBlog />} />
-      <Route path="/blog/:id" element={<BlogDetail />} /> 
+      <Route path="/blog/:id" element={<BlogDetail />} />
+      <Route path="/career" element={<Career />} /> 
       {/* Login/Register - Redirect if already logged in */}
       <Route 
         path="/login" 
@@ -107,7 +108,7 @@ function AppRoutes() {
         <Route path="universities" element={<Universities />} />
         <Route path="documentchecklist" element={<DocumentChecklist />} />
         <Route path="sessions" element={<Sessions />} />
-        <Route path="career" element={<Career />} />
+        <Route path="career" element={<Navigate to="/career" replace />} />
         <Route path="profile" element={<Profile />} />
         <Route path="messages" element={<Messages />} />
       </Route>
