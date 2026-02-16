@@ -20,6 +20,7 @@
     "axios": "^1.12.2",
     "cloudinary": "^2.9.0",
     "firebase": "^12.8.0",
+    "framer-motion": "^12.34.0",
     "gsap": "^3.14.1",
     "lottie-react": "^2.4.1",
     "lucide-react": "^0.561.0",
