@@ -32,6 +32,7 @@ import { AuthContext } from "./pages/Provider/ContextProvider";
 import PublicBlog from "./pages/Blog";
 import BlogDetail from "./pages/BlogDetail";
 import Career from "./pages/Career";
+import Payment from "./pages/Payment";
 
 import "./App.css";
 
@@ -66,7 +67,8 @@ function AppRoutes() {
       <Route path="/ireland" element={<IrelandPage />} />
       <Route path="/blog" element={<PublicBlog />} />
       <Route path="/blog/:id" element={<BlogDetail />} />
-      <Route path="/career" element={<Career />} /> 
+      <Route path="/career" element={<Career />} />
+      <Route path="/payment" element={<Payment />} />
       {/* Login/Register - Redirect if already logged in */}
       <Route 
         path="/login" 
