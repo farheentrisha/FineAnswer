@@ -12,6 +12,5 @@ const getApiBaseUrl = () => {
   }
   return BASE_URL.replace(/\/$/, "");
 };
-
 export const API_BASE = getApiBaseUrl();
 export const API_BASE_URL = `${API_BASE}/api`;

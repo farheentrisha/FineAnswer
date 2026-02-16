@@ -14,18 +14,11 @@ import "./LandingPage.css";
 import uni1 from "./assets/DCU.jpg";
 import uni2 from "./assets/UL.jpg";
 import uni3 from "./assets/setu.jpg";
-import {
-  FaGlobe,
-  FaLaptopCode,
-  FaChalkboardTeacher,
-  FaUserGraduate,
-} from "react-icons/fa";
-
 export default function LandingPage() {
   const navigate = useNavigate();
   const { user, loading } = useContext(AuthContext);
-  const [aboutRef, aboutVisible] = useFadeIn();
   const [servicesRef, servicesVisible] = useFadeIn();
+  const [partnerLogosRef, partnerLogosVisible] = useFadeIn();
   const [storiesRef, storiesVisible] = useFadeIn();
   const [countryRef, countryVisible] = useFadeIn();
   const [ceoRef, ceoVisible] = useFadeIn();
@@ -86,7 +79,7 @@ export default function LandingPage() {
       setCurrentImage((prev) => (prev + 1) % images.length);
     }, 5000);
     return () => clearInterval(interval);
-  }, []);
+  }, [images.length]);
 
   // Count-up animation
   useEffect(() => {
@@ -313,7 +306,14 @@ export default function LandingPage() {
 
           <div className="about-buttons">
             <button className="btn-primary">Learn More</button>
-            <button className="btn-outline">Watch Video ▶</button>
+            <a
+              href="https://www.youtube.com/@FineAnswerStudyAbroad/videos"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="btn-outline"
+            >
+              Watch Video ▶
+            </a>
           </div>
         </div>
 
@@ -346,100 +346,13 @@ export default function LandingPage() {
       >
         <Services />
       </div>
-    </div>
-    {/* CTA BUTTONS */}
-<div className="hero-cta-buttons">
-  <button className="cta-apply" onClick={() => navigate("/apply")}>
-    Apply Now
-  </button>
 
-  <button className="cta-consult" onClick={() => navigate("/consultation")}>
-    Book Consultation
-  </button>
-</div>
-
-
-
-  </div>
-</section>
-
-{/* ABOUT + STATS SECTION (Like Example Image) */}
-<section className="about-stats-section" ref={statsRef}>
-
-
-  <div className="about-left">
-    <h2>ABOUT US</h2>
-    <p>
-      Headquartered in Ireland, with an operating branch in Dhaka, we empower students to access global academic opportunities through tailored guidance, expert mentoring, and comprehensive end-to-end support. From selecting the right destination to successfully arriving on campus, we provide trusted guidance at every stage of the journey
-    </p>
-
-    <div className="about-buttons">
-      <button className="btn-primary">Learn More</button>
-      <a
-  href="https://www.youtube.com/@FineAnswerStudyAbroad/videos"
-  target="_blank"
-  rel="noopener noreferrer"
->
-  <button className="btn-outline">
-    Watch Video ▶
-  </button>
-</a>
-
-    </div>
-  </div>
-
-  <div className="about-right">
-    <div className="stat-box">
-      <h3>{students}+</h3>
-      <p>Happy Students</p>
-    </div>
-
-    <div className="stat-box">
-      <h3>{countries}+</h3>
-      <p>Countries Served</p>
-    </div>
-
-    <div className="stat-box">
-      <h3>{partners}+</h3>
-      <p>Partner Institutions</p>
-    </div>
-
-    <div className="stat-box">
-      <h3>{satisfaction}%</h3>
-      <p>Student Satisfaction</p>
-    </div>
-  </div>
-
-</section>
-
-
-
-<div ref={servicesRef} className={`fade-section ${servicesVisible ? "show" : ""}`}>
-  <Services />
-</div>
-
-<div ref={storiesRef} className={`fade-section ${storiesVisible ? "show" : ""}`}>
-  <PartnerLogos />
-</div>
-
-<div ref={storiesRef} className={`fade-section ${storiesVisible ? "show" : ""}`}>
-  <SuccessStories />
-</div>
-
-<div ref={countryRef} className={`fade-section ${countryVisible ? "show" : ""}`}>
-  <CountrySlider />
-</div>
-
-<div ref={ceoRef} className={`fade-section ${ceoVisible ? "show" : ""}`}>
-  <CEOQuote />
-</div>
-
-<div ref={contactRef} className={`fade-section ${contactVisible ? "show" : ""}`}>
-  <ContactSection />
-</div>
-
-
-
+      <div
+        ref={partnerLogosRef}
+        className={`fade-section ${partnerLogosVisible ? "show" : ""}`}
+      >
+        <PartnerLogos />
+      </div>
 
       <div
         ref={storiesRef}
@@ -455,7 +368,10 @@ export default function LandingPage() {
         <CountrySlider />
       </div>
 
-      <div ref={ceoRef} className={`fade-section ${ceoVisible ? "show" : ""}`}>
+      <div
+        ref={ceoRef}
+        className={`fade-section ${ceoVisible ? "show" : ""}`}
+      >
         <CEOQuote />
       </div>
 
