@@ -7,7 +7,8 @@ import { AuthContext } from "./pages/Provider/ContextProvider";
 
 export default function LoginPage() {
   const navigate = useNavigate();
-  const { googleSignIn, getCurrentUser } = useContext(AuthContext);
+  const { googleSignIn, getCurrentUser, applyBackendAuth } =
+    useContext(AuthContext);
 
   // Slideshow images
   const images = [
@@ -56,32 +57,27 @@ export default function LoginPage() {
       
       // Store only token in localStorage - user data comes from backend
       localStorage.setItem("token", token);
-      
-      // Fetch fresh user data from backend to update context (including isAdmin)
-      const currentUser = await getCurrentUser();
-      
-      // Get admin status from backend response only
-      // Priority: getCurrentUser result > login response root isAdmin > login response data.isAdmin
-      let isAdminFromContext = false;
-      
-      if (typeof currentUser?.isAdmin === 'boolean') {
-        isAdminFromContext = currentUser.isAdmin;
-      } else if (typeof adminStatus === 'boolean') {
-        isAdminFromContext = adminStatus;
-      } else if (typeof data?.isAdmin === 'boolean') {
-        isAdminFromContext = data.isAdmin;
-      }
+      const isAdminFromResponse =
+        typeof adminStatus === "boolean"
+          ? adminStatus
+          : typeof data?.isAdmin === "boolean"
+            ? data.isAdmin
+            : false;
+
+      // Instantly hydrate auth context (no extra network delay)
+      applyBackendAuth?.(data || null, isAdminFromResponse);
 
       setMessage({ type: "success", text: "✅ Login successful!" });
 
       // Redirect based on admin status
-      setTimeout(() => {
-        if (isAdminFromContext) {
-          navigate("/admin/dashboard");
-        } else {
-          navigate("/dashboard");
-        }
-      }, 1000);
+      if (isAdminFromResponse) {
+        navigate("/admin/dashboard");
+      } else {
+        navigate("/dashboard");
+      }
+
+      // Refresh from backend in background (keeps context in sync)
+      Promise.resolve(getCurrentUser?.()).catch(() => {});
     } catch (error) {
       console.error("Login error:", error);
       setMessage({
@@ -98,7 +94,6 @@ export default function LoginPage() {
       
       // Step 1: Authenticate with Google via Firebase
       const result = await googleSignIn();
-      console.log("Google Firebase auth successful:", result.user);
 
       // Step 2: Send to backend /api/auth/google endpoint
       const response = await fetch(`${API_BASE_URL}/auth/google`, {
@@ -121,32 +116,27 @@ export default function LoginPage() {
 
       // Store only token in localStorage - user data comes from backend
       localStorage.setItem("token", token);
-      
-      // Fetch fresh user data from backend to update context (including isAdmin)
-      const currentUser = await getCurrentUser();
-      
-      // Get admin status from backend response only
-      // Priority: getCurrentUser result > login response root isAdmin > login response data.isAdmin
-      let isAdminFromContext = false;
-      
-      if (typeof currentUser?.isAdmin === 'boolean') {
-        isAdminFromContext = currentUser.isAdmin;
-      } else if (typeof adminStatus === 'boolean') {
-        isAdminFromContext = adminStatus;
-      } else if (typeof data?.isAdmin === 'boolean') {
-        isAdminFromContext = data.isAdmin;
-      }
+      const isAdminFromResponse =
+        typeof adminStatus === "boolean"
+          ? adminStatus
+          : typeof data?.isAdmin === "boolean"
+            ? data.isAdmin
+            : false;
+
+      // Instantly hydrate auth context (no extra network delay)
+      applyBackendAuth?.(data || null, isAdminFromResponse);
 
       setMessage({ type: "success", text: "✅ Google login successful!" });
 
       // Redirect based on admin status
-      setTimeout(() => {
-        if (isAdminFromContext) {
-          navigate("/admin/dashboard");
-        } else {
-          navigate("/dashboard");
-        }
-      }, 1000);
+      if (isAdminFromResponse) {
+        navigate("/admin/dashboard");
+      } else {
+        navigate("/dashboard");
+      }
+
+      // Refresh from backend in background (keeps context in sync)
+      Promise.resolve(getCurrentUser?.()).catch(() => {});
     } catch (error) {
       console.error("Google login error:", error);
       
