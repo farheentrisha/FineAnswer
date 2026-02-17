@@ -112,7 +112,6 @@ export default function LoginPage() {
       });
 
       const apiResult = await response.json();
-
       if (!response.ok) {
         throw new Error(apiResult.message || "Google login failed");
       }

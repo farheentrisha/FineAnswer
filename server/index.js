@@ -132,29 +132,25 @@ const requireAdmin = (req, res, next) => {
 };
 
 async function run() {
-  try {
-    // Connect the client to the server
-    await client.connect();
+  // Connect the client to the server; rethrow so server does not start without DB
+  await client.connect();
 
-    // Collections
-    usersCollection = client.db("FineAnswer").collection("usersCollection");
-    successStoryCollection = client.db("FineAnswer").collection("successStory");
-    blogCollection = client.db("FineAnswer").collection("blog");
-    sessionCollection = client.db("FineAnswer").collection("session");
-    eventsCollection = client.db("FineAnswer").collection("events");
-    careerCollection = client.db("FineAnswer").collection("careerCollection");
-    careerApplicationsCollection = client
-      .db("FineAnswer")
-      .collection("careerApplications");
-    documentsCollection = client
-      .db("FineAnswer")
-      .collection("documentsCollection");
+  // Collections (only set after successful connect)
+  usersCollection = client.db("FineAnswer").collection("usersCollection");
+  successStoryCollection = client.db("FineAnswer").collection("successStory");
+  blogCollection = client.db("FineAnswer").collection("blog");
+  sessionCollection = client.db("FineAnswer").collection("session");
+  eventsCollection = client.db("FineAnswer").collection("events");
+  careerCollection = client.db("FineAnswer").collection("careerCollection");
+  careerApplicationsCollection = client
+    .db("FineAnswer")
+    .collection("careerApplications");
+  documentsCollection = client
+    .db("FineAnswer")
+    .collection("documentsCollection");
 
-    // Send a ping to confirm a successful connection
-    await client.db("admin").command({ ping: 1 });
-  } catch (_error) {
-    // Connection errors surface via health check / routes
-  }
+  // Send a ping to confirm a successful connection
+  await client.db("admin").command({ ping: 1 });
 }
 
 // Routes
@@ -390,6 +386,13 @@ app.post(
 app.post(
   "/api/auth/google",
   asyncHandler(async (req, res) => {
+    if (!usersCollection) {
+      return res.status(503).json({
+        success: false,
+        message: "Database is not connected. Please try again later.",
+      });
+    }
+
     const { email, googleId, name, picture } = req.body;
 
     if (!email || !googleId) {
