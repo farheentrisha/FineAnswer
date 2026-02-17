@@ -18,6 +18,7 @@ export default function TrackerUpdate() {
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
+  const [userSearch, setUserSearch] = useState("");
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -138,6 +139,16 @@ export default function TrackerUpdate() {
     (u) => u._id === selectedUserId || u.id === selectedUserId,
   );
 
+  const filteredUsers = users.filter((user) => {
+    if (!userSearch.trim()) return true;
+    const q = userSearch.toLowerCase();
+    return (
+      (user.name || "").toLowerCase().includes(q) ||
+      (user.email || "").toLowerCase().includes(q) ||
+      (user.phone || "").toLowerCase().includes(q)
+    );
+  });
+
   return (
     <div className="tracker-update-page">
       <div className="page-header">
@@ -151,20 +162,65 @@ export default function TrackerUpdate() {
       {success && <div className="success-banner">{success}</div>}
 
       <div className="user-selection-card">
-        <label htmlFor="user-select">Select Student:</label>
-        <select
-          id="user-select"
-          value={selectedUserId}
-          onChange={(e) => setSelectedUserId(e.target.value)}
-          className="user-select"
-        >
-          <option value="">-- Select a student --</option>
-          {users.map((user) => (
-            <option key={user._id || user.id} value={user._id || user.id}>
-              {user.name || user.email} ({user.email})
-            </option>
-          ))}
-        </select>
+        <div className="user-selection-header">
+          <div>
+            <label htmlFor="user-search">Select Student:</label>
+            <p className="user-selection-subtitle">
+              Search and click on a student to update their tracker.
+            </p>
+          </div>
+          <div className="user-search-wrapper">
+            <input
+              id="user-search"
+              type="text"
+              className="user-search-input"
+              placeholder="Search by name, email or phone..."
+              value={userSearch}
+              onChange={(e) => setUserSearch(e.target.value)}
+            />
+          </div>
+        </div>
+
+        <div className="user-list">
+          {filteredUsers.length === 0 ? (
+            <div className="user-list-empty">
+              No students found for this search.
+            </div>
+          ) : (
+            filteredUsers.map((user) => {
+              const id = user._id || user.id;
+              const isSelected = id === selectedUserId;
+              return (
+                <button
+                  key={id}
+                  type="button"
+                  className={`user-list-item ${isSelected ? "selected" : ""}`}
+                  onClick={() => setSelectedUserId(id)}
+                >
+                  <div className="user-list-main">
+                    <span className="user-list-name">
+                      {user.name || "Unnamed User"}
+                    </span>
+                    {user.email && (
+                      <span className="user-list-email">{user.email}</span>
+                    )}
+                  </div>
+                  <div className="user-list-meta">
+                    {user.country && (
+                      <span className="user-list-tag">{user.country}</span>
+                    )}
+                    {user.authProvider && (
+                      <span className="user-list-tag subtle">
+                        {user.authProvider}
+                      </span>
+                    )}
+                  </div>
+                </button>
+              );
+            })
+          )}
+        </div>
+
         {selectedUser && (
           <div className="selected-user-info">
             <p>
