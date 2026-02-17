@@ -179,13 +179,27 @@ html, body, #root {
   border: 2px solid #cbd5e1;
   background: #fff;
   display: flex;
+  align-items: center;
   justify-content: center;
   gap: 10px;
   cursor: pointer;
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: #1e293b;
+  transition: all 0.3s ease;
+}
+
+.google-btn:hover {
+  background: #f8fafc;
+  border-color: #94a3b8;
+  transform: translateY(-1px);
 }
 
 .google-btn img {
   width: 20px;
+  height: 20px;
+  display: block;
+  flex-shrink: 0;
 }
 
 /* MESSAGES */
@@ -206,11 +220,30 @@ html, body, #root {
   color: #842029;
 }
 
+/* SIGNUP TEXT */
+.signup-text {
+  margin-top: 20px;
+  font-size: 0.9rem;
+  color: #64748b;
+}
+
+.signup-link {
+  color: #0284c7;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.signup-link:hover {
+  color: #0369a1;
+}
+
 /* RESPONSIVE */
 @media (max-width: 900px) {
   .login-box {
     flex-direction: column;
     height: auto;
+    border-radius: 0;
   }
 
   .login-left {
@@ -219,6 +252,108 @@ html, body, #root {
 
   .login-right {
     width: 100%;
-    padding: 40px 0;
+    padding: 40px 20px;
+    min-height: 100vh;
+  }
+
+  .login-card {
+    max-width: 100%;
+    padding: 35px 25px;
+  }
+
+  .login-card h2 {
+    font-size: 1.75rem;
+  }
+
+  .login-subtext {
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 576px) {
+  .login-container {
+    background: #fff;
+  }
+
+  .login-box {
+    border-radius: 0;
+    box-shadow: none;
+  }
+
+  .login-right {
+    padding: 30px 15px;
+  }
+
+  .login-card {
+    padding: 30px 20px;
+    border-radius: 15px;
+  }
+
+  .login-card h2 {
+    font-size: 1.5rem;
+    margin-bottom: 8px;
+  }
+
+  .login-subtext {
+    font-size: 0.85rem;
+    margin-bottom: 25px;
+  }
+
+  .input-group {
+    margin-bottom: 15px;
+  }
+
+  .input-group input {
+    padding: 12px 14px;
+    font-size: 0.9rem;
+  }
+
+  .options {
+    font-size: 0.8rem;
+    margin: 14px 0 20px;
+  }
+
+  .login-btn {
+    padding: 12px;
+    font-size: 0.95rem;
+  }
+
+  .google-btn {
+    padding: 11px;
+    font-size: 0.9rem;
+  }
+
+  .google-btn img {
+    width: 18px;
+    height: 18px;
+  }
+
+  .divider {
+    margin: 18px 0;
+    font-size: 0.85rem;
+  }
+
+  .signup-text {
+    font-size: 0.85rem;
+    margin-top: 18px;
+  }
+}
+
+@media (max-width: 480px) {
+  .login-card {
+    padding: 25px 18px;
+  }
+
+  .login-card h2 {
+    font-size: 1.4rem;
+  }
+
+  .input-group input {
+    padding: 11px 12px;
+  }
+
+  .login-btn,
+  .google-btn {
+    padding: 11px;
   }
 }
