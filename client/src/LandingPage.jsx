@@ -73,6 +73,28 @@ export default function LandingPage() {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
+  // Scroll to section when hash changes
+  useEffect(() => {
+    const handleHashChange = () => {
+      const hash = window.location.hash.slice(1); // Remove '#' prefix
+      if (hash) {
+        setTimeout(() => {
+          const element = document.getElementById(hash);
+          if (element) {
+            element.scrollIntoView({ behavior: "smooth", block: "start" });
+          }
+        }, 100);
+      }
+    };
+
+    // Handle initial hash on page load
+    handleHashChange();
+
+    // Listen for hash changes
+    window.addEventListener("hashchange", handleHashChange);
+    return () => window.removeEventListener("hashchange", handleHashChange);
+  }, []);
+
   // Image slider
   useEffect(() => {
     const interval = setInterval(() => {
@@ -294,7 +316,7 @@ export default function LandingPage() {
       </section>
 
       {/* ABOUT + STATS SECTION (Like Example Image) */}
-      <section className="about-stats-section" ref={statsRef}>
+      <section id="about" className="about-stats-section" ref={statsRef}>
         <div className="about-left">
           <h2>ABOUT US</h2>
           <p>
@@ -341,6 +363,7 @@ export default function LandingPage() {
       </section>
 
       <div
+        id="services"
         ref={servicesRef}
         className={`fade-section ${servicesVisible ? "show" : ""}`}
       >
@@ -362,6 +385,7 @@ export default function LandingPage() {
       </div>
 
       <div
+        id="countries"
         ref={countryRef}
         className={`fade-section ${countryVisible ? "show" : ""}`}
       >
@@ -376,6 +400,7 @@ export default function LandingPage() {
       </div>
 
       <div
+        id="contact"
         ref={contactRef}
         className={`fade-section ${contactVisible ? "show" : ""}`}
       >
