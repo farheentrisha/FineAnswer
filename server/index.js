@@ -148,7 +148,7 @@ async function run() {
       .db("FineAnswer")
       .collection("documentsCollection");
 
-    await client.db("admin").command({ ping: 1 });
+    // await client.db("admin").command({ ping: 1 });
   } catch (err) {
     console.warn("MongoDB connection failed — server will run but DB routes will return 503:", err.message);
   }
