@@ -106,6 +106,13 @@ const ContextProvider = ({ children }) => {
     }
   }, []);
 
+  // Apply backend auth response instantly (avoids extra /auth/me roundtrip on login)
+  const applyBackendAuth = useCallback((backendUser, adminStatus) => {
+    setUser(backendUser || null);
+    setIsAdmin(!!adminStatus);
+    setLoading(false);
+  }, []);
+
   //   Update Profile
   const updateUserProfile = (name, photo) => {
     return updateProfile(auth.currentUser, {
@@ -152,6 +159,7 @@ const ContextProvider = ({ children }) => {
     googleSignIn,
     updateUserProfile,
     getCurrentUser,
+    applyBackendAuth,
     setLoading,
   };
   return (
