@@ -14,31 +14,44 @@ export default function TrackerUpdate() {
   const [users, setUsers] = useState([]);
   const [selectedUserId, setSelectedUserId] = useState("");
   const [timeline, setTimeline] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(false); // timeline loading
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
   const [userSearch, setUserSearch] = useState("");
+  const [usersLoading, setUsersLoading] = useState(true);
 
   useEffect(() => {
     const fetchUsers = async () => {
       try {
+        setUsersLoading(true);
         const token = localStorage.getItem("token");
-        if (!token) return;
+        if (!token) {
+          setUsers([]);
+          setUsersLoading(false);
+          return;
+        }
 
         const response = await fetch(`${API_BASE_URL}/users`, {
           headers: { Authorization: `Bearer ${token}` },
         });
 
-        if (response.ok) {
-          const data = await response.json();
-          const regularUsers = (data.users || data || []).filter(
-            (user) => !user.isAdmin,
-          );
-          setUsers(regularUsers);
+        if (!response.ok) {
+          console.error("Failed to fetch users for tracker:", response.status);
+          setUsers([]);
+          return;
         }
+
+        const data = await response.json();
+        const regularUsers = (data.users || data || []).filter(
+          (user) => !user.isAdmin,
+        );
+        setUsers(regularUsers);
       } catch (err) {
         console.error("Error fetching users:", err);
+        setUsers([]);
+      } finally {
+        setUsersLoading(false);
       }
     };
 
@@ -182,8 +195,10 @@ export default function TrackerUpdate() {
         </div>
 
         <div className="user-list">
-          {filteredUsers.length === 0 ? (
-            <div className="user-list-empty">
+          {usersLoading ? (
+            <div className="user-list-status">Loading students...</div>
+          ) : filteredUsers.length === 0 ? (
+            <div className="user-list-status">
               No students found for this search.
             </div>
           ) : (
