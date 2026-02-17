@@ -49,10 +49,10 @@ export default function Navbar() {
 
         <nav className={`nav-menu ${menuOpen ? "open" : ""}`}>
           <NavLink to="/" onClick={() => setMenuOpen(false)}>Home</NavLink>
-          <NavLink to="/about" onClick={() => setMenuOpen(false)}>About</NavLink>
-          <NavLink to="/services" onClick={() => setMenuOpen(false)}>Services</NavLink>
-          <NavLink to="/countries" onClick={() => setMenuOpen(false)}>Countries</NavLink>
-          <NavLink to="/contact" onClick={() => setMenuOpen(false)}>Contact</NavLink>
+          <a href="/#about" onClick={() => setMenuOpen(false)}>About</a>
+          <a href="/#services" onClick={() => setMenuOpen(false)}>Services</a>
+          <a href="/#countries" onClick={() => setMenuOpen(false)}>Countries</a>
+          <a href="/#contact" onClick={() => setMenuOpen(false)}>Contact</a>
           <NavLink to="/payment" onClick={() => setMenuOpen(false)}>Payment</NavLink>
           <NavLink to="/career" onClick={() => setMenuOpen(false)}>Career</NavLink>
           <NavLink to="/blog" onClick={() => setMenuOpen(false)}>Blog</NavLink>
