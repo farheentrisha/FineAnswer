@@ -218,3 +218,173 @@ html, body, #root {
   margin-top: 10px;
 }
 
+/* RESPONSIVE STYLES */
+@media (max-width: 1024px) {
+  .register-box {
+    flex-direction: column;
+    height: auto;
+    min-height: 100vh;
+  }
+
+  .register-left {
+    flex: 1;
+    width: 100%;
+    padding: 40px 20px;
+  }
+
+  .register-right {
+    flex: 1;
+    width: 100%;
+    min-height: 400px;
+  }
+
+  .register-form {
+    max-width: 100%;
+  }
+}
+
+@media (max-width: 768px) {
+  .register-container {
+    background: #fff;
+  }
+
+  .register-box {
+    border-radius: 0;
+  }
+
+  .register-left {
+    padding: 35px 20px;
+  }
+
+  .register-form h2 {
+    font-size: 1.75rem;
+  }
+
+  .subtext {
+    font-size: 0.9rem;
+  }
+
+  .input-group {
+    margin-bottom: 16px;
+  }
+
+  .input-group input {
+    padding: 12px 14px;
+    font-size: 0.9rem;
+  }
+
+  .register-btn {
+    padding: 12px;
+    font-size: 0.95rem;
+  }
+
+  .register-right {
+    min-height: 350px;
+  }
+
+  .testimonial {
+    width: 90%;
+    padding: 35px 25px;
+  }
+
+  .testimonial p {
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 576px) {
+  .register-left {
+    padding: 30px 15px;
+  }
+
+  .register-form {
+    text-align: center;
+  }
+
+  .register-form h2 {
+    font-size: 1.5rem;
+    margin-bottom: 6px;
+  }
+
+  .subtext {
+    font-size: 0.85rem;
+    margin-bottom: 20px;
+  }
+
+  .input-group {
+    margin-bottom: 15px;
+  }
+
+  .input-group input {
+    padding: 11px 12px;
+    font-size: 0.9rem;
+  }
+
+  .register-btn {
+    padding: 11px;
+    font-size: 0.9rem;
+  }
+
+  .login-link {
+    font-size: 0.85rem;
+    margin-top: 12px;
+  }
+
+  .register-right {
+    min-height: 300px;
+  }
+
+  .testimonial {
+    width: 95%;
+    padding: 30px 20px;
+    border-radius: 15px;
+  }
+
+  .testimonial p {
+    font-size: 0.95rem;
+    line-height: 1.5;
+    margin-bottom: 15px;
+  }
+
+  .testimonial h4 {
+    font-size: 1rem;
+  }
+
+  .testimonial span {
+    font-size: 0.85rem;
+    margin-bottom: 8px;
+  }
+
+  .stars {
+    font-size: 1.1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .register-left {
+    padding: 25px 15px;
+  }
+
+  .register-form h2 {
+    font-size: 1.4rem;
+  }
+
+  .input-group input {
+    padding: 10px 12px;
+    font-size: 0.85rem;
+  }
+
+  .register-btn {
+    padding: 10px;
+    font-size: 0.85rem;
+  }
+
+  .testimonial {
+    padding: 25px 18px;
+  }
+
+  .testimonial p {
+    font-size: 0.9rem;
+  }
+}
+
