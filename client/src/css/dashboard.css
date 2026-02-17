@@ -17,6 +17,39 @@ body {
   overflow: hidden; /* stop body scroll */
 }
 
+.dashboard-layout.is-sidebar-collapsed .sidebar {
+  width: 84px;
+  padding: 18px 12px;
+}
+
+.dashboard-layout.is-sidebar-collapsed .dashboard-main {
+  margin-left: 84px;
+}
+
+.dashboard-layout.is-sidebar-collapsed .sidebar .sidebar-logo h3,
+.dashboard-layout.is-sidebar-collapsed .sidebar .sidebar-nav a span,
+.dashboard-layout.is-sidebar-collapsed .sidebar .logout-btn span {
+  display: none;
+}
+
+.dashboard-layout.is-sidebar-collapsed .sidebar .sidebar-nav a {
+  justify-content: center;
+  padding: 14px 10px;
+}
+
+.dashboard-layout.is-sidebar-collapsed .sidebar .sidebar-logo {
+  justify-content: center;
+}
+
+.dashboard-layout.is-sidebar-collapsed .sidebar .logout-btn {
+  justify-content: center;
+  padding: 12px 10px;
+}
+
+.dashboard-sidebar-backdrop {
+  display: none;
+}
+
 /* Fixed sidebar */
 
 
@@ -100,11 +133,83 @@ body {
   margin-bottom: 20px;
 }
 
+.dashboard-topbar-titleRow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex: 1;
+}
+
+.dashboard-topbar-burger,
+.dashboard-topbar-collapse {
+  border: 1px solid #e5e7eb;
+  background: #fff;
+  color: #111827;
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+}
+
+.dashboard-topbar-burger:hover,
+.dashboard-topbar-collapse:hover {
+  background: #f1f5f9;
+}
+
+.dashboard-topbar-burger {
+  display: none;
+}
+
 .topbar input {
-  width: 60%;
+  width: 100%;
+  max-width: 560px;
   padding: 10px;
   border-radius: 8px;
   border: 1px solid #ddd;
+}
+
+@media (max-width: 992px) {
+  .dashboard-layout .sidebar {
+    transform: translateX(-110%);
+    transition: transform 0.2s ease;
+  }
+
+  .dashboard-layout.is-sidebar-open-mobile .sidebar {
+    transform: translateX(0);
+  }
+
+  .dashboard-layout .dashboard-main {
+    margin-left: 0;
+  }
+
+  .dashboard-layout.is-sidebar-collapsed .dashboard-main {
+    margin-left: 0;
+  }
+
+  .dashboard-sidebar-backdrop {
+    display: block;
+    position: fixed;
+    inset: 0;
+    background: rgba(17, 24, 39, 0.35);
+    z-index: 40;
+    border: none;
+  }
+
+  .dashboard-layout .sidebar {
+    z-index: 50;
+  }
+
+  .dashboard-topbar-burger {
+    display: inline-flex;
+  }
+
+  .dashboard-topbar-collapse {
+    display: none;
+  }
 }
 
 .topbar-right {

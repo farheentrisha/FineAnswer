@@ -15,7 +15,7 @@ import {
 import { AuthContext } from "../../pages/Provider/ContextProvider";
 import "../Sidebar.css";
 
-export default function Sidebar() {
+export default function Sidebar({ collapsed = false, mobileOpen = false, onCloseMobile }) {
   const { logOut } = useContext(AuthContext);
   const navigate = useNavigate();
 
@@ -25,7 +25,7 @@ export default function Sidebar() {
   };
 
   return (
-    <aside className="sidebar">
+    <aside className={`sidebar ${collapsed ? "sidebar--collapsed" : ""} ${mobileOpen ? "sidebar--mobileOpen" : ""}`}>
       {/* Logo - same style as user dashboard */}
       <div className="sidebar-logo">
         <div className="logo-icon">🛡️</div>
@@ -38,46 +38,46 @@ export default function Sidebar() {
       </div>
 
       {/* Navigation - same layout as user sidebar */}
-      <nav className="sidebar-nav">
-        <NavLink to="/admin/dashboard" end>
+      <nav className="sidebar-nav" onClick={() => onCloseMobile?.()}>
+        <NavLink to="/admin/dashboard" end title="Dashboard">
           <FaTachometerAlt /> <span>Dashboard</span>
         </NavLink>
 
-        <NavLink to="/admin/analytics">
+        <NavLink to="/admin/analytics" title="Analytics">
           <FaChartBar /> <span>Analytics</span>
         </NavLink>
 
-        <NavLink to="/admin/success-stories">
+        <NavLink to="/admin/success-stories" title="Success Stories">
           <FaStar /> <span>Success Stories</span>
         </NavLink>
 
-        <NavLink to="/admin/blog">
+        <NavLink to="/admin/blog" title="Blog">
           <FaBlog /> <span>Blog</span>
         </NavLink>
 
-        <NavLink to="/admin/career">
+        <NavLink to="/admin/career" title="Career">
           <FaBriefcase /> <span>Career</span>
         </NavLink>
 
-        <NavLink to="/admin/tracker-update">
+        <NavLink to="/admin/tracker-update" title="Tracker Update">
           <FaTasks /> <span>Tracker Update</span>
         </NavLink>
 
-        <NavLink to="/admin/sessions">
+        <NavLink to="/admin/sessions" title="Sessions">
           <FaVideo /> <span>Sessions</span>
         </NavLink>
 
-        <NavLink to="/admin/students-info">
+        <NavLink to="/admin/students-info" title="Students Info">
           <FaUsers /> <span>Students Info</span>
         </NavLink>
 
-        <NavLink to="/admin/documents">
+        <NavLink to="/admin/documents" title="Documents">
           <FaFileAlt /> <span>Documents</span>
         </NavLink>
       </nav>
 
       {/* Logout - shares same styling as user sidebar */}
-      <button className="logout-btn" onClick={handleLogout}>
+      <button className="logout-btn" onClick={handleLogout} title="Logout">
         <FaSignOutAlt /> Logout
       </button>
     </aside>

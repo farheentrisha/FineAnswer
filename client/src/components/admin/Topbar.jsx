@@ -1,7 +1,12 @@
 import { useContext } from "react";
+import { FaBars, FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import { AuthContext } from "../../pages/Provider/ContextProvider";
 
-export default function Topbar() {
+export default function Topbar({
+  sidebarCollapsed = false,
+  onToggleSidebar,
+  onToggleMobileSidebar,
+}) {
   const { user } = useContext(AuthContext);
   
   const getUserInitials = () => {
@@ -22,8 +27,29 @@ export default function Topbar() {
   return (
     <header className="topbar">
       <div>
-        <h2>Admin Dashboard</h2>
-        <p>Manage and monitor your platform</p>
+        <div className="admin-topbar-titleRow">
+          <button
+            type="button"
+            className="admin-topbar-burger"
+            onClick={onToggleMobileSidebar}
+            aria-label="Open sidebar"
+          >
+            <FaBars />
+          </button>
+          <button
+            type="button"
+            className="admin-topbar-collapse"
+            onClick={onToggleSidebar}
+            aria-label={sidebarCollapsed ? "Expand sidebar" : "Collapse sidebar"}
+            title={sidebarCollapsed ? "Expand sidebar" : "Collapse sidebar"}
+          >
+            {sidebarCollapsed ? <FaChevronRight /> : <FaChevronLeft />}
+          </button>
+          <div>
+            <h2>Admin Dashboard</h2>
+            <p>Manage and monitor your platform</p>
+          </div>
+        </div>
       </div>
 
       <div className="topbar-right">

@@ -22,6 +22,108 @@
   z-index: 50 !important;
 }
 
+.admin-layout.is-sidebar-collapsed .sidebar {
+  width: 84px !important;
+  padding: 18px 12px !important;
+}
+
+.admin-layout.is-sidebar-collapsed .admin-main {
+  margin-left: 84px;
+}
+
+.admin-layout.is-sidebar-collapsed .sidebar .sidebar-logo h3,
+.admin-layout.is-sidebar-collapsed .sidebar .sidebar-logo span,
+.admin-layout.is-sidebar-collapsed .sidebar .sidebar-nav a span,
+.admin-layout.is-sidebar-collapsed .sidebar .logout-btn span {
+  display: none !important;
+}
+
+.admin-layout.is-sidebar-collapsed .sidebar .sidebar-nav a {
+  justify-content: center !important;
+  padding: 14px 10px !important;
+}
+
+.admin-layout.is-sidebar-collapsed .sidebar .sidebar-logo {
+  justify-content: center !important;
+}
+
+.admin-layout.is-sidebar-collapsed .sidebar .logout-btn {
+  justify-content: center !important;
+  padding: 12px 10px !important;
+}
+
+.admin-sidebar-backdrop {
+  display: none;
+}
+
+.admin-topbar-titleRow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.admin-topbar-burger,
+.admin-topbar-collapse {
+  border: 1px solid #e5e7eb;
+  background: #fff;
+  color: #111827;
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.admin-topbar-burger:hover,
+.admin-topbar-collapse:hover {
+  background: #f1f5f9;
+}
+
+.admin-topbar-burger {
+  display: none;
+}
+
+@media (max-width: 992px) {
+  .admin-layout .sidebar {
+    transform: translateX(-110%);
+    transition: transform 0.2s ease;
+  }
+
+  .admin-layout.is-sidebar-open-mobile .sidebar {
+    transform: translateX(0);
+  }
+
+  .admin-layout .admin-main {
+    margin-left: 0;
+  }
+
+  .admin-layout.is-sidebar-collapsed .admin-main {
+    margin-left: 0;
+  }
+
+  .admin-sidebar-backdrop {
+    display: block;
+    position: fixed;
+    inset: 0;
+    background: rgba(17, 24, 39, 0.35);
+    z-index: 40;
+    border: none;
+  }
+
+  .admin-layout .sidebar {
+    z-index: 50 !important;
+  }
+
+  .admin-topbar-burger {
+    display: inline-flex;
+  }
+
+  .admin-topbar-collapse {
+    display: none;
+  }
+}
 /* Ensure sidebar navigation links match user dashboard */
 .admin-layout .sidebar .sidebar-nav a {
   display: flex !important;
