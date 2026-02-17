@@ -36,6 +36,7 @@ export default function LandingPage() {
 
   // Popup state
   const [showPopup, setShowPopup] = useState(false);
+  const [popupShownBefore, setPopupShownBefore] = useState(false);
 
   // Search dropdown state
   const [activeDropdown, setActiveDropdown] = useState(null);
@@ -157,10 +158,21 @@ export default function LandingPage() {
     });
   }, []);
 
-  // Show popup after 10 seconds only when user is not logged in
+  // Show popup after 10 seconds only when user is not logged in and popup hasn't been shown before
   useEffect(() => {
     if (loading || user) return;
-    const timer = setTimeout(() => setShowPopup(true), 10000);
+    
+    // Check if popup has been shown before
+    const hasShownPopup = localStorage.getItem('popupShown');
+    setPopupShownBefore(!!hasShownPopup);
+    
+    if (hasShownPopup) return;
+    
+    const timer = setTimeout(() => {
+      setShowPopup(true);
+      localStorage.setItem('popupShown', 'true');
+    }, 10000);
+    
     return () => clearTimeout(timer);
   }, [loading, user]);
 
@@ -307,7 +319,12 @@ export default function LandingPage() {
 
             <button
               className="cta-consult"
-              onClick={() => navigate("/consultation")}
+              onClick={() => {
+                const contactSection = document.getElementById('contact');
+                if (contactSection) {
+                  contactSection.scrollIntoView({ behavior: 'smooth' });
+                }
+              }}
             >
               Book Consultation
             </button>
@@ -415,7 +432,10 @@ export default function LandingPage() {
       {showPopup && !loading && !user && (
         <div className="popup-overlay">
           <div className="modern-popup">
-            <button className="popup-close" onClick={() => setShowPopup(false)}>
+            <button className="popup-close" onClick={() => {
+              setShowPopup(false);
+              localStorage.setItem('popupShown', 'true');
+            }}>
               ×
             </button>
             <h2>Unlock More Opportunities!</h2>
