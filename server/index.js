@@ -2055,14 +2055,11 @@ app.use((err, req, res, next) => {
   });
 });
 
-// Connect to MongoDB, then start the server (so usersCollection is set before any request)
-run()
-  .then(() => {
-    app.listen(port, () => {
-      // Server started on port
-    });
-  })
-  .catch((err) => {
-    console.error("Failed to connect to MongoDB:", err.message);
-    process.exit(1);
-  });
+// Start server first so it always runs; connect to MongoDB in the background
+app.listen(port, () => {
+  console.log(`Server running on port ${port}`);
+});
+
+run().catch((err) => {
+  console.warn("MongoDB connection failed — DB routes will return 503:", err.message);
+});
