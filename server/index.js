@@ -132,25 +132,26 @@ const requireAdmin = (req, res, next) => {
 };
 
 async function run() {
-  // Connect the client to the server; rethrow so server does not start without DB
-  await client.connect();
+  try {
+    await client.connect();
 
-  // Collections (only set after successful connect)
-  usersCollection = client.db("FineAnswer").collection("usersCollection");
-  successStoryCollection = client.db("FineAnswer").collection("successStory");
-  blogCollection = client.db("FineAnswer").collection("blog");
-  sessionCollection = client.db("FineAnswer").collection("session");
-  eventsCollection = client.db("FineAnswer").collection("events");
-  careerCollection = client.db("FineAnswer").collection("careerCollection");
-  careerApplicationsCollection = client
-    .db("FineAnswer")
-    .collection("careerApplications");
-  documentsCollection = client
-    .db("FineAnswer")
-    .collection("documentsCollection");
+    usersCollection = client.db("FineAnswer").collection("usersCollection");
+    successStoryCollection = client.db("FineAnswer").collection("successStory");
+    blogCollection = client.db("FineAnswer").collection("blog");
+    sessionCollection = client.db("FineAnswer").collection("session");
+    eventsCollection = client.db("FineAnswer").collection("events");
+    careerCollection = client.db("FineAnswer").collection("careerCollection");
+    careerApplicationsCollection = client
+      .db("FineAnswer")
+      .collection("careerApplications");
+    documentsCollection = client
+      .db("FineAnswer")
+      .collection("documentsCollection");
 
-  // Send a ping to confirm a successful connection
-  await client.db("admin").command({ ping: 1 });
+    await client.db("admin").command({ ping: 1 });
+  } catch (err) {
+    console.warn("MongoDB connection failed — server will run but DB routes will return 503:", err.message);
+  }
 }
 
 // Routes
