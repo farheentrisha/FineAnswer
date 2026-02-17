@@ -12,6 +12,13 @@ import {
 
 
 const Services = () => {
+  const handleSendEnquiry = () => {
+    const contactSection = document.getElementById('contact');
+    if (contactSection) {
+      contactSection.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
   const cards = [
   {
     icon: <FaGlobe />,
@@ -61,7 +68,7 @@ const Services = () => {
           Find another value to dependent in the workplace with our team of experts.
           Exceptional skills & performance.
         </p>
-        <button>Send your enquiry</button>
+        <button onClick={handleSendEnquiry}>Send your enquiry</button>
       </div>
 
       <div className="services-grid">
