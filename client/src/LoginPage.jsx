@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { FcGoogle } from "react-icons/fc";
 import { API_BASE_URL } from "./config/api";
 import "./LoginPage.css";
 import { AuthContext } from "./pages/Provider/ContextProvider";
@@ -232,10 +233,7 @@ export default function LoginPage() {
             <div className="divider">or</div>
 
             <button type="button" className="google-btn" onClick={handleGoogleSignIn}>
-              <img
-                src="https://www.svgrepo.com/show/355037/google.svg"
-                alt="Google"
-              />
+              <FcGoogle className="google-icon" />
               Sign in with Google
             </button>
 

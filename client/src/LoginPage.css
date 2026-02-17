@@ -195,11 +195,12 @@ html, body, #root {
   transform: translateY(-1px);
 }
 
-.google-btn img {
+.google-btn .google-icon {
   width: 20px;
   height: 20px;
   display: block;
   flex-shrink: 0;
+  font-size: 20px;
 }
 
 /* MESSAGES */
@@ -323,9 +324,10 @@ html, body, #root {
     font-size: 0.9rem;
   }
 
-  .google-btn img {
+  .google-btn .google-icon {
     width: 18px;
     height: 18px;
+    font-size: 18px;
   }
 
   .divider {
