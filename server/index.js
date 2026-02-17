@@ -1971,6 +1971,39 @@ app.put(
   }),
 );
 
+// DELETE /api/admin/documents/:userId - Admin deletes user's documents
+app.delete(
+  "/api/admin/documents/:userId",
+  authenticateToken,
+  requireAdmin,
+  asyncHandler(async (req, res) => {
+    const { userId } = req.params;
+
+    if (!userId || !ObjectId.isValid(userId)) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid user ID",
+      });
+    }
+
+    const deleted = await documentsCollection.findOneAndDelete({
+      userId: new ObjectId(userId),
+    });
+
+    if (!deleted) {
+      return res.status(404).json({
+        success: false,
+        message: "No documents found for this user",
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      message: "User documents deleted successfully",
+    });
+  }),
+);
+
 // ==================== Payment Gateway ROUTES ====================
 app.post("/api/create-payment", async (req, res) => {
   const paymentInfo = req.body;

@@ -78,8 +78,14 @@
   color: #6b7280;
 }
 
-.documents-view-btn {
+.document-card-actions {
   margin-top: 8px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.documents-view-btn {
   padding: 8px 14px;
   background: #4c5c9e;
   color: #fff;
@@ -94,6 +100,28 @@
 
 .documents-view-btn:hover {
   background: #3d4a8a;
+}
+
+.documents-delete-btn {
+  padding: 8px 14px;
+  background: #dc2626;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.9rem;
+}
+
+.documents-delete-btn:hover:not(:disabled) {
+  background: #b91c1c;
+}
+
+.documents-delete-btn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
 }
 
 .documents-modal-overlay {
