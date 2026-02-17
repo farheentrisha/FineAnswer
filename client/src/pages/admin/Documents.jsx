@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { FaFileAlt, FaEye, FaSpinner, FaDownload } from "react-icons/fa";
+import { FaFileAlt, FaEye, FaSpinner, FaDownload, FaTrash } from "react-icons/fa";
 import { API_BASE_URL } from "../../config/api";
 import "./Documents.css";
 
@@ -29,6 +29,7 @@ export default function AdminDocuments() {
   const [feedbackText, setFeedbackText] = useState("");
   const [submittingFeedback, setSubmittingFeedback] = useState(false);
   const [loadingPdf, setLoadingPdf] = useState(null);
+  const [deletingId, setDeletingId] = useState(null);
 
   useEffect(() => {
     fetchDocuments();
@@ -65,6 +66,43 @@ export default function AdminDocuments() {
 
   const handleViewDetails = (doc) => {
     setSelectedDoc(doc);
+  };
+
+  const handleDelete = async (doc) => {
+    const userName = doc.user?.name || "Unknown User";
+    const confirmed = window.confirm(
+      `Are you sure you want to delete all documents for "${userName}"? This cannot be undone.`
+    );
+    if (!confirmed) return;
+
+    const userId = doc.userId?.toString?.() ?? String(doc.userId || "");
+    if (!userId) {
+      alert("Cannot delete: Invalid user ID");
+      return;
+    }
+
+    setDeletingId(doc._id);
+    try {
+      const token = localStorage.getItem("token");
+      const res = await fetch(`${API_BASE_URL}/admin/documents/${userId}`, {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      const data = await res.json();
+
+      if (data.success) {
+        setDocuments((prev) => prev.filter((d) => d._id !== doc._id));
+        if (selectedDoc?._id === doc._id) setSelectedDoc(null);
+      } else {
+        alert(data.message || "Failed to delete documents");
+      }
+    } catch (_err) {
+      alert("An error occurred while deleting. Please try again.");
+    } finally {
+      setDeletingId(null);
+    }
   };
 
   const closeModal = () => {
@@ -191,12 +229,28 @@ export default function AdminDocuments() {
                   Status: {doc.validationStatus}
                 </p>
               )}
-              <button
-                className="documents-view-btn"
-                onClick={() => handleViewDetails(doc)}
-              >
-                <FaEye /> View Documents
-              </button>
+              <div className="document-card-actions">
+                <button
+                  className="documents-view-btn"
+                  onClick={() => handleViewDetails(doc)}
+                >
+                  <FaEye /> View Documents
+                </button>
+                <button
+                  className="documents-delete-btn"
+                  onClick={() => handleDelete(doc)}
+                  disabled={deletingId === doc._id}
+                  title="Delete user documents"
+                >
+                  {deletingId === doc._id ? (
+                    <FaSpinner className="spinner" />
+                  ) : (
+                    <>
+                      <FaTrash /> Delete
+                    </>
+                  )}
+                </button>
+              </div>
             </div>
           ))}
         </div>
