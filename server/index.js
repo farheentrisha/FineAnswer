@@ -11,14 +11,22 @@ const nodemailer = require("nodemailer");
 const app = express();
 const port = process.env.PORT || 5000;
 
-// Middleware
+// Middleware – allow localhost on any port (e.g. 5173, 5174) and production
+function corsOrigin(origin, cb) {
+  const allowed = [
+    "https://fine-answer-wcij.vercel.app",
+    "https://fine-answer-wcij.vercel.app/",
+  ];
+  if (!origin || /^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/.test(origin) || allowed.includes(origin)) {
+    cb(null, true);
+  } else {
+    cb(null, false);
+  }
+}
+
 app.use(
   cors({
-    origin: [
-      "http://localhost:5173",
-      "https://fine-answer-wcij.vercel.app",
-      "https://fine-answer-wcij.vercel.app/",
-    ],
+    origin: corsOrigin,
     credentials: true,
     methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"],
