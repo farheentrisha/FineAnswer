@@ -1,9 +1,13 @@
 import { useState, useEffect } from "react";
 import "./ProgressTracker.css";
 import { getMyProgressTracker } from "../services/progressTrackerApi";
+import {
+  getInitialTimeline,
+  normalizeTimeline,
+  PROGRESS_STEPS,
+} from "../utils/progressTrackerSteps";
 
 export default function ProgressTracker() {
-  const [open, setOpen] = useState(null);
   const [timeline, setTimeline] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -17,10 +21,11 @@ export default function ProgressTracker() {
         }
 
         const data = await getMyProgressTracker(token);
-        setTimeline(data.timeline || data.progressTracker || []);
+        const raw = data.timeline || data.progressTracker || [];
+        setTimeline(normalizeTimeline(raw));
       } catch (error) {
         console.error("Error fetching progress tracker:", error);
-        setTimeline([]);
+        setTimeline(getInitialTimeline());
       } finally {
         setLoading(false);
       }
@@ -28,6 +33,9 @@ export default function ProgressTracker() {
 
     fetchTracker();
   }, []);
+
+  const allComplete = timeline.length > 0 && timeline[9]?.completed;
+  const hasData = timeline.some((s) => s.completed);
 
   if (loading) {
     return (
@@ -40,12 +48,13 @@ export default function ProgressTracker() {
     );
   }
 
-  if (timeline.length === 0) {
+  if (!hasData) {
     return (
       <div className="visa-wrapper">
         <h3 className="visa-header">Study Abroad Progress tracker</h3>
         <div style={{ textAlign: "center", padding: "40px", color: "#6b7280" }}>
-          No progress updates yet. Your tracker will appear here once updated by admin.
+          No progress updates yet. Your tracker will appear here once updated by
+          admin.
         </div>
       </div>
     );
@@ -54,42 +63,41 @@ export default function ProgressTracker() {
   return (
     <div className="visa-wrapper">
       <h3 className="visa-header">Study Abroad Progress tracker</h3>
+      {allComplete && (
+        <div className="progress-complete-banner">
+          ✓ Progress Complete
+        </div>
+      )}
 
       <div className="timeline">
-        {timeline.map((step, index) => (
-          <div key={step.id || index} className={`timeline-item ${step.side || (index % 2 === 0 ? "left" : "right")}`}>
-            
-            {/* Card */}
-            <div className={`content ${step.final ? "final" : ""}`}>
-              <span className="date">{step.date || "No date"}</span>
-              <h4>{step.title || "Untitled"}</h4>
+        {PROGRESS_STEPS.map((def, index) => {
+          const item = timeline[index] || {
+            step: def.step,
+            title: def.title,
+            date: null,
+            completed: false,
+          };
 
-              {/* Dropdown */}
-              {step.type === "dropdown" && step.options && step.options.length > 0 && (
-                <div className="dropdown">
-                  <button onClick={() => setOpen(open === index ? null : index)}>
-                    View University Offers ▾
-                  </button>
-
-                  {open === index && (
-                    <div className="dropdown-menu">
-                      {step.options.map((opt, i) => (
-                        <div key={i} className="dropdown-item">
-                          <strong>{opt.university || "University"}</strong>
-                          <p>{opt.status || "Status"}</p>
-                          <span>{opt.date || "Date"}</span>
-                        </div>
-                      ))}
-                    </div>
-                  )}
-                </div>
-              )}
+          return (
+            <div
+              key={item.step}
+              className={`timeline-item ${index % 2 === 0 ? "left" : "right"}`}
+            >
+              <div
+                className={`content ${item.completed ? "completed" : ""} ${index === 9 && item.completed ? "final" : ""}`}
+              >
+                <span className="date">
+                  {item.date ? new Date(item.date).toLocaleDateString() : "—"}
+                </span>
+                <h4>{item.title}</h4>
+                {item.completed && (
+                  <span className="completed-badge">✓ Completed</span>
+                )}
+              </div>
+              <span className={`dot ${item.completed ? "success" : ""}`} />
             </div>
-
-            {/* Dot */}
-            <span className={`dot ${step.final ? "success" : ""}`} />
-          </div>
-        ))}
+          );
+        })}
       </div>
     </div>
   );
