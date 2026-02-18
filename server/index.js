@@ -2073,6 +2073,7 @@ app.post(
       cus_email,
       cus_phone,
       userId,
+      purpose,
     } = req.body;
     if (!amount || amount < 10) {
       return res.status(400).json({
@@ -2110,6 +2111,7 @@ app.post(
     const name = cus_name || "Customer";
     const email = cus_email || "customer@example.com";
     const phone = cus_phone || "01711111111";
+    const purposeLabel = purpose || "Study Abroad Application Fee";
 
     const paymentDoc = {
       paymentId: tranId,
@@ -2121,6 +2123,7 @@ app.post(
       cus_email: email,
       cus_phone: phone,
       userId: paidByUserId || null,
+      purpose: purposeLabel,
       createdAt: new Date(),
       updatedAt: new Date(),
     };
@@ -2140,7 +2143,7 @@ app.post(
       tran_id: tranId,
       product_category: "education",
       product_profile: "general",
-      product_name: "Study Abroad Application Fee",
+      product_name: purposeLabel,
       success_url: successUrl,
       fail_url: failUrl,
       cancel_url: cancelUrl,

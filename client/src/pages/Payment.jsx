@@ -7,9 +7,37 @@ import Navbar3 from "../components/navbar3";
 import "./Payment.css";
 
 export default function Payment() {
+  const PAYMENT_OPTIONS = [
+    {
+      id: "english",
+      label: "English Proficiency Fee",
+      description: "Pay for English proficiency tests or related assessments.",
+      amount: 1000,
+    },
+    {
+      id: "medical",
+      label: "Medical Insurance Fee",
+      description: "Secure your medical insurance coverage for study abroad.",
+      amount: 2000,
+    },
+    {
+      id: "logistics",
+      label: "Logistics Fee",
+      description: "Covers logistics, courier, and document handling costs.",
+      amount: 1500,
+    },
+    {
+      id: "courses",
+      label: "Course Fee",
+      description: "Pay for course-related fees and training programs.",
+      amount: 5000,
+    },
+  ];
+
   const { user } = useContext(AuthContext);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+   const [selectedOption, setSelectedOption] = useState(PAYMENT_OPTIONS[0]);
 
   const handleCreatePayment = async () => {
     try {
@@ -17,8 +45,9 @@ export default function Payment() {
       setError(null);
       const token = localStorage.getItem("token");
       const payload = {
-        amount: 1000,
+        amount: selectedOption.amount,
         currency: "BDT",
+        purpose: selectedOption.label,
       };
       if (user) {
         payload.cus_name = user.name || user.displayName || user.email?.split("@")[0] || "Customer";
@@ -53,9 +82,38 @@ export default function Payment() {
             application fees and service payments.
           </p>
           <div className="payment-placeholder-box">
-            <p>
-              Pay application fee (1000 BDT) securely via SSLCommerz. You will be
-              redirected to the payment gateway.
+            <p>Select what you want to pay for:</p>
+
+            <div className="payment-options">
+              {PAYMENT_OPTIONS.map((option) => (
+                <button
+                  key={option.id}
+                  type="button"
+                  className={`payment-option${
+                    selectedOption.id === option.id ? " selected" : ""
+                  }`}
+                  onClick={() => setSelectedOption(option)}
+                  disabled={loading}
+                >
+                  <div className="payment-option-header">
+                    <span className="payment-option-title">{option.label}</span>
+                    <span className="payment-option-amount">
+                      {option.amount.toLocaleString("en-BD")} BDT
+                    </span>
+                  </div>
+                  <p className="payment-option-description">
+                    {option.description}
+                  </p>
+                </button>
+              ))}
+            </div>
+
+            <p className="payment-selected-summary">
+              You are about to pay{" "}
+              <strong>
+                {selectedOption.amount.toLocaleString("en-BD")} BDT
+              </strong>{" "}
+              for <strong>{selectedOption.label}</strong> via SSLCommerz.
             </p>
             {error && <p className="payment-error">{error}</p>}
             <button
@@ -63,7 +121,7 @@ export default function Payment() {
               className="payment-btn"
               disabled={loading}
             >
-              {loading ? "Processing..." : "Apply Now"}
+              {loading ? "Processing..." : "Pay Now"}
             </button>
             <p className="payment-hint">
               <Link to="/">Back to Home</Link>
