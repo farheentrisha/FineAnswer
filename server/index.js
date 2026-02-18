@@ -2018,6 +2018,14 @@ const FRONTEND_URL = process.env.FRONTEND_URL || "http://localhost:5173";
 const BACKEND_URL =
   process.env.BACKEND_URL || `http://localhost:${port}`;
 
+// SSLCommerz API URLs - use sandbox for development, production for live
+const isProduction = process.env.NODE_ENV === "production";
+const SSLCOMMERZ_BASE_URL = isProduction
+  ? "https://securepay.sslcommerz.com"
+  : "https://sandbox.sslcommerz.com";
+const SSLCOMMERZ_API_URL = `${SSLCOMMERZ_BASE_URL}/gwprocess/v4/api.php`;
+const SSLCOMMERZ_VALIDATOR_URL = `${SSLCOMMERZ_BASE_URL}/validator/api/validationserverAPI.php`;
+
 // Validate SSLCommerz IPN callback using Order Validation API
 const validateSSLCommerzIPN = async (tranId, valId) => {
   if (!tranId || !valId) return false;
@@ -2029,7 +2037,7 @@ const validateSSLCommerzIPN = async (tranId, valId) => {
       format: "json",
     });
     const response = await axios.get(
-      `https://sandbox.sslcommerz.com/validator/api/validationserverAPI.php?${params.toString()}`
+      `${SSLCOMMERZ_VALIDATOR_URL}?${params.toString()}`
     );
     const data = response.data;
     // Verify transaction ID matches and status is VALID
@@ -2149,7 +2157,7 @@ app.post(
     });
 
     const response = await axios.post(
-      "https://sandbox.sslcommerz.com/gwprocess/v4/api.php",
+      SSLCOMMERZ_API_URL,
       params.toString(),
       {
         headers: {
