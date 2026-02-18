@@ -1,11 +1,13 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import { API_BASE_URL } from "../config/api";
+import { AuthContext } from "./Provider/ContextProvider";
 import Navbar3 from "../components/navbar3";
 import "./Payment.css";
 
 export default function Payment() {
+  const { user } = useContext(AuthContext);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
@@ -13,10 +15,19 @@ export default function Payment() {
     try {
       setLoading(true);
       setError(null);
-      const res = await axios.post(`${API_BASE_URL}/create-payment`, {
+      const token = localStorage.getItem("token");
+      const payload = {
         amount: 1000,
         currency: "BDT",
-      });
+      };
+      if (user) {
+        payload.cus_name = user.name || user.displayName || user.email?.split("@")[0] || "Customer";
+        payload.cus_email = user.email || "customer@example.com";
+        payload.cus_phone = user.phone || user.phoneNumber || "01711111111";
+        if (user._id) payload.userId = user._id;
+      }
+      const headers = token ? { Authorization: `Bearer ${token}` } : {};
+      const res = await axios.post(`${API_BASE_URL}/create-payment`, payload, { headers });
       if (res?.data?.success && res?.data?.GatewayPageURL) {
         window.location.href = res.data.GatewayPageURL;
       } else {
