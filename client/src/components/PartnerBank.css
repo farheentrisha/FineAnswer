@@ -139,9 +139,198 @@
   .partner-stats { justify-content: center; }
 }
 
-@media (max-width: 480px) {
+@media (max-width: 480px) {.partner-bank-section {
+  padding: 100px 10%;
+  background-color: #ffffff;
+  overflow: hidden;
+}
+
+.partner-bank-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 50px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.partner-content {
+  flex: 1;
+  max-width: 480px;
+}
+
+.partner-badge {
+  color: #4f5fb3;
+  font-weight: 700;
+  letter-spacing: 2px;
+  font-size: 0.85rem;
+  margin-bottom: 15px;
+}
+
+.partner-title {
+  font-size: 2.8rem;
+  color: #1a1a1a;
+  margin-bottom: 20px;
+  font-weight: 800;
+  line-height: 1.1;
+}
+
+.partner-title span {
+  color: #4f5fb3;
+}
+
+.partner-description {
+  font-size: 1.1rem;
+  color: #555;
+  margin-bottom: 30px;
+  line-height: 1.6;
+}
+
+.partner-stats {
+  display: flex;
+  gap: 25px;
+}
+
+.p-stat {
+  font-size: 0.9rem;
+  color: #333;
+}
+
+.p-stat strong {
+  color: #4f5fb3;
+  display: block;
+  font-size: 1.4rem;
+}
+
+/* Bubbles Layout */
+.partner-visual {
+  flex: 1.2;
+  position: relative;
+  height: 500px;
+}
+
+.bubbles-wrapper {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.bank-bubble {
+  position: absolute;
+  background: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 10px 30px rgba(79, 95, 179, 0.12);
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  cursor: pointer;
+  padding: 15px;
+  animation: float 6s ease-in-out infinite;
+  border: 1px solid rgba(79, 95, 179, 0.05);
+}
+
+.bank-bubble img {
+  width: 75%;
+  height: auto;
+  object-fit: contain;
+}
+
+.bank-bubble:hover {
+  transform: scale(1.1) translateY(-10px);
+  box-shadow: 0 20px 40px rgba(79, 95, 179, 0.2);
+  border-color: #4f5fb3;
+  z-index: 20;
+}
+
+/* Sizes */
+.large { width: 150px; height: 150px; }
+.medium { width: 120px; height: 120px; }
+.small { width: 90px; height: 90px; }
+
+/* Staggered Positioning for 8 Partners */
+.p1 { top: 5%; left: 35%; animation-delay: 0s; }    /* City Bank */
+.p2 { top: 40%; left: 5%; animation-delay: 1s; }    /* NRBC */
+.p3 { bottom: 35%; left: 30%; animation-delay: 2s; } /* Premier */
+.p4 { top: 25%; right: 20%; animation-delay: 0.5s;} /* KC Overseas */
+.p5 { top: 14%; left: 15%; animation-delay: 1.5s; }   /* Crizac */
+.p6 { bottom: 18%; right: 20%; animation-delay: 2.5s;}/* TCL */
+.p7 { top: 75%; left: 45%; animation-delay: 3s; }   /* BYLC */
+.p8 { bottom: 5%; right: 60%; animation-delay: 1.2s;}/* Study Global */
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-15px); }
+}
+
+@media (max-width: 992px) {
+  .partner-bank-container { flex-direction: column; text-align: center; }
+  .partner-visual { height: 450px; width: 100%; }
+  .partner-stats { justify-content: center; }
+}
   .bubbles-grid { grid-template-columns: repeat(2, 1fr); gap: 15px; }
   .bank-bubble { width: 110px; height: 110px; }
 }
 
 
+/* Right side visual */
+.partner-visual {
+  flex: 1.2;
+  position: relative;
+  height: 520px;
+}
+
+.bubbles-wrapper {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+/* Bubble base */
+.bank-bubble {
+  position: absolute;
+  width: 120px;
+  height: 120px;
+  background: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 18px;
+  cursor: pointer;
+
+  border: 2px solid #eef1ff;
+  box-shadow: 0 10px 30px rgba(79,95,179,0.15);
+  animation: float 6s ease-in-out infinite;
+  transition: all 0.4s ease;
+}
+
+.bank-bubble img {
+  width: 80%;
+  height: auto;
+  object-fit: contain;
+}
+
+/* Hover */
+.bank-bubble:hover {
+  transform: scale(1.1);
+  border-color: #4f5fb3;
+  box-shadow: 0 20px 40px rgba(79,95,179,0.25);
+  z-index: 10;
+}
+
+/* Different sizes (like photo) */
+.p1 { width:140px; height:140px; top:5%; left:45%; animation-delay:0s;}
+.p2 { width:110px; height:110px; top:49%; left:85%; animation-delay:1s;}
+.p3 { width:120px; height:120px; bottom:30%; left:25%; animation-delay:2s;}
+.p4 { width:140px; height:140px; top:20%; right:10%; animation-delay:.5s;}
+.p5 { width:100px; height:100px; top:25%; left:30%; animation-delay:1.5s;}
+.p6 { width:120px; height:120px; bottom:10%; right:15%; animation-delay:2.5s;}
+.p7 { width:100px; height:100px; top:75%; left:45%; animation-delay:3s;}
+.p8 { width:130px; height:130px; bottom:35%; right:30%; animation-delay:1.2s;}
+
+/* Floating animation */
+@keyframes float {
+  0%,100% { transform: translateY(0px); }
+  50% { transform: translateY(-18px); }
+}
