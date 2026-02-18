@@ -44,17 +44,17 @@ const PartnerBank = () => {
         </div>
 
         {/* Right Side: Organized Grid of Bubbles */}
-        <div className="partner-visual">
-          <div className="bubbles-grid">
-            {partners.map((item, index) => (
-              <div key={index} className="bank-bubble-wrapper">
-                <div className="bank-bubble">
-                  <img src={item.logo} alt={item.name} />
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
+        {/* Right Side Floating Logos */}
+<div className="partner-visual">
+  <div className="bubbles-wrapper">
+    {partners.map((item, index) => (
+      <div key={index} className={`bank-bubble p${index + 1}`}>
+        <img src={item.logo} alt={item.name} />
+      </div>
+    ))}
+  </div>
+</div>
+
       </div>
     </section>
   );
