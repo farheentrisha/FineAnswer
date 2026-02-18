@@ -51,6 +51,7 @@ let eventsCollection; // stores external session/event links (e.g., Facebook)
 let careerCollection; // stores career/job posts
 let careerApplicationsCollection; // stores job applications
 let documentsCollection; // stores user uploaded documents
+let paymentCollection; // stores payment records (pending → success/fail/cancel)
 
 // JWT Secret (should be in .env file)
 const JWT_SECRET =
@@ -149,6 +150,9 @@ async function run() {
     documentsCollection = client
       .db("FineAnswer")
       .collection("documentsCollection");
+    paymentCollection = client
+      .db("FineAnswer")
+      .collection("paymentCollection");
 
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
@@ -2005,42 +2009,269 @@ app.delete(
 );
 
 // ==================== Payment Gateway ROUTES ====================
-app.post("/api/create-payment", async (req, res) => {
-  const paymentInfo = req.body;
-  const paymentData = {
-    store_id: "finea6992eec523c33",
-    store_passwd: "finea6992eec523c33@ssl",
-    total_amount: paymentInfo.amount,
-    currency: "EUR",
-    tran_id: "REF123", // unique transaction id
-    success_url: "http://yoursite.com/success.php",
-    fail_url: "http://yoursite.com/fail.php",
-    cancel_url: "http://yoursite.com/cancel.php",
-    cus_name: "Customer Name",
-    cus_email: "cust@yahoo.com",
-    cus_add1: "Dhaka",
-    cus_add2: "Dhaka",
-    cus_city: "Dhaka",
-    cus_state: "Dhaka",
-    cus_postcode: "1000",
-    cus_country: "Bangladesh",
-    cus_phone: "01711111111",
-    cus_fax: "01711111111",
-    ship_name: "Customer Name",
-    ship_add1: "Dhaka",
-    ship_add2: "Dhaka",
-    ship_city: "Dhaka",
-    ship_state: "Dhaka",
-    ship_postcode: "1000",
-    ship_country: "Bangladesh",
-    multi_card_name: "mastercard,visacard,amexcard",
-    value_a: "ref001_A",
-    value_b: "ref002_B",
-    value_c: "ref003_C",
-    value_d: "ref004_D"
-  };
-  
-});
+// SSLCommerz expects application/x-www-form-urlencoded, NOT JSON
+const SSLCOMMERZ_STORE_ID =
+  process.env.SSLCOMMERZ_STORE_ID || "testbox";
+const SSLCOMMERZ_STORE_PASSWD =
+  process.env.SSLCOMMERZ_STORE_PASSWD || "qwerty";
+const FRONTEND_URL = process.env.FRONTEND_URL || "http://localhost:5173";
+const BACKEND_URL =
+  process.env.BACKEND_URL || `http://localhost:${port}`;
+
+// SSLCommerz environment:
+// - MODE=sandbox: always use sandbox gateway (safe for testing, even in production)
+// - MODE=live: use live gateway (requires approved live store + live credentials)
+// - default: sandbox in dev, live in production
+const isProduction = process.env.NODE_ENV === "production";
+const SSLCOMMERZ_MODE =
+  process.env.SSLCOMMERZ_MODE ||
+  (isProduction ? "live" : "sandbox");
+
+const SSLCOMMERZ_BASE_URL =
+  SSLCOMMERZ_MODE === "live"
+    ? "https://securepay.sslcommerz.com"
+    : "https://sandbox.sslcommerz.com";
+const SSLCOMMERZ_API_URL = `${SSLCOMMERZ_BASE_URL}/gwprocess/v4/api.php`;
+const SSLCOMMERZ_VALIDATOR_URL = `${SSLCOMMERZ_BASE_URL}/validator/api/validationserverAPI.php`;
+
+// Validate SSLCommerz IPN callback using Order Validation API
+const validateSSLCommerzIPN = async (tranId, valId) => {
+  if (!tranId || !valId) return false;
+  try {
+    const params = new URLSearchParams({
+      store_id: SSLCOMMERZ_STORE_ID,
+      store_passwd: SSLCOMMERZ_STORE_PASSWD,
+      val_id: valId,
+      format: "json",
+    });
+    const response = await axios.get(
+      `${SSLCOMMERZ_VALIDATOR_URL}?${params.toString()}`
+    );
+    const data = response.data;
+    // Verify transaction ID matches and status is VALID
+    return (
+      data?.status === "VALID" &&
+      data?.tran_id === tranId &&
+      data?.risk_level === "0"
+    );
+  } catch (error) {
+    console.error("[Payment] IPN validation error:", error.message);
+    return false;
+  }
+};
+
+// Create payment - accepts optional auth token (recommended for logged-in users)
+// SECURITY: Authentication is optional to allow guest payments, but authenticated
+// payments are preferred as they link to user accounts and prevent spoofing
+app.post(
+  "/api/create-payment",
+  asyncHandler(async (req, res) => {
+    const {
+      amount,
+      currency = "BDT",
+      cus_name,
+      cus_email,
+      cus_phone,
+      userId,
+    } = req.body;
+    if (!amount || amount < 10) {
+      return res.status(400).json({
+        success: false,
+        message: "Amount is required (min 10 BDT)",
+      });
+    }
+    if (amount > 100000) {
+      return res.status(400).json({
+        success: false,
+        message: "Amount exceeds maximum limit (100,000 BDT)",
+      });
+    }
+
+    // Optional: get logged-in user from token to attach to payment
+    let paidByUserId = userId || null;
+    const authHeader = req.headers["authorization"];
+    if (authHeader && authHeader.startsWith("Bearer ") && usersCollection) {
+      try {
+        const token = authHeader.split(" ")[1];
+        const decoded = jwt.verify(token, JWT_SECRET);
+        const user = await usersCollection.findOne({
+          _id: new ObjectId(decoded.userId),
+        });
+        if (user) {
+          paidByUserId = user._id.toString();
+        }
+      } catch (_) {
+        // ignore invalid token; use body data only
+      }
+    }
+
+    const tranId =
+      "TXN" + Date.now() + Math.random().toString(36).slice(2, 8).toUpperCase();
+    const name = cus_name || "Customer";
+    const email = cus_email || "customer@example.com";
+    const phone = cus_phone || "01711111111";
+
+    const paymentDoc = {
+      paymentId: tranId,
+      tran_id: tranId,
+      amount: Number(amount),
+      currency: String(currency).toUpperCase().slice(0, 3),
+      status: "pending",
+      cus_name: name,
+      cus_email: email,
+      cus_phone: phone,
+      userId: paidByUserId || null,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    };
+    if (paymentCollection) {
+      await paymentCollection.insertOne(paymentDoc);
+    }
+
+    const successUrl = `${BACKEND_URL.replace(/\/$/, "")}/api/payment/success`;
+    const failUrl = `${BACKEND_URL.replace(/\/$/, "")}/api/payment/fail`;
+    const cancelUrl = `${BACKEND_URL.replace(/\/$/, "")}/api/payment/cancel`;
+
+    const params = new URLSearchParams({
+      store_id: SSLCOMMERZ_STORE_ID,
+      store_passwd: SSLCOMMERZ_STORE_PASSWD,
+      total_amount: String(Number(amount).toFixed(2)),
+      currency: String(currency).toUpperCase().slice(0, 3),
+      tran_id: tranId,
+      product_category: "education",
+      product_profile: "general",
+      product_name: "Study Abroad Application Fee",
+      success_url: successUrl,
+      fail_url: failUrl,
+      cancel_url: cancelUrl,
+      cus_name: name,
+      cus_email: email,
+      cus_add1: "Dhaka",
+      cus_add2: "Dhaka",
+      cus_city: "Dhaka",
+      cus_state: "Dhaka",
+      cus_postcode: "1000",
+      cus_country: "Bangladesh",
+      cus_phone: phone,
+      cus_fax: phone,
+      ship_name: name,
+      ship_add1: "Dhaka",
+      ship_add2: "Dhaka",
+      ship_city: "Dhaka",
+      ship_state: "Dhaka",
+      ship_postcode: "1000",
+      ship_country: "Bangladesh",
+      shipping_method: "NO",
+    });
+
+    const response = await axios.post(
+      SSLCOMMERZ_API_URL,
+      params.toString(),
+      {
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+      }
+    );
+
+    const data = response.data;
+    if (data?.status === "SUCCESS" && data?.GatewayPageURL) {
+      return res.json({
+        success: true,
+        GatewayPageURL: data.GatewayPageURL,
+        sessionkey: data.sessionkey,
+      });
+    }
+
+    return res.status(400).json({
+      success: false,
+      message: data?.failedreason || "Payment init failed",
+    });
+  })
+);
+
+// SSLCommerz POSTs to these URLs after payment - validate IPN, update DB, then redirect
+app.post(
+  "/api/payment/success",
+  asyncHandler(async (req, res) => {
+    const tranId = req.body?.tran_id;
+    const valId = req.body?.val_id;
+    
+    // Validate IPN with SSLCommerz (security: prevent spoofing)
+    const isValid = await validateSSLCommerzIPN(tranId, valId);
+    
+    if (paymentCollection && tranId) {
+      if (isValid) {
+        // Only update if IPN is valid
+        await paymentCollection.updateOne(
+          { tran_id: tranId },
+          {
+            $set: {
+              status: "success",
+              updatedAt: new Date(),
+              val_id: valId,
+            },
+          }
+        );
+      } else {
+        // Log suspicious activity but don't update status
+        console.warn(
+          `[Payment] Invalid IPN for tran_id: ${tranId}, val_id: ${valId}`
+        );
+      }
+    }
+    // Always redirect (don't reveal validation failure to attacker)
+    res.redirect(302, `${FRONTEND_URL.replace(/\/$/, "")}/payment/success`);
+  })
+);
+app.post(
+  "/api/payment/fail",
+  asyncHandler(async (req, res) => {
+    const tranId = req.body?.tran_id;
+    const valId = req.body?.val_id;
+    
+    // Validate IPN
+    const isValid = await validateSSLCommerzIPN(tranId, valId);
+    
+    if (paymentCollection && tranId) {
+      if (isValid) {
+        await paymentCollection.updateOne(
+          { tran_id: tranId },
+          { $set: { status: "fail", updatedAt: new Date(), val_id: valId } }
+        );
+      } else {
+        console.warn(
+          `[Payment] Invalid IPN for tran_id: ${tranId}, val_id: ${valId}`
+        );
+      }
+    }
+    res.redirect(302, `${FRONTEND_URL.replace(/\/$/, "")}/payment/fail`);
+  })
+);
+app.post(
+  "/api/payment/cancel",
+  asyncHandler(async (req, res) => {
+    const tranId = req.body?.tran_id;
+    const valId = req.body?.val_id;
+    
+    // Validate IPN
+    const isValid = await validateSSLCommerzIPN(tranId, valId);
+    
+    if (paymentCollection && tranId) {
+      if (isValid) {
+        await paymentCollection.updateOne(
+          { tran_id: tranId },
+          { $set: { status: "cancel", updatedAt: new Date(), val_id: valId } }
+        );
+      } else {
+        console.warn(
+          `[Payment] Invalid IPN for tran_id: ${tranId}, val_id: ${valId}`
+        );
+      }
+    }
+    res.redirect(302, `${FRONTEND_URL.replace(/\/$/, "")}/payment/cancel`);
+  })
+);
 
 // Global error handler (catches errors from asyncHandler-wrapped routes)
 app.use((err, req, res, next) => {
@@ -2050,6 +2281,9 @@ app.use((err, req, res, next) => {
     error: err.message,
   });
 });
+
+
+
 
 // Connect to MongoDB, then start the server (so usersCollection is set before any request)
 run()

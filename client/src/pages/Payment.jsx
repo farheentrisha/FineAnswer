@@ -1,22 +1,46 @@
-import React from "react";
+import React, { useState, useContext } from "react";
 import axios from "axios";
+import { Link } from "react-router-dom";
 import { API_BASE_URL } from "../config/api";
+import { AuthContext } from "./Provider/ContextProvider";
 import Navbar3 from "../components/navbar3";
 import "./Payment.css";
 
-const handleCreatePayment = async () => {
-  console.log("Payment created");
-  await axios
-    .post(`${API_BASE_URL}/create-payment`, {
-      amount: 1000,
-      currency: "BDT",
-    })
-    .then((res) => {
-      console.log(res);
-    });
-};
-
 export default function Payment() {
+  const { user } = useContext(AuthContext);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+
+  const handleCreatePayment = async () => {
+    try {
+      setLoading(true);
+      setError(null);
+      const token = localStorage.getItem("token");
+      const payload = {
+        amount: 1000,
+        currency: "BDT",
+      };
+      if (user) {
+        payload.cus_name = user.name || user.displayName || user.email?.split("@")[0] || "Customer";
+        payload.cus_email = user.email || "customer@example.com";
+        payload.cus_phone = user.phone || user.phoneNumber || "01711111111";
+        if (user._id) payload.userId = user._id;
+      }
+      const headers = token ? { Authorization: `Bearer ${token}` } : {};
+      const res = await axios.post(`${API_BASE_URL}/create-payment`, payload, { headers });
+      if (res?.data?.success && res?.data?.GatewayPageURL) {
+        window.location.href = res.data.GatewayPageURL;
+      } else {
+        setError(res?.data?.message || "Payment init failed");
+      }
+    } catch (err) {
+      setError(
+        err?.response?.data?.message || err?.message || "Payment request failed."
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
   return (
     <div className="payment-page">
       <Navbar3 />
@@ -30,12 +54,20 @@ export default function Payment() {
           </p>
           <div className="payment-placeholder-box">
             <p>
-              Payment gateway UI & SSLCommerz integration will be implemented in
-              this section.
+              Pay application fee (1000 BDT) securely via SSLCommerz. You will be
+              redirected to the payment gateway.
             </p>
-            <button onClick={handleCreatePayment} className=" payment-btn ">
-              Apply Now
+            {error && <p className="payment-error">{error}</p>}
+            <button
+              onClick={handleCreatePayment}
+              className="payment-btn"
+              disabled={loading}
+            >
+              {loading ? "Processing..." : "Apply Now"}
             </button>
+            <p className="payment-hint">
+              <Link to="/">Back to Home</Link>
+            </p>
           </div>
         </section>
       </main>

@@ -5,11 +5,11 @@ import "./PartnerBank.css";
 import cityBank from "../assets/city-bank-logo.webp";
 import nrbcBank from "../assets/nrbc.webp";
 import premierBank from "../assets/pp.webp";
-import kcOverseas from "../assets/kc-overseas.png";
+import kcOverseas from "../assets/kc.png";
 import crizac from "../assets/crizac.png";
 import tcl from "../assets/tcl.png";
 import bylc from "../assets/bylc.png";
-import studyGlobal from "../assets/study-global.png";
+import studyGlobal from "../assets/studyp.png";
 
 const PartnerBank = () => {
   const partners = [

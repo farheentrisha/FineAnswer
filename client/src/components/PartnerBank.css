@@ -1,5 +1,5 @@
 .partner-bank-section {
-  padding: 100px 10%;
+  padding: 80px 10%;
   background-color: #ffffff;
   overflow: hidden;
 }
@@ -8,30 +8,30 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 50px;
-  max-width: 1200px;
+  gap: 40px;
+  max-width: 1300px;
   margin: 0 auto;
 }
 
 .partner-content {
-  flex: 1;
-  max-width: 480px;
+  flex: 0.8;
+  max-width: 450px;
 }
 
 .partner-badge {
   color: #4f5fb3;
   font-weight: 700;
-  letter-spacing: 2px;
-  font-size: 0.85rem;
-  margin-bottom: 15px;
+  letter-spacing: 1.5px;
+  font-size: 0.8rem;
+  margin-bottom: 10px;
 }
 
 .partner-title {
-  font-size: 2.8rem;
+  font-size: 2.5rem;
   color: #1a1a1a;
   margin-bottom: 20px;
   font-weight: 800;
-  line-height: 1.1;
+  line-height: 1.2;
 }
 
 .partner-title span {
@@ -39,75 +39,78 @@
 }
 
 .partner-description {
-  font-size: 1.1rem;
-  color: #555;
+  font-size: 1rem;
+  color: #666;
   margin-bottom: 30px;
   line-height: 1.6;
 }
 
 .partner-stats {
   display: flex;
-  gap: 25px;
-}
-
-.p-stat {
-  font-size: 0.9rem;
-  color: #333;
+  gap: 30px;
 }
 
 .p-stat strong {
   color: #4f5fb3;
   display: block;
-  font-size: 1.4rem;
+  font-size: 1.5rem;
+  margin-bottom: 5px;
 }
 
-/* Bubbles Layout */
+/* Organized Bubble Visuals */
 .partner-visual {
   flex: 1.2;
-  position: relative;
-  height: 500px;
+  display: flex;
+  justify-content: flex-end;
 }
 
-.bubbles-wrapper {
-  position: relative;
-  width: 100%;
-  height: 100%;
+.bubbles-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); /* 3 Columns like the photo */
+  gap: 30px;
+  padding: 20px;
 }
+
+.bank-bubble-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Floating logic applied to each wrapper with different delays */
+.bank-bubble-wrapper:nth-child(odd) { animation: float 5s ease-in-out infinite; }
+.bank-bubble-wrapper:nth-child(even) { animation: float 6s ease-in-out infinite; animation-delay: 1s; }
 
 .bank-bubble {
-  position: absolute;
+  width: 140px;  /* Size of the bubble */
+  height: 140px;
   background: white;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 10px 30px rgba(79, 95, 179, 0.12);
-  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  /* Thin blue border like the reference image */
+  border: 2px solid #eef1ff; 
+  box-shadow: 0 10px 25px rgba(79, 95, 179, 0.08);
+  transition: all 0.3s ease;
+  padding: 15px; /* Control space around logo */
   cursor: pointer;
-  padding: 15px;
-  animation: float 6s ease-in-out infinite;
-  border: 1px solid rgba(79, 95, 179, 0.05);
 }
 
 .bank-bubble img {
-  width: 75%;
-  height: auto;
+  width: 85%; /* Increased logo size */
+  max-height: 70%;
   object-fit: contain;
+  transition: transform 0.3s ease;
 }
 
 .bank-bubble:hover {
-  transform: scale(1.1) translateY(-10px);
-  box-shadow: 0 20px 40px rgba(79, 95, 179, 0.2);
   border-color: #4f5fb3;
-  z-index: 20;
+  transform: scale(1.05);
+  box-shadow: 0 15px 35px rgba(79, 95, 179, 0.15);
 }
 
-/* Sizes */
-.large { width: 150px; height: 150px; }
-.medium { width: 120px; height: 120px; }
-.small { width: 90px; height: 90px; }
 
-/* Staggered Positioning for 8 Partners */
 .p1 { top: 5%; left: 35%; animation-delay: 0s; }    /* City Bank */
 .p2 { top: 40%; left: 5%; animation-delay: 1s; }    /* NRBC */
 .p3 { bottom: 35%; left: 30%; animation-delay: 2s; } /* Premier */
@@ -115,15 +118,30 @@
 .p5 { top: 14%; left: 15%; animation-delay: 1.5s; }   /* Crizac */
 .p6 { bottom: 18%; right: 20%; animation-delay: 2.5s;}/* TCL */
 .p7 { top: 75%; left: 45%; animation-delay: 3s; }   /* BYLC */
-.p8 { bottom: 5%; right: 60%; animation-delay: 1.2s;}/* Study Global */
+.p8 { bottom: 5%; right: 60%; animation-delay: 1.2s;} 
 
+.bank-bubble:hover img {
+  transform: scale(1.1);
+}
+
+/* Animation */
 @keyframes float {
   0%, 100% { transform: translateY(0px); }
   50% { transform: translateY(-15px); }
 }
 
-@media (max-width: 992px) {
+/* Mobile Responsive */
+@media (max-width: 1100px) {
   .partner-bank-container { flex-direction: column; text-align: center; }
-  .partner-visual { height: 450px; width: 100%; }
+  .partner-visual { justify-content: center; margin-top: 40px; }
+  .bubbles-grid { grid-template-columns: repeat(2, 1fr); }
+  .partner-content { max-width: 100%; }
   .partner-stats { justify-content: center; }
 }
+
+@media (max-width: 480px) {
+  .bubbles-grid { grid-template-columns: repeat(2, 1fr); gap: 15px; }
+  .bank-bubble { width: 110px; height: 110px; }
+}
+
+

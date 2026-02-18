@@ -1,6 +1,13 @@
-// const BASE_URL = "http://localhost:5000";
-const BASE_URL = "https://fine-answer.vercel.app";   
-
+/**
+ * API Configuration
+ * 
+ * Uses environment variable VITE_API_URL if set, otherwise defaults:
+ * - Development: http://localhost:5000
+ * - Production: Set VITE_API_URL in your hosting platform (Vercel/Netlify)
+ * 
+ * This file should NOT be modified between branches to avoid merge conflicts.
+ * Use environment variables instead!
+ */
 const getApiBaseUrl = () => {
   const envUrl = import.meta.env.VITE_API_URL;
   if (envUrl && typeof envUrl === "string") {
@@ -10,7 +17,10 @@ const getApiBaseUrl = () => {
     }
     return `https://${url}`.replace(/\/$/, "");
   }
-  return BASE_URL.replace(/\/$/, "");
+  // Default: localhost for dev, production should set VITE_API_URL
+  return import.meta.env.DEV 
+    ? "http://localhost:5000"
+    : "https://fine-answer.vercel.app";
 };
 export const API_BASE = getApiBaseUrl();
 export const API_BASE_URL = `${API_BASE}/api`;

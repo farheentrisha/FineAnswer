@@ -38,6 +38,60 @@
   font-size: 14px;
 }
 
+.payment-btn {
+  margin-top: 16px;
+  padding: 12px 24px;
+  background: #0369a1;
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.payment-btn:hover {
+  background: #0284c7;
+}
+
+.payment-error {
+  color: #dc2626;
+  font-size: 13px;
+  margin-top: 8px;
+}
+
+.payment-hint {
+  margin-top: 12px;
+  font-size: 13px;
+}
+
+.payment-hint a {
+  color: #0369a1;
+  text-decoration: none;
+}
+
+.payment-hint a:hover {
+  text-decoration: underline;
+}
+
+.payment-result-card.success .payment-title {
+  color: #059669;
+}
+
+.payment-result-card.fail .payment-title {
+  color: #dc2626;
+}
+
+.payment-result-card.cancel .payment-title {
+  color: #d97706;
+}
+
+.payment-result-card .payment-btn {
+  text-decoration: none;
+  display: inline-block;
+  text-align: center;
+}
+
 @media (max-width: 640px) {
   .payment-content {
     margin-top: 100px;
