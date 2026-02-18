@@ -9,6 +9,7 @@ import Navbar3 from "./components/navbar3";
 import CEOQuote from "./components/CEOQuote";
 import useFadeIn from "./hooks/useFadeIn";
 import PartnerLogos from "./components/PartnerLogos";
+import PartnerBank from "./components/PartnerBank";
 
 import "./LandingPage.css";
 import uni1 from "./assets/DCU.jpg";
@@ -409,12 +410,18 @@ export default function LandingPage() {
         <CountrySlider />
       </div>
 
+      <div className={`fade-section ${partnerLogosVisible ? "show" : ""}`}>
+  <PartnerBank />
+</div>
+
       <div
         ref={ceoRef}
         className={`fade-section ${ceoVisible ? "show" : ""}`}
       >
         <CEOQuote />
       </div>
+
+
 
       <div
         id="contact"

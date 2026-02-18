@@ -1,0 +1,129 @@
+.partner-bank-section {
+  padding: 100px 10%;
+  background-color: #ffffff;
+  overflow: hidden;
+}
+
+.partner-bank-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 50px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.partner-content {
+  flex: 1;
+  max-width: 480px;
+}
+
+.partner-badge {
+  color: #4f5fb3;
+  font-weight: 700;
+  letter-spacing: 2px;
+  font-size: 0.85rem;
+  margin-bottom: 15px;
+}
+
+.partner-title {
+  font-size: 2.8rem;
+  color: #1a1a1a;
+  margin-bottom: 20px;
+  font-weight: 800;
+  line-height: 1.1;
+}
+
+.partner-title span {
+  color: #4f5fb3;
+}
+
+.partner-description {
+  font-size: 1.1rem;
+  color: #555;
+  margin-bottom: 30px;
+  line-height: 1.6;
+}
+
+.partner-stats {
+  display: flex;
+  gap: 25px;
+}
+
+.p-stat {
+  font-size: 0.9rem;
+  color: #333;
+}
+
+.p-stat strong {
+  color: #4f5fb3;
+  display: block;
+  font-size: 1.4rem;
+}
+
+/* Bubbles Layout */
+.partner-visual {
+  flex: 1.2;
+  position: relative;
+  height: 500px;
+}
+
+.bubbles-wrapper {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.bank-bubble {
+  position: absolute;
+  background: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 10px 30px rgba(79, 95, 179, 0.12);
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  cursor: pointer;
+  padding: 15px;
+  animation: float 6s ease-in-out infinite;
+  border: 1px solid rgba(79, 95, 179, 0.05);
+}
+
+.bank-bubble img {
+  width: 75%;
+  height: auto;
+  object-fit: contain;
+}
+
+.bank-bubble:hover {
+  transform: scale(1.1) translateY(-10px);
+  box-shadow: 0 20px 40px rgba(79, 95, 179, 0.2);
+  border-color: #4f5fb3;
+  z-index: 20;
+}
+
+/* Sizes */
+.large { width: 150px; height: 150px; }
+.medium { width: 120px; height: 120px; }
+.small { width: 90px; height: 90px; }
+
+/* Staggered Positioning for 8 Partners */
+.p1 { top: 5%; left: 35%; animation-delay: 0s; }    /* City Bank */
+.p2 { top: 40%; left: 5%; animation-delay: 1s; }    /* NRBC */
+.p3 { bottom: 35%; left: 30%; animation-delay: 2s; } /* Premier */
+.p4 { top: 25%; right: 20%; animation-delay: 0.5s;} /* KC Overseas */
+.p5 { top: 14%; left: 15%; animation-delay: 1.5s; }   /* Crizac */
+.p6 { bottom: 18%; right: 20%; animation-delay: 2.5s;}/* TCL */
+.p7 { top: 75%; left: 45%; animation-delay: 3s; }   /* BYLC */
+.p8 { bottom: 5%; right: 60%; animation-delay: 1.2s;}/* Study Global */
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-15px); }
+}
+
+@media (max-width: 992px) {
+  .partner-bank-container { flex-direction: column; text-align: center; }
+  .partner-visual { height: 450px; width: 100%; }
+  .partner-stats { justify-content: center; }
+}
