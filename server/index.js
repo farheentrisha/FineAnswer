@@ -2005,41 +2005,107 @@ app.delete(
 );
 
 // ==================== Payment Gateway ROUTES ====================
-app.post("/api/create-payment", async (req, res) => {
-  const paymentInfo = req.body;
-  const paymentData = {
-    store_id: "finea6992eec523c33",
-    store_passwd: "finea6992eec523c33@ssl",
-    total_amount: paymentInfo.amount,
-    currency: "EUR",
-    tran_id: "REF123", // unique transaction id
-    success_url: "http://yoursite.com/success.php",
-    fail_url: "http://yoursite.com/fail.php",
-    cancel_url: "http://yoursite.com/cancel.php",
-    cus_name: "Customer Name",
-    cus_email: "cust@yahoo.com",
-    cus_add1: "Dhaka",
-    cus_add2: "Dhaka",
-    cus_city: "Dhaka",
-    cus_state: "Dhaka",
-    cus_postcode: "1000",
-    cus_country: "Bangladesh",
-    cus_phone: "01711111111",
-    cus_fax: "01711111111",
-    ship_name: "Customer Name",
-    ship_add1: "Dhaka",
-    ship_add2: "Dhaka",
-    ship_city: "Dhaka",
-    ship_state: "Dhaka",
-    ship_postcode: "1000",
-    ship_country: "Bangladesh",
-    multi_card_name: "mastercard,visacard,amexcard",
-    value_a: "ref001_A",
-    value_b: "ref002_B",
-    value_c: "ref003_C",
-    value_d: "ref004_D"
-  };
-  
+// SSLCommerz expects application/x-www-form-urlencoded, NOT JSON
+const SSLCOMMERZ_STORE_ID =
+  process.env.SSLCOMMERZ_STORE_ID || "testbox";
+const SSLCOMMERZ_STORE_PASSWD =
+  process.env.SSLCOMMERZ_STORE_PASSWD || "qwerty";
+const FRONTEND_URL = process.env.FRONTEND_URL || "http://localhost:5173";
+const BACKEND_URL =
+  process.env.BACKEND_URL || `http://localhost:${port}`;
+
+app.post(
+  "/api/create-payment",
+  asyncHandler(async (req, res) => {
+    const { amount, currency = "BDT", cus_name, cus_email, cus_phone } =
+      req.body;
+    if (!amount || amount < 10) {
+      return res.status(400).json({
+        success: false,
+        message: "Amount is required (min 10 BDT)",
+      });
+    }
+
+    const tranId =
+      "TXN" + Date.now() + Math.random().toString(36).slice(2, 8).toUpperCase();
+
+    const successUrl = `${BACKEND_URL.replace(/\/$/, "")}/api/payment/success`;
+    const failUrl = `${BACKEND_URL.replace(/\/$/, "")}/api/payment/fail`;
+    const cancelUrl = `${BACKEND_URL.replace(/\/$/, "")}/api/payment/cancel`;
+    console.log("[Payment] Callback URLs (SSLCommerz will POST here):", {
+      success_url: successUrl,
+      fail_url: failUrl,
+      cancel_url: cancelUrl,
+    });
+
+    const params = new URLSearchParams({
+      store_id: SSLCOMMERZ_STORE_ID,
+      store_passwd: SSLCOMMERZ_STORE_PASSWD,
+      total_amount: String(Number(amount).toFixed(2)),
+      currency: String(currency).toUpperCase().slice(0, 3),
+      tran_id: tranId,
+      product_category: "education",
+      product_profile: "general",
+      product_name: "Study Abroad Application Fee",
+      success_url: successUrl,
+      fail_url: failUrl,
+      cancel_url: cancelUrl,
+      cus_name: cus_name || "Customer",
+      cus_email: cus_email || "customer@example.com",
+      cus_add1: "Dhaka",
+      cus_add2: "Dhaka",
+      cus_city: "Dhaka",
+      cus_state: "Dhaka",
+      cus_postcode: "1000",
+      cus_country: "Bangladesh",
+      cus_phone: cus_phone || "01711111111",
+      cus_fax: "01711111111",
+      ship_name: cus_name || "Customer",
+      ship_add1: "Dhaka",
+      ship_add2: "Dhaka",
+      ship_city: "Dhaka",
+      ship_state: "Dhaka",
+      ship_postcode: "1000",
+      ship_country: "Bangladesh",
+      shipping_method: "NO",
+    });
+
+    const response = await axios.post(
+      "https://sandbox.sslcommerz.com/gwprocess/v4/api.php",
+      params.toString(),
+      {
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+      }
+    );
+
+    const data = response.data;
+    if (data?.status === "SUCCESS" && data?.GatewayPageURL) {
+      return res.json({
+        success: true,
+        GatewayPageURL: data.GatewayPageURL,
+        sessionkey: data.sessionkey,
+      });
+    }
+
+    return res.status(400).json({
+      success: false,
+      message: data?.failedreason || "Payment init failed",
+    });
+  })
+);
+
+// SSLCommerz POSTs to these URLs after payment - we redirect to frontend
+app.post("/api/payment/success", (req, res) => {
+  // Optionally log/validate req.body (SSLCommerz sends transaction data)
+  res.redirect(302, `${FRONTEND_URL.replace(/\/$/, "")}/payment/success`);
+});
+app.post("/api/payment/fail", (req, res) => {
+  res.redirect(302, `${FRONTEND_URL.replace(/\/$/, "")}/payment/fail`);
+});
+app.post("/api/payment/cancel", (req, res) => {
+  res.redirect(302, `${FRONTEND_URL.replace(/\/$/, "")}/payment/cancel`);
 });
 
 // Global error handler (catches errors from asyncHandler-wrapped routes)
