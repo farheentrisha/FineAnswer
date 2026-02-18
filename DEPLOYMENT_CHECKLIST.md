@@ -42,11 +42,17 @@ Or set in your hosting platform (Vercel/Netlify):
 
 ### 3. **SSLCommerz Merchant Dashboard Configuration**
 
+**Required:**
 1. Log in to [SSLCommerz Merchant Panel](https://merchant.sslcommerz.com/)
-2. Go to **Settings → IPN Configuration**
-3. Set **IPN URL** to: `https://your-backend-domain.com/api/payment/ipn` (if you add IPN endpoint)
-   - Or ensure your success/fail/cancel URLs are whitelisted
-4. Verify your **Store ID** and **Store Password** match production credentials
+2. Verify your **Store ID** and **Store Password** match the credentials in your `.env` file
+3. Ensure your store is **active** (sandbox for testing, live for production)
+
+**Optional (Recommended for Production):**
+4. Go to **Settings → IPN Configuration**
+5. Set **IPN URL** to: `https://your-backend-domain.com/api/payment/ipn`
+   - **Note**: IPN is optional - your payment flow works without it
+   - IPN is useful for handling missed payments (if user closes browser before redirect)
+   - Currently not implemented - you can add an IPN endpoint later if needed
 
 ### 4. **CORS Configuration** (if deploying to new domain)
 
@@ -74,11 +80,13 @@ No code changes needed - just set `NODE_ENV=production` in your server environme
 - [ ] **Backend**: Set `NODE_ENV=production` in server environment
 - [ ] **Backend**: Set `FRONTEND_URL` to production frontend domain
 - [ ] **Backend**: Set `BACKEND_URL` to production backend domain
-- [ ] **Backend**: Replace sandbox SSLCommerz credentials with production credentials
+- [ ] **Backend**: Set `SSLCOMMERZ_MODE=sandbox` (or `live` if store is approved)
+- [ ] **Backend**: Set SSLCommerz credentials (`SSLCOMMERZ_STORE_ID`, `SSLCOMMERZ_STORE_PASSWD`)
 - [ ] **Backend**: Update CORS origins to include production frontend URL
 - [ ] **Client**: Set `VITE_API_URL` environment variable to production backend
-- [ ] **SSLCommerz**: Configure IPN URL in merchant dashboard (optional but recommended)
-- [ ] **SSLCommerz**: Verify production Store ID and Password are correct
+- [ ] **SSLCommerz**: Verify Store ID and Password are correct in merchant dashboard
+- [ ] **SSLCommerz**: Ensure store is active (sandbox for testing, live for production)
+- [ ] **SSLCommerz**: Configure IPN URL (optional - only if you add IPN endpoint later)
 - [ ] **Database**: Ensure production MongoDB connection string is set
 - [ ] **JWT_SECRET**: Use a strong, random secret (not the default)
 - [ ] **Email**: Verify SMTP credentials work in production
@@ -104,9 +112,11 @@ No code changes needed - just set `NODE_ENV=production` in your server environme
 
 ## 📝 Notes
 
-- **Sandbox vs Production**: Code automatically switches based on `NODE_ENV`
+- **Sandbox vs Live gateway**: Controlled by `SSLCOMMERZ_MODE`
+  - `SSLCOMMERZ_MODE=sandbox` → always use sandbox gateway (safe for testing, even on live site)
+  - `SSLCOMMERZ_MODE=live` → use live gateway (`securepay.sslcommerz.com`) – requires approved live store + live credentials
 - **IPN URL**: Optional but recommended for missed payment notifications
-- **SSLCommerz**: Production credentials are different from sandbox
+- **SSLCommerz**: Production (live) credentials are different from sandbox
 - **Environment Variables**: Never commit `.env` files to git
 - **CORS**: Must include exact production frontend URL (with protocol)
 
