@@ -2018,11 +2018,19 @@ const FRONTEND_URL = process.env.FRONTEND_URL || "http://localhost:5173";
 const BACKEND_URL =
   process.env.BACKEND_URL || `http://localhost:${port}`;
 
-// SSLCommerz API URLs - use sandbox for development, production for live
+// SSLCommerz environment:
+// - MODE=sandbox: always use sandbox gateway (safe for testing, even in production)
+// - MODE=live: use live gateway (requires approved live store + live credentials)
+// - default: sandbox in dev, live in production
 const isProduction = process.env.NODE_ENV === "production";
-const SSLCOMMERZ_BASE_URL = isProduction
-  ? "https://securepay.sslcommerz.com"
-  : "https://sandbox.sslcommerz.com";
+const SSLCOMMERZ_MODE =
+  process.env.SSLCOMMERZ_MODE ||
+  (isProduction ? "live" : "sandbox");
+
+const SSLCOMMERZ_BASE_URL =
+  SSLCOMMERZ_MODE === "live"
+    ? "https://securepay.sslcommerz.com"
+    : "https://sandbox.sslcommerz.com";
 const SSLCOMMERZ_API_URL = `${SSLCOMMERZ_BASE_URL}/gwprocess/v4/api.php`;
 const SSLCOMMERZ_VALIDATOR_URL = `${SSLCOMMERZ_BASE_URL}/validator/api/validationserverAPI.php`;
 
