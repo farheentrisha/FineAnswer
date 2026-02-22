@@ -6,9 +6,16 @@ import {
   FaYoutube,
 } from "react-icons/fa";
 
+const FORMSUBMIT_URL = "https://formsubmit.co/fineanswer2025@gmail.com";
+
 export default function ContactSection() {
+  const thankYouUrl =
+    typeof window !== "undefined"
+      ? `${window.location.origin}${window.location.pathname || "/"}${window.location.hash || "#contact"}?submitted=1`
+      : "";
+
   return (
-    <section className="contact-wrapper">
+    <section className="contact-wrapper" id="contact">
       <div className="contact-container">
         {/* LEFT PANEL */}
         <div className="contact-left">
@@ -31,59 +38,105 @@ export default function ContactSection() {
             <a
               href="https://www.facebook.com/FineanswerStudyAbroad"
               target="_blank"
+              rel="noreferrer"
             >
               <FaFacebookF />
             </a>
             <a
               href="https://www.linkedin.com/company/fineanswerstudyabroad/?originalSubdomain=bd"
               target="_blank"
+              rel="noreferrer"
             >
               <FaLinkedinIn />
             </a>
             <a
               href="https://www.instagram.com/fineanswer_study_abroad/"
               target="_blank"
+              rel="noreferrer"
             >
               <FaInstagram />
             </a>
             <a
               href="https://www.youtube.com/@FineAnswerStudyAbroad/videos"
               target="_blank"
+              rel="noreferrer"
             >
               <FaYoutube />
             </a>
           </div>
         </div>
 
-        {/* RIGHT FORM CARD */}
+        {/* RIGHT FORM CARD - FormSubmit.co sends to fineanswer2025@gmail.com */}
         <div className="contact-card">
-          <h3 className="form-title">Book a Free Consultation</h3>
+          <h3 className="form-title">Send your query</h3>
 
-          <form className="contact-form">
+          <form
+            className="contact-form"
+            action={FORMSUBMIT_URL}
+            method="POST"
+          >
+            <input type="hidden" name="_subject" value="FineAnswer: Free Consultation Request" />
+            <input type="hidden" name="_replyto" value="email" />
+            <input type="hidden" name="_captcha" value="false" />
+            {thankYouUrl && (
+              <input type="hidden" name="_next" value={thankYouUrl} />
+            )}
+
             <div className="form-group">
-              <label>Full Name</label>
-              <input type="text" placeholder="Your Full Name" />
+              <label htmlFor="contact-name">Full Name</label>
+              <input
+                id="contact-name"
+                type="text"
+                name="name"
+                placeholder="Your Full Name"
+                required
+              />
             </div>
 
             <div className="form-group">
-              <label>Phone Number</label>
-              <input type="tel" placeholder="+880 1XXXXXXXXX" />
+              <label htmlFor="contact-email">Email</label>
+              <input
+                id="contact-email"
+                type="email"
+                name="email"
+                placeholder="your@email.com"
+                required
+              />
             </div>
 
             <div className="form-group">
-              <label>Appointment Date</label>
-              <input type="date" />
+              <label htmlFor="contact-phone">Phone Number</label>
+              <input
+                id="contact-phone"
+                type="tel"
+                name="phone"
+                placeholder="+880 1XXXXXXXXX"
+              />
             </div>
 
             <div className="form-group">
-              <label>Your Message</label>
+              <label htmlFor="contact-date">Appointment Date</label>
+              <input
+                id="contact-date"
+                type="date"
+                name="appointmentDate"
+              />
+            </div>
+
+            <div className="form-group">
+              <label htmlFor="contact-message">Your Message</label>
               <textarea
+                id="contact-message"
+                name="message"
                 rows="4"
                 placeholder="Write your questions or requirements"
-              ></textarea>
+                required
+              />
             </div>
 
-            <button className="send-btn">Book Appointment</button>
+            <button type="submit" className="send-btn">
+              Send
+            </button>
           </form>
         </div>
       </div>
