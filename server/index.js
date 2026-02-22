@@ -17,7 +17,7 @@ app.use(
     origin: [
       "http://localhost:5173",
       "https://fine-answer-wcij.vercel.app",
-      "https://fine-answer-wcij.vercel.app/",
+      "https://fine-answer-wcij.vercel.app",
     ],
     credentials: true,
     methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
@@ -2411,5 +2411,9 @@ app.get("/", (req, res) => {
   res.send("Running Bhaai Running");
 });
 app.listen(port, () => {
+<<<<<<< HEAD
   console.log(`Port Is Running One ${port}`);
+=======
+  console.log(`Port Is Running On ${port}`);
+>>>>>>> 7f2859af78ac0e96da20da5935c464f272a8ce4f
 });
