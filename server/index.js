@@ -2412,8 +2412,12 @@ app.get("/", (req, res) => {
 });
 app.listen(port, () => {
 <<<<<<< HEAD
+<<<<<<< HEAD
   console.log(`Port Is Running One ${port}`);
 =======
   console.log(`Port Is Running On ${port}`);
 >>>>>>> 7f2859af78ac0e96da20da5935c464f272a8ce4f
+=======
+  console.log(`Port Is Running On ${port}`);
+>>>>>>> 160d84c375a4ba24d3d76d47236ba17a209b91c4
 });
