@@ -2411,9 +2411,5 @@ app.get("/", (req, res) => {
   res.send("Running Bhaai Running");
 });
 app.listen(port, () => {
-<<<<<<< HEAD
   console.log(`Port Is Running One ${port}`);
-=======
-  console.log(`Port Is Running Oi Kiree ${port}`);
->>>>>>> 17cb5c90161f8071938a0225c14f7d5affdaf162
 });
