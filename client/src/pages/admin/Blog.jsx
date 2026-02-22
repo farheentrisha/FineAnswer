@@ -150,10 +150,11 @@ export default function Blog() {
       };
 
       const token = localStorage.getItem("token");
-      const url = editingBlog
-        ? `${API_BASE_URL}/blogs/${editingBlog._id}`
+      const editId = editingBlog && (editingBlog._id ?? editingBlog.id);
+      const url = editId
+        ? `${API_BASE_URL}/blogs/${editId}`
         : `${API_BASE_URL}/blogs`;
-      const method = editingBlog ? "PUT" : "POST";
+      const method = editId ? "PUT" : "POST";
 
       const response = await fetch(url, {
         method,
@@ -233,40 +234,53 @@ export default function Blog() {
 
       {!loading && !error && blogs.length > 0 && (
         <div className="blog-list">
-          {blogs.map((blog) => (
-            <div key={blog._id} className="blog-card">
-              {blog.image ? (
-                <img src={blog.image} alt={blog.title} className="blog-card-image" />
-              ) : (
-                <div className="blog-card-image" />
-              )}
-              <div className="blog-card-content">
-                <h3 className="blog-card-title">{blog.title}</h3>
-                <p className="blog-card-excerpt">{blog.content}</p>
-                <div className="blog-card-footer">
-                  <span className="blog-card-author">
-                    <FaUser /> {blog.author || "Admin"}
-                  </span>
-                  <div className="blog-card-actions">
-                    <button
-                      className="edit-btn"
-                      onClick={() => handleOpenForm(blog)}
-                      title="Edit"
-                    >
-                      <FaEdit />
-                    </button>
-                    <button
-                      className="delete-btn"
-                      onClick={() => handleDelete(blog._id)}
-                      title="Delete"
-                    >
-                      <FaTrash />
-                    </button>
+          {blogs.map((blog) => {
+            const blogId = blog._id ?? blog.id;
+            return (
+              <div key={blogId} className="blog-card">
+                {blog.image ? (
+                  <img src={blog.image} alt={blog.title} className="blog-card-image" />
+                ) : (
+                  <div className="blog-card-image" />
+                )}
+                <div className="blog-card-content">
+                  <h3 className="blog-card-title">{blog.title}</h3>
+                  <p className="blog-card-excerpt">{blog.content}</p>
+                  <div className="blog-card-footer">
+                    <span className="blog-card-author">
+                      <FaUser /> {blog.author || "Admin"}
+                    </span>
+                    <div className="blog-card-actions">
+                      <button
+                        type="button"
+                        className="edit-btn"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          e.stopPropagation();
+                          handleOpenForm(blog);
+                        }}
+                        title="Edit"
+                      >
+                        <FaEdit />
+                      </button>
+                      <button
+                        type="button"
+                        className="delete-btn"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          e.stopPropagation();
+                          if (blogId) handleDelete(blogId);
+                        }}
+                        title="Delete"
+                      >
+                        <FaTrash />
+                      </button>
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       )}
 

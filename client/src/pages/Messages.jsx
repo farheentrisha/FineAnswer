@@ -167,7 +167,6 @@ export default function Messages() {
                 <option value="Ireland">Ireland</option>
               </select>
             </div>
-
             <div className="full">
               <label>Appointment Date</label>
               <input
