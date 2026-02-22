@@ -33,6 +33,7 @@ import PublicBlog from "./pages/Blog";
 import BlogDetail from "./pages/BlogDetail";
 import Career from "./pages/Career";
 import Payment from "./pages/Payment";
+import EnglishProficiency from "./pages/EnglishProficiency";
 import PaymentSuccess from "./pages/PaymentSuccess";
 import PaymentFail from "./pages/PaymentFail";
 import PaymentCancel from "./pages/PaymentCancel";
@@ -119,6 +120,7 @@ function AppRoutes() {
         <Route path="profile" element={<Profile />} />
         <Route path="messages" element={<Messages />} />
         <Route path="payment" element={<Payment />} />
+        <Route path="english-proficiency" element={<EnglishProficiency />} />
       </Route>
 
       {/* Admin Dashboard - Protected, Admin Only */}
