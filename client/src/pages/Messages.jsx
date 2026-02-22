@@ -1,7 +1,8 @@
-import { useState } from "react";
+import { useState, useEffect, useContext } from "react";
 import { FaEnvelope, FaPaperPlane } from "react-icons/fa";
 import axios from "axios";
 import { API_BASE_URL } from "../config/api";
+import { AuthContext } from "./Provider/ContextProvider";
 import "./Messages.css";
 
 // Basic email format validation (valid structure so we can reply)
@@ -13,6 +14,7 @@ const isValidEmail = (email) => {
 };
 
 export default function Messages() {
+  const { user } = useContext(AuthContext);
   const [form, setForm] = useState({
     name: "",
     email: "",
@@ -25,6 +27,20 @@ export default function Messages() {
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(null);
   const [error, setError] = useState(null);
+
+  // Pre-fill name, email, phone from logged-in user
+  useEffect(() => {
+    if (!user) return;
+    setForm((prev) => ({
+      ...prev,
+      ...(user.email && { email: user.email }),
+      ...((user.name || user.displayName) && {
+        name: user.name || user.displayName,
+      }),
+      ...(user.phone && { phone: user.phone }),
+      ...(user.phoneNumber && !user.phone && { phone: user.phoneNumber }),
+    }));
+  }, [user]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -65,9 +81,9 @@ export default function Messages() {
       if (res?.data?.success) {
         setSuccess(res.data.message || "Your message has been sent successfully.");
         setForm({
-          name: "",
-          email: "",
-          phone: "",
+          name: user?.name || user?.displayName || "",
+          email: user?.email || "",
+          phone: user?.phone || user?.phoneNumber || "",
           lastEducation: "",
           preferredCountry: "",
           appointmentDate: "",
