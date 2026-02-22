@@ -142,7 +142,6 @@ export default function Messages() {
                 placeholder="+880 1XXXXXXXXX"
               />
             </div>
-
             <div>
               <label>Last Education</label>
               <input
@@ -202,7 +201,6 @@ export default function Messages() {
               {error}
             </p>
           )}
-
           <button type="submit" className="send-btn" disabled={loading}>
             <FaPaperPlane /> {loading ? "Sending..." : "Send Message"}
           </button>
