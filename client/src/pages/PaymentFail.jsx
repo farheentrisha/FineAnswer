@@ -14,7 +14,7 @@ export default function PaymentFail() {
             Your payment could not be completed. Please try again or contact
             support if the issue persists.
           </p>
-          <Link to="/payment" className="payment-btn">
+          <Link to="/dashboard/payment" className="payment-btn">
             Try Again
           </Link>
         </section>

@@ -6,6 +6,7 @@ import {
   FaFolderOpen,
   FaVideo,
   FaEnvelope,
+  FaCreditCard,
   FaUser,
   FaSignOutAlt,
 } from "react-icons/fa";
@@ -57,6 +58,10 @@ export default function Sidebar({
 
         <NavLink to="/dashboard/messages" title="Messages">
           <FaEnvelope /> <span>Messages</span>
+        </NavLink>
+
+        <NavLink to="/dashboard/payment" title="Payment">
+          <FaCreditCard /> <span>Payment</span>
         </NavLink>
 
         <NavLink to="/dashboard/profile" title="Profile">

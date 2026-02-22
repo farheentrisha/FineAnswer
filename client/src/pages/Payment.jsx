@@ -3,7 +3,6 @@ import axios from "axios";
 import { Link } from "react-router-dom";
 import { API_BASE_URL } from "../config/api";
 import { AuthContext } from "./Provider/ContextProvider";
-import Navbar3 from "../components/navbar3";
 import "./Payment.css";
 
 export default function Payment() {
@@ -72,8 +71,6 @@ export default function Payment() {
   };
   return (
     <div className="payment-page">
-      <Navbar3 />
-
       <main className="payment-content">
         <section className="payment-card">
           <h1 className="payment-title">Secure Payment</h1>

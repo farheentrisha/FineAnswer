@@ -71,7 +71,6 @@ function AppRoutes() {
       <Route path="/blog" element={<PublicBlog />} />
       <Route path="/blog/:id" element={<BlogDetail />} />
       <Route path="/career" element={<Career />} />
-      <Route path="/payment" element={<Payment />} />
       <Route path="/payment/success" element={<PaymentSuccess />} />
       <Route path="/payment/fail" element={<PaymentFail />} />
       <Route path="/payment/cancel" element={<PaymentCancel />} />
@@ -119,6 +118,7 @@ function AppRoutes() {
         <Route path="career" element={<Navigate to="/career" replace />} />
         <Route path="profile" element={<Profile />} />
         <Route path="messages" element={<Messages />} />
+        <Route path="payment" element={<Payment />} />
       </Route>
 
       {/* Admin Dashboard - Protected, Admin Only */}
