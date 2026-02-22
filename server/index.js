@@ -2295,7 +2295,7 @@ async function run() {
       }),
     );
 
-    
+
     // Send a ping to confirm a successful connection
     // await client.db("admin").command({ ping: 1 }); 
     console.log(
@@ -2312,5 +2312,5 @@ app.get("/", (req, res) => {
   res.send("Running Bhaai Running");
 });
 app.listen(port, () => {
-  console.log(`Port Is Running On bhaai ree ${port}`);
+  console.log(`Port Is Running One ${port}`);
 });
