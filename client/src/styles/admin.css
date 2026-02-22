@@ -20,11 +20,16 @@
   display: flex !important;
   flex-direction: column !important;
   z-index: 50 !important;
+  transition: width 0.25s ease, padding 0.25s ease !important;
 }
 
 .admin-layout.is-sidebar-collapsed .sidebar {
   width: 84px !important;
   padding: 18px 12px !important;
+}
+
+.admin-main {
+  transition: margin-left 0.25s ease;
 }
 
 .admin-layout.is-sidebar-collapsed .admin-main {
@@ -59,26 +64,58 @@
 .admin-topbar-titleRow {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.admin-topbar-titleRow > div:last-of-type {
+  min-width: 0;
+}
+
+.admin-topbar-titleRow h2 {
+  margin: 0;
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: #111827;
+}
+
+.admin-topbar-titleRow p {
+  margin: 4px 0 0 0;
+  font-size: 0.875rem;
+  color: #6b7280;
 }
 
 .admin-topbar-burger,
 .admin-topbar-collapse {
-  border: 1px solid #e5e7eb;
+  border: 1px solid #d1d5db;
   background: #fff;
-  color: #111827;
-  width: 38px;
-  height: 38px;
+  color: #374151;
+  width: 40px;
+  height: 40px;
+  min-width: 40px;
+  min-height: 40px;
   border-radius: 10px;
   cursor: pointer;
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  flex-shrink: 0;
+  font-size: 1.125rem;
+  transition: background 0.2s, border-color 0.2s;
+}
+
+.admin-topbar-burger svg,
+.admin-topbar-collapse svg {
+  width: 1.125em;
+  height: 1.125em;
+  flex-shrink: 0;
 }
 
 .admin-topbar-burger:hover,
 .admin-topbar-collapse:hover {
   background: #f1f5f9;
+  border-color: #9ca3af;
+  color: #111827;
 }
 
 .admin-topbar-burger {
@@ -87,8 +124,8 @@
 
 @media (max-width: 992px) {
   .admin-layout .sidebar {
-    transform: translateX(-110%);
-    transition: transform 0.2s ease;
+    transform: translateX(-100%);
+    transition: transform 0.25s ease;
   }
 
   .admin-layout.is-sidebar-open-mobile .sidebar {
@@ -96,11 +133,11 @@
   }
 
   .admin-layout .admin-main {
-    margin-left: 0;
+    margin-left: 0 !important;
   }
 
   .admin-layout.is-sidebar-collapsed .admin-main {
-    margin-left: 0;
+    margin-left: 0 !important;
   }
 
   .admin-sidebar-backdrop {
@@ -110,6 +147,7 @@
     background: rgba(17, 24, 39, 0.35);
     z-index: 40;
     border: none;
+    cursor: pointer;
   }
 
   .admin-layout .sidebar {
@@ -122,6 +160,26 @@
 
   .admin-topbar-collapse {
     display: none;
+  }
+
+  .admin-topbar-titleRow {
+    gap: 8px;
+  }
+
+  .admin-topbar-titleRow h2 {
+    font-size: 1.15rem;
+  }
+
+  .admin-layout .topbar {
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  .admin-layout .topbar input {
+    width: 100%;
+    max-width: 100%;
+    order: 3;
+    min-width: 0;
   }
 }
 /* Ensure sidebar navigation links match user dashboard */

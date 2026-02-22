@@ -13,7 +13,7 @@ export default function PaymentCancel() {
           <p className="payment-subtitle">
             You have cancelled the payment. No charges were made.
           </p>
-          <Link to="/payment" className="payment-btn">
+          <Link to="/dashboard/payment" className="payment-btn">
             Try Again
           </Link>
         </section>

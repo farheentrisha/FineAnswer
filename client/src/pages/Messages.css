@@ -20,11 +20,33 @@
   margin-bottom: 18px;
 }
 
+.form-grid-wrap {
+  display: block;
+}
+
 /* Form grid */
 .form-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 16px;
+}
+
+.messages-success {
+  margin-top: 12px;
+  padding: 10px 12px;
+  background: #d1fae5;
+  color: #065f46;
+  border-radius: 8px;
+  font-size: 13px;
+}
+
+.messages-error {
+  margin-top: 12px;
+  padding: 10px 12px;
+  background: #fee2e2;
+  color: #991b1b;
+  border-radius: 8px;
+  font-size: 13px;
 }
 
 .form-grid .full {
