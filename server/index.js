@@ -1031,6 +1031,50 @@ async function run() {
       }),
     );
 
+    // PUT /api/success-stories/:id - Update a success story (ADMIN ONLY)
+    app.put(
+      "/api/success-stories/:id",
+      authenticateToken,
+      requireAdmin,
+      asyncHandler(async (req, res) => {
+        const { id } = req.params;
+        const { name, university, country, program, story, image } = req.body;
+        if (!ObjectId.isValid(id)) {
+          return res.status(400).json({
+            message: "Invalid success story ID format",
+          });
+        }
+        const updateFields = { updatedAt: new Date() };
+        if (name !== undefined) updateFields.name = name.trim();
+        if (university !== undefined) updateFields.university = university.trim();
+        if (country !== undefined) updateFields.country = country.trim();
+        if (program !== undefined) updateFields.program = program.trim();
+        if (story !== undefined) updateFields.story = story.trim();
+        if (image !== undefined) {
+          try {
+            new URL(image);
+            updateFields.image = image.trim();
+          } catch (_e) {
+            return res.status(400).json({ message: "Invalid image URL format" });
+          }
+        }
+        const updatedStory = await successStoryCollection.findOneAndUpdate(
+          { _id: new ObjectId(id) },
+          { $set: updateFields },
+          { returnDocument: "after" },
+        );
+        if (!updatedStory) {
+          return res.status(404).json({
+            message: "Success story not found",
+          });
+        }
+        res.status(200).json({
+          message: "Success story updated successfully",
+          story: updatedStory,
+        });
+      }),
+    );
+
     // ==================== BLOG ENDPOINTS ====================
 
     // GET /api/blogs - Get all blog posts (Public)

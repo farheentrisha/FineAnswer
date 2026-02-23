@@ -1,10 +1,11 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { FaTimes, FaCloudUploadAlt, FaSpinner } from "react-icons/fa";
 import { uploadImageToCloudinary } from "../../utils/cloudinary";
-import { createSuccessStory } from "../../services/successStoriesApi";
+import { createSuccessStory, updateSuccessStory } from "../../services/successStoriesApi";
 import "./SuccessStoryForm.css";
 
-export default function SuccessStoryForm({ isOpen, onClose, onSuccess }) {
+export default function SuccessStoryForm({ isOpen, onClose, onSuccess, initialStory = null }) {
+  const isEdit = Boolean(initialStory?.id || initialStory?._id);
   const [formData, setFormData] = useState({
     name: "",
     university: "",
@@ -17,9 +18,34 @@ export default function SuccessStoryForm({ isOpen, onClose, onSuccess }) {
   const [uploading, setUploading] = useState(false);
   const [error, setError] = useState(null);
 
+  useEffect(() => {
+    if (isOpen && initialStory) {
+      setFormData({
+        name: initialStory.name || "",
+        university: initialStory.university || "",
+        country: initialStory.country || "",
+        program: initialStory.program || "",
+        story: initialStory.story || "",
+        image: null,
+      });
+      setImagePreview(initialStory.image || null);
+    } else if (isOpen && !initialStory) {
+      setFormData({
+        name: "",
+        university: "",
+        country: "",
+        program: "",
+        story: "",
+        image: null,
+      });
+      setImagePreview(null);
+    }
+    setError(null);
+  }, [isOpen, initialStory]);
+
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
+    setFormData((prev) => ({ ...prev, [name]: value }));
     setError(null);
   };
 
@@ -30,7 +56,7 @@ export default function SuccessStoryForm({ isOpen, onClose, onSuccess }) {
         setError("Image size should be less than 10MB");
         return;
       }
-      setFormData({ ...formData, image: file });
+      setFormData((prev) => ({ ...prev, image: file }));
       const reader = new FileReader();
       reader.onloadend = () => {
         setImagePreview(reader.result);
@@ -44,9 +70,13 @@ export default function SuccessStoryForm({ isOpen, onClose, onSuccess }) {
     e.preventDefault();
     setError(null);
 
-    // Validation
-    if (!formData.name || !formData.university || !formData.country || !formData.program || !formData.story || !formData.image) {
+    if (!formData.name || !formData.university || !formData.country || !formData.program || !formData.story) {
       setError("Please fill in all required fields");
+      return;
+    }
+    const needsImage = !isEdit || formData.image;
+    if (needsImage && !formData.image && !imagePreview) {
+      setError("Please add an image");
       return;
     }
 
@@ -57,10 +87,13 @@ export default function SuccessStoryForm({ isOpen, onClose, onSuccess }) {
         throw new Error("Authentication required");
       }
 
-      // Upload image to Cloudinary
-      const imageUrl = await uploadImageToCloudinary(formData.image);
+      let imageUrl = initialStory?.image || null;
+      if (formData.image && typeof formData.image === "object" && formData.image instanceof File) {
+        imageUrl = await uploadImageToCloudinary(formData.image);
+      } else if (imagePreview && imagePreview.startsWith("http")) {
+        imageUrl = imagePreview;
+      }
 
-      // Create success story with all data
       const storyData = {
         name: formData.name,
         university: formData.university,
@@ -70,9 +103,13 @@ export default function SuccessStoryForm({ isOpen, onClose, onSuccess }) {
         image: imageUrl,
       };
 
-      await createSuccessStory(storyData, token);
+      if (isEdit) {
+        const id = initialStory._id ?? initialStory.id;
+        await updateSuccessStory(id, storyData, token);
+      } else {
+        await createSuccessStory(storyData, token);
+      }
 
-      // Reset form
       setFormData({
         name: "",
         university: "",
@@ -85,7 +122,7 @@ export default function SuccessStoryForm({ isOpen, onClose, onSuccess }) {
       onSuccess();
       onClose();
     } catch (err) {
-      setError(err.message || "Failed to create success story");
+      setError(err.message || (isEdit ? "Failed to update success story" : "Failed to create success story"));
     } finally {
       setUploading(false);
     }
@@ -97,7 +134,7 @@ export default function SuccessStoryForm({ isOpen, onClose, onSuccess }) {
     <div className="modal-overlay" onClick={onClose}>
       <div className="modal-content" onClick={(e) => e.stopPropagation()}>
         <div className="modal-header">
-          <h2>Create Success Story</h2>
+          <h2>{isEdit ? "Edit Success Story" : "Create Success Story"}</h2>
           <button className="close-btn" onClick={onClose}>
             <FaTimes />
           </button>
@@ -174,7 +211,7 @@ export default function SuccessStoryForm({ isOpen, onClose, onSuccess }) {
           </div>
 
           <div className="form-group">
-            <label htmlFor="image">Image *</label>
+            <label htmlFor="image">Image {isEdit ? "(leave empty to keep current)" : "*"}</label>
             <div className="image-upload-container">
               <input
                 type="file"
@@ -183,7 +220,7 @@ export default function SuccessStoryForm({ isOpen, onClose, onSuccess }) {
                 accept="image/*"
                 onChange={handleImageChange}
                 className="file-input"
-                required
+                required={!isEdit}
               />
               <label htmlFor="image" className="file-label">
                 <FaCloudUploadAlt />
@@ -204,8 +241,10 @@ export default function SuccessStoryForm({ isOpen, onClose, onSuccess }) {
             <button type="submit" className="btn-submit" disabled={uploading}>
               {uploading ? (
                 <>
-                  <FaSpinner className="spinner" /> Uploading...
+                  <FaSpinner className="spinner" /> {isEdit ? "Saving..." : "Uploading..."}
                 </>
+              ) : isEdit ? (
+                "Update Story"
               ) : (
                 "Create Story"
               )}
