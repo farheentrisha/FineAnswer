@@ -40,14 +40,25 @@ export default function LandingPage() {
   const [popupShownBefore, setPopupShownBefore] = useState(false);
 
   // Search state
-  const [programInput, setProgramInput] = useState("");
+  const [selectedLevel, setSelectedLevel] = useState("");
   const [selectedIntake, setSelectedIntake] = useState("");
   const [activeDropdown, setActiveDropdown] = useState(null);
   const searchRef = useRef(null);
 
   // Country is fixed to Ireland
   const COUNTRY = "Ireland";
-  const INTAKES = ["Sept", "Jan", "Feb", "May"];
+  // label shown in dropdown → value sent to backend (must partially match sheet category row)
+  const LEVELS = [
+    { label: "Post Graduate",         value: "Master's (Postgraduate)" },
+    { label: "Undergraduate",         value: "Bachelor's (Undergraduate)" },
+    { label: "Postgraduate Diploma",  value: "Postgraduate Diploma" },
+    { label: "Higher Diploma",        value: "Higher Diploma" },
+  ];
+  const INTAKES = [
+    { label: "September",         value: "September" },
+    { label: "January / February", value: "January/February" },
+    { label: "April",             value: "April" },
+  ];
 
   const toggleDropdown = (name) => {
     setActiveDropdown((prev) => (prev === name ? null : name));
@@ -55,9 +66,14 @@ export default function LandingPage() {
 
   const handleSearch = () => {
     const params = new URLSearchParams();
-    if (programInput.trim()) params.set("program", programInput.trim());
+    if (selectedLevel) params.set("level", selectedLevel);
     params.set("country", COUNTRY);
     if (selectedIntake) params.set("intake", selectedIntake);
+    // Also pass display labels for the results page to show in its search bar
+    const levelObj = LEVELS.find((l) => l.value === selectedLevel);
+    if (levelObj) params.set("levelLabel", levelObj.label);
+    const intakeObj = INTAKES.find((i) => i.value === selectedIntake);
+    if (intakeObj) params.set("intakeLabel", intakeObj.label);
     navigate(`/search-results?${params.toString()}`);
   };
 
@@ -212,19 +228,38 @@ export default function LandingPage() {
           <div className="hero-search-wrapper-new" ref={searchRef}>
             <div className="hero-search-box-new">
 
-              {/* Program – free-text input */}
-              <div className="search-item-wrap">
-                <div className="search-item-new search-item-input">
-                  <span className="search-label">Program</span>
-                  <input
-                    type="text"
-                    className="search-text-input"
-                    placeholder="Search Program"
-                    value={programInput}
-                    onChange={(e) => setProgramInput(e.target.value)}
-                    onKeyDown={(e) => e.key === "Enter" && handleSearch()}
-                  />
-                </div>
+              {/* Level – dropdown */}
+              <div
+                className={`search-item-wrap ${activeDropdown === "level" ? "dropdown-open" : ""}`}
+              >
+                <button
+                  type="button"
+                  className="search-item-new"
+                  onClick={() => toggleDropdown("level")}
+                >
+                  <span className="search-label">Level</span>
+                  <span className="search-value">
+                    {LEVELS.find((l) => l.value === selectedLevel)?.label || "Select Level"}
+                    <span className="search-chevron">▼</span>
+                  </span>
+                </button>
+                {activeDropdown === "level" && (
+                  <div className="search-dropdown">
+                    {LEVELS.map((l) => (
+                      <button
+                        key={l.value}
+                        type="button"
+                        className="search-dropdown-item"
+                        onClick={() => {
+                          setSelectedLevel(l.value);
+                          setActiveDropdown(null);
+                        }}
+                      >
+                        {l.label}
+                      </button>
+                    ))}
+                  </div>
+                )}
               </div>
 
               <div className="divider"></div>
@@ -250,7 +285,7 @@ export default function LandingPage() {
                 >
                   <span className="search-label">Intake</span>
                   <span className="search-value">
-                    {selectedIntake || "Select Intake"}
+                    {INTAKES.find((i) => i.value === selectedIntake)?.label || "Select Intake"}
                     <span className="search-chevron">▼</span>
                   </span>
                 </button>
@@ -258,15 +293,15 @@ export default function LandingPage() {
                   <div className="search-dropdown">
                     {INTAKES.map((i) => (
                       <button
-                        key={i}
+                        key={i.value}
                         type="button"
                         className="search-dropdown-item"
                         onClick={() => {
-                          setSelectedIntake(i);
+                          setSelectedIntake(i.value);
                           setActiveDropdown(null);
                         }}
                       >
-                        {i}
+                        {i.label}
                       </button>
                     ))}
                   </div>

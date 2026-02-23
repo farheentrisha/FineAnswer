@@ -158,25 +158,6 @@ body {
   opacity: 0.9;
 }
 
-/* Program text input inside the search bar */
-.search-item-input {
-  cursor: default;
-}
-
-.search-text-input {
-  background: none;
-  border: none;
-  outline: none;
-  color: #fff;
-  font-size: 16px;
-  font-family: inherit;
-  width: 160px;
-  padding: 0;
-}
-
-.search-text-input::placeholder {
-  color: rgba(255, 255, 255, 0.7);
-}
 
 .search-item-wrap {
   position: relative;
