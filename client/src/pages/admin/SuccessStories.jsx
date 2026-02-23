@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { FaPlus, FaTrash, FaSpinner } from "react-icons/fa";
+import { FaPlus, FaTrash, FaEdit, FaSpinner } from "react-icons/fa";
 import SuccessStoryForm from "../../components/admin/SuccessStoryForm";
 import { getSuccessStories, deleteSuccessStory } from "../../services/successStoriesApi";
 import "./SuccessStories.css";
@@ -8,6 +8,7 @@ export default function SuccessStories() {
   const [stories, setStories] = useState([]);
   const [loading, setLoading] = useState(true);
   const [isFormOpen, setIsFormOpen] = useState(false);
+  const [editingStory, setEditingStory] = useState(null);
   const [deleting, setDeleting] = useState(null);
   const [error, setError] = useState(null);
 
@@ -29,7 +30,16 @@ export default function SuccessStories() {
     fetchStories();
   }, []);
 
-  const handleDelete = async (id) => {
+  const handleEdit = (e, story) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setEditingStory(story);
+    setIsFormOpen(true);
+  };
+
+  const handleDelete = async (e, id) => {
+    e.preventDefault();
+    e.stopPropagation();
     if (!window.confirm("Are you sure you want to delete this success story?")) {
       return;
     }
@@ -50,6 +60,11 @@ export default function SuccessStories() {
     }
   };
 
+  const handleCloseForm = () => {
+    setIsFormOpen(false);
+    setEditingStory(null);
+  };
+
   return (
     <div className="admin-success-stories">
       <div className="page-header">
@@ -57,7 +72,13 @@ export default function SuccessStories() {
           <h2>Success Stories</h2>
           <p>Manage success stories that appear on the landing page</p>
         </div>
-        <button className="btn-create" onClick={() => setIsFormOpen(true)}>
+        <button
+          className="btn-create"
+          onClick={() => {
+            setEditingStory(null);
+            setIsFormOpen(true);
+          }}
+        >
           <FaPlus /> Create New Story
         </button>
       </div>
@@ -79,40 +100,57 @@ export default function SuccessStories() {
         </div>
       ) : (
         <div className="stories-grid">
-          {stories.map((story) => (
-            <div key={story._id || story.id} className="story-card">
-              <div className="story-image">
-                <img src={story.image} alt={story.name || "Success story"} />
+          {stories.map((story) => {
+            const storyId = story._id || story.id;
+            return (
+              <div key={storyId} className="story-card">
+                <div className="story-image">
+                  <img src={story.image} alt={story.name || "Success story"} />
+                </div>
+                <div className="story-content">
+                  <h3>{story.name}</h3>
+                  <p className="story-university">{story.university}</p>
+                  <p className="story-country">{story.country}</p>
+                  <p className="story-program">{story.program}</p>
+                  <p className="story-text">{story.story}</p>
+                </div>
+                <div className="story-actions">
+                  <button
+                    type="button"
+                    className="btn-edit"
+                    onClick={(e) => handleEdit(e, story)}
+                    title="Edit"
+                  >
+                    <FaEdit />
+                  </button>
+                  <button
+                    type="button"
+                    className="btn-delete"
+                    onClick={(e) => handleDelete(e, storyId)}
+                    disabled={deleting === storyId}
+                    title="Delete"
+                  >
+                    {deleting === storyId ? (
+                      <FaSpinner className="spinner" />
+                    ) : (
+                      <FaTrash />
+                    )}
+                  </button>
+                </div>
               </div>
-              <div className="story-content">
-                <h3>{story.name}</h3>
-                <p className="story-university">{story.university}</p>
-                <p className="story-country">{story.country}</p>
-                <p className="story-program">{story.program}</p>
-                <p className="story-text">{story.story}</p>
-              </div>
-              <div className="story-actions">
-                <button
-                  className="btn-delete"
-                  onClick={() => handleDelete(story._id || story.id)}
-                  disabled={deleting === (story._id || story.id)}
-                >
-                  {deleting === (story._id || story.id) ? (
-                    <FaSpinner className="spinner" />
-                  ) : (
-                    <FaTrash />
-                  )}
-                </button>
-              </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       )}
 
       <SuccessStoryForm
         isOpen={isFormOpen}
-        onClose={() => setIsFormOpen(false)}
-        onSuccess={fetchStories}
+        onClose={handleCloseForm}
+        onSuccess={() => {
+          fetchStories();
+          setEditingStory(null);
+        }}
+        initialStory={editingStory}
       />
     </div>
   );

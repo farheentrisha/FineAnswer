@@ -1,26 +1,24 @@
 /**
  * API Configuration
- * 
- * Uses environment variable VITE_API_URL if set, otherwise defaults:
- * - Development: http://localhost:5000
- * - Production: Set VITE_API_URL in your hosting platform (Vercel/Netlify)
- * 
- * This file should NOT be modified between branches to avoid merge conflicts.
- * Use environment variables instead!
+ *
+ * LOCAL DEV  → http://localhost:5000  (automatic, no config needed)
+ * PRODUCTION → set VITE_API_URL in your Vercel / Netlify environment variables
+ *              to the URL of your deployed backend server
+ *              e.g.  https://fine-answer-api.up.railway.app
+ *
+ * ⚠️  Do NOT set this to the frontend URL — it must point to the Express server.
  */
 const getApiBaseUrl = () => {
   const envUrl = import.meta.env.VITE_API_URL;
-  if (envUrl && typeof envUrl === "string") {
+  if (envUrl && typeof envUrl === "string" && envUrl.trim()) {
     const url = envUrl.trim();
     if (url.startsWith("http://") || url.startsWith("https://")) {
       return url.replace(/\/$/, "");
     }
     return `https://${url}`.replace(/\/$/, "");
   }
-  // Default: localhost for dev, production should set VITE_API_URL
-  return import.meta.env.DEV 
-    ? "http://localhost:5000"
-    : "https://fine-answer.vercel.app";
+  // Development default — no fallback for production to avoid silent mis-routing
+  return "http://localhost:5000";
 };
 export const API_BASE = getApiBaseUrl();
 export const API_BASE_URL = `${API_BASE}/api`;

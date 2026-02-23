@@ -68,6 +68,30 @@ export const createSuccessStory = async (storyData, token) => {
   }
 };
 
+export const updateSuccessStory = async (id, storyData, token) => {
+  try {
+    const response = await fetch(`${API_BASE_URL}/success-stories/${id}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`,
+      },
+      body: JSON.stringify(storyData),
+    });
+
+    if (!response.ok) {
+      const errorData = await parseResponse(response).catch(() => ({}));
+      throw new Error(errorData.message || `Failed to update success story: ${response.status} ${response.statusText}`);
+    }
+
+    const data = await parseResponse(response);
+    return data;
+  } catch (error) {
+    console.error('Error updating success story:', error);
+    throw error;
+  }
+};
+
 export const deleteSuccessStory = async (id, token) => {
   try {
     const response = await fetch(`${API_BASE_URL}/success-stories/${id}`, {

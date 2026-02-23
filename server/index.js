@@ -4,6 +4,9 @@ const crypto = require("crypto");
 const axios = require("axios");
 require("dotenv").config();
 
+// Programs search route (Google Sheets data source)
+const programsRouter = require("./routes/programs");
+
 const { MongoClient, ServerApiVersion, ObjectId } = require("mongodb");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
@@ -26,6 +29,9 @@ app.use(
 );
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+// Mount programs search API (Google Sheets — no DB)
+app.use("/api/programs", programsRouter);
 
 // Wraps async route handlers so rejected promises are passed to the error handler
 const asyncHandler = (fn) => (req, res, next) =>
@@ -1021,6 +1027,50 @@ async function run() {
         }
         res.status(200).json({
           message: "Success story deleted successfully",
+        });
+      }),
+    );
+
+    // PUT /api/success-stories/:id - Update a success story (ADMIN ONLY)
+    app.put(
+      "/api/success-stories/:id",
+      authenticateToken,
+      requireAdmin,
+      asyncHandler(async (req, res) => {
+        const { id } = req.params;
+        const { name, university, country, program, story, image } = req.body;
+        if (!ObjectId.isValid(id)) {
+          return res.status(400).json({
+            message: "Invalid success story ID format",
+          });
+        }
+        const updateFields = { updatedAt: new Date() };
+        if (name !== undefined) updateFields.name = name.trim();
+        if (university !== undefined) updateFields.university = university.trim();
+        if (country !== undefined) updateFields.country = country.trim();
+        if (program !== undefined) updateFields.program = program.trim();
+        if (story !== undefined) updateFields.story = story.trim();
+        if (image !== undefined) {
+          try {
+            new URL(image);
+            updateFields.image = image.trim();
+          } catch (_e) {
+            return res.status(400).json({ message: "Invalid image URL format" });
+          }
+        }
+        const updatedStory = await successStoryCollection.findOneAndUpdate(
+          { _id: new ObjectId(id) },
+          { $set: updateFields },
+          { returnDocument: "after" },
+        );
+        if (!updatedStory) {
+          return res.status(404).json({
+            message: "Success story not found",
+          });
+        }
+        res.status(200).json({
+          message: "Success story updated successfully",
+          story: updatedStory,
         });
       }),
     );

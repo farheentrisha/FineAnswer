@@ -39,30 +39,42 @@ export default function LandingPage() {
   const [showPopup, setShowPopup] = useState(false);
   const [popupShownBefore, setPopupShownBefore] = useState(false);
 
-  // Search dropdown state
+  // Search state
+  const [selectedLevel, setSelectedLevel] = useState("");
+  const [selectedIntake, setSelectedIntake] = useState("");
   const [activeDropdown, setActiveDropdown] = useState(null);
-  const [selectedProgram, setSelectedProgram] = useState(null);
-  const [selectedCountry, setSelectedCountry] = useState(null);
-  const [selectedIntake, setSelectedIntake] = useState(null);
   const searchRef = useRef(null);
 
-  const PROGRAMS = [
-    "Computer Science",
-    "Business Administration",
-    "Engineering",
-    "Data Science",
-    "Psychology",
+  // Country is fixed to Ireland
+  const COUNTRY = "Ireland";
+  // label shown in dropdown → value sent to backend (must partially match sheet category row)
+  const LEVELS = [
+    { label: "Post Graduate",         value: "Master's (Postgraduate)" },
+    { label: "Undergraduate",         value: "Bachelor's (Undergraduate)" },
+    { label: "Postgraduate Diploma",  value: "Postgraduate Diploma" },
+    { label: "Higher Diploma",        value: "Higher Diploma" },
   ];
-  const COUNTRIES = ["Ireland", "United Kingdom", "Australia"];
-  const INTAKES = ["September", "January", "April"];
+  const INTAKES = [
+    { label: "September",         value: "September" },
+    { label: "January / February", value: "January/February" },
+    { label: "April",             value: "April" },
+  ];
 
   const toggleDropdown = (name) => {
     setActiveDropdown((prev) => (prev === name ? null : name));
   };
 
-  const selectOption = (setter, value) => {
-    setter(value);
-    setActiveDropdown(null);
+  const handleSearch = () => {
+    const params = new URLSearchParams();
+    if (selectedLevel) params.set("level", selectedLevel);
+    params.set("country", COUNTRY);
+    if (selectedIntake) params.set("intake", selectedIntake);
+    // Also pass display labels for the results page to show in its search bar
+    const levelObj = LEVELS.find((l) => l.value === selectedLevel);
+    if (levelObj) params.set("levelLabel", levelObj.label);
+    const intakeObj = INTAKES.find((i) => i.value === selectedIntake);
+    if (intakeObj) params.set("intakeLabel", intakeObj.label);
+    navigate(`/search-results?${params.toString()}`);
   };
 
   useEffect(() => {
@@ -215,30 +227,35 @@ export default function LandingPage() {
           {/* Search Bar Glass Box */}
           <div className="hero-search-wrapper-new" ref={searchRef}>
             <div className="hero-search-box-new">
+
+              {/* Level – dropdown */}
               <div
-                className={`search-item-wrap ${activeDropdown === "program" ? "dropdown-open" : ""}`}
+                className={`search-item-wrap ${activeDropdown === "level" ? "dropdown-open" : ""}`}
               >
                 <button
                   type="button"
                   className="search-item-new"
-                  onClick={() => toggleDropdown("program")}
+                  onClick={() => toggleDropdown("level")}
                 >
-                  <span className="search-label">Program</span>
+                  <span className="search-label">Level</span>
                   <span className="search-value">
-                    {selectedProgram || "Search Program"}
+                    {LEVELS.find((l) => l.value === selectedLevel)?.label || "Select Level"}
                     <span className="search-chevron">▼</span>
                   </span>
                 </button>
-                {activeDropdown === "program" && (
+                {activeDropdown === "level" && (
                   <div className="search-dropdown">
-                    {PROGRAMS.map((p) => (
+                    {LEVELS.map((l) => (
                       <button
-                        key={p}
+                        key={l.value}
                         type="button"
                         className="search-dropdown-item"
-                        onClick={() => selectOption(setSelectedProgram, p)}
+                        onClick={() => {
+                          setSelectedLevel(l.value);
+                          setActiveDropdown(null);
+                        }}
                       >
-                        {p}
+                        {l.label}
                       </button>
                     ))}
                   </div>
@@ -247,38 +264,17 @@ export default function LandingPage() {
 
               <div className="divider"></div>
 
-              <div
-                className={`search-item-wrap ${activeDropdown === "country" ? "dropdown-open" : ""}`}
-              >
-                <button
-                  type="button"
-                  className="search-item-new"
-                  onClick={() => toggleDropdown("country")}
-                >
+              {/* Country – fixed to Ireland */}
+              <div className="search-item-wrap">
+                <div className="search-item-new">
                   <span className="search-label">Country</span>
-                  <span className="search-value">
-                    {selectedCountry || "Choose Country"}
-                    <span className="search-chevron">▼</span>
-                  </span>
-                </button>
-                {activeDropdown === "country" && (
-                  <div className="search-dropdown">
-                    {COUNTRIES.map((c) => (
-                      <button
-                        key={c}
-                        type="button"
-                        className="search-dropdown-item"
-                        onClick={() => selectOption(setSelectedCountry, c)}
-                      >
-                        {c}
-                      </button>
-                    ))}
-                  </div>
-                )}
+                  <span className="search-value">{COUNTRY}</span>
+                </div>
               </div>
 
               <div className="divider"></div>
 
+              {/* Intake – dropdown */}
               <div
                 className={`search-item-wrap ${activeDropdown === "intake" ? "dropdown-open" : ""}`}
               >
@@ -289,7 +285,7 @@ export default function LandingPage() {
                 >
                   <span className="search-label">Intake</span>
                   <span className="search-value">
-                    {selectedIntake || "Select Intake"}
+                    {INTAKES.find((i) => i.value === selectedIntake)?.label || "Select Intake"}
                     <span className="search-chevron">▼</span>
                   </span>
                 </button>
@@ -297,19 +293,24 @@ export default function LandingPage() {
                   <div className="search-dropdown">
                     {INTAKES.map((i) => (
                       <button
-                        key={i}
+                        key={i.value}
                         type="button"
                         className="search-dropdown-item"
-                        onClick={() => selectOption(setSelectedIntake, i)}
+                        onClick={() => {
+                          setSelectedIntake(i.value);
+                          setActiveDropdown(null);
+                        }}
                       >
-                        {i}
+                        {i.label}
                       </button>
                     ))}
                   </div>
                 )}
               </div>
 
-              <button className="search-btn-new">Search</button>
+              <button className="search-btn-new" onClick={handleSearch}>
+                Search
+              </button>
             </div>
           </div>
           {/* CTA BUTTONS */}
