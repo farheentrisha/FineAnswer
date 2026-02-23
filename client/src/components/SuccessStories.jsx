@@ -28,7 +28,8 @@ export default function SuccessStories() {
     const fetchStories = async () => {
       try {
         const data = await getSuccessStories();
-        const storiesData = data.stories || data || [];
+        const raw = Array.isArray(data) ? data : (data?.stories ?? data?.data ?? []);
+        const storiesData = Array.isArray(raw) ? raw : [];
         setOriginalStories(storiesData);
         
         // Only duplicate if we have exactly 1 story for carousel effect
@@ -185,17 +186,21 @@ export default function SuccessStories() {
                         />
                       </div>
                       <div className="card-content">
-                        <h3>{story.name}</h3>
+                        <h3>{story.name || "—"}</h3>
                         <p className="card-meta">
                           <FaUniversity className="card-icon" />
-                          <span>{story.university}</span>
+                          <span>{story.university || "—"}</span>
                         </p>
                         <p className="card-meta">
                           <FaMapMarkerAlt className="card-icon" />
-                          <span>{story.country}</span>
+                          <span>{story.country || "—"}</span>
                         </p>
-                        <span className="card-program">{story.program}</span>
-                        <p className="card-story">{story.story?.trim() || "Their journey to studying abroad."}</p>
+                        {(story.program || story.Program) && (
+                          <span className="card-program">{story.program || story.Program}</span>
+                        )}
+                        <p className="card-story">
+                          {(story.story || story.stories || story.Story)?.trim() || "Their journey to studying abroad."}
+                        </p>
                       </div>
                     </div>
                   </div>
@@ -216,17 +221,21 @@ export default function SuccessStories() {
                   />
                 </div>
                 <div className="card-content">
-                  <h3>{story.name}</h3>
+                  <h3>{story.name || "—"}</h3>
                   <p className="card-meta">
                     <FaUniversity className="card-icon" />
-                    <span>{story.university}</span>
+                    <span>{story.university || "—"}</span>
                   </p>
                   <p className="card-meta">
                     <FaMapMarkerAlt className="card-icon" />
-                    <span>{story.country}</span>
+                    <span>{story.country || "—"}</span>
                   </p>
-                  <span className="card-program">{story.program}</span>
-                  <p className="card-story">{story.story?.trim() || "Their journey to studying abroad."}</p>
+                  {(story.program || story.Program) && (
+                    <span className="card-program">{story.program || story.Program}</span>
+                  )}
+                  <p className="card-story">
+                    {(story.story || story.stories || story.Story)?.trim() || "Their journey to studying abroad."}
+                  </p>
                 </div>
               </div>
             ))}
