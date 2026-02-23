@@ -25,12 +25,15 @@ const auth = new google.auth.GoogleAuth({
 
 const sheets = google.sheets({ version: "v4", auth });
 
-// Extract the raw spreadsheet ID from a full URL or bare ID
+// Extract the raw spreadsheet ID from a full URL or bare ID.
+// Strips any trailing #gid=... fragment that comes from copy-pasting a sheet URL.
 function extractSpreadsheetId(raw) {
   if (!raw) return null;
+  // Full URL: extract ID segment
   const match = raw.match(/\/spreadsheets\/d\/([a-zA-Z0-9_-]+)/);
   if (match) return match[1];
-  return raw.trim();
+  // Bare ID (possibly with a #gid=... fragment — strip it)
+  return raw.trim().replace(/#.*$/, "");
 }
 
 const SPREADSHEET_ID = extractSpreadsheetId(process.env.GOOGLE_SPREADSHEET_ID);
