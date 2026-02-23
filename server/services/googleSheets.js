@@ -1,10 +1,25 @@
 const { google } = require("googleapis");
 
-// Load service account credentials directly (file is gitignored)
-const credentials = require("../fineanswer-sheets-integration-c29908b1decf.json");
+// Credentials: use env var in production (no key file on server), or local JSON file in dev
+let credentials = null;
+if (process.env.GOOGLE_APPLICATION_CREDENTIALS_JSON) {
+  try {
+    credentials = JSON.parse(process.env.GOOGLE_APPLICATION_CREDENTIALS_JSON);
+  } catch (e) {
+    console.warn("[Google Sheets] Invalid GOOGLE_APPLICATION_CREDENTIALS_JSON");
+  }
+}
+if (!credentials) {
+  try {
+    // Local dev: key file is gitignored; copy from Google Cloud Console or use env var
+    credentials = require("../fineanswer-sheets-integration-c29908b1decf.json");
+  } catch (e) {
+    // File missing (e.g. in production) – set GOOGLE_APPLICATION_CREDENTIALS_JSON
+  }
+}
 
 const auth = new google.auth.GoogleAuth({
-  credentials,
+  credentials: credentials || undefined,
   scopes: ["https://www.googleapis.com/auth/spreadsheets.readonly"],
 });
 
@@ -191,6 +206,11 @@ async function getAllPrograms() {
     return cache.data;
   }
 
+  if (!credentials) {
+    throw new Error(
+      "Google Sheets credentials not configured. Set GOOGLE_APPLICATION_CREDENTIALS_JSON (full JSON string) in production, or add the service account key file locally."
+    );
+  }
   if (!SPREADSHEET_ID) {
     throw new Error("GOOGLE_SPREADSHEET_ID is not set in environment variables.");
   }
