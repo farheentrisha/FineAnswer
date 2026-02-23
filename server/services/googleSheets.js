@@ -1,7 +1,7 @@
 const { google } = require("googleapis");
 
 // Load service account credentials directly (file is gitignored)
-const credentials = require("../fineanswer-sheets-integration-36cfd2d82769.json");
+const credentials = require("../fineanswer-sheets-integration-c29908b1decf.json");
 
 const auth = new google.auth.GoogleAuth({
   credentials,
