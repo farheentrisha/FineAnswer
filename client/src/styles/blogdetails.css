@@ -573,16 +573,6 @@
   margin-bottom: 0;
 }
 
-.blog-detail-body p:first-letter {
-  font-size: 1.5em;
-  font-weight: 700;
-  color: #6366f1;
-  float: left;
-  line-height: 1;
-  margin-right: 8px;
-  margin-top: 4px;
-}
-
 /* Footer Section */
 .blog-detail-footer {
   max-width: 720px;

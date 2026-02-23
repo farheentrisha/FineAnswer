@@ -37,6 +37,7 @@ import EnglishProficiency from "./pages/EnglishProficiency";
 import PaymentSuccess from "./pages/PaymentSuccess";
 import PaymentFail from "./pages/PaymentFail";
 import PaymentCancel from "./pages/PaymentCancel";
+import SuccessStoryDetail from "./pages/SuccessStoryDetail";
 
 import "./App.css";
 
@@ -71,6 +72,7 @@ function AppRoutes() {
       <Route path="/ireland" element={<IrelandPage />} />
       <Route path="/blog" element={<PublicBlog />} />
       <Route path="/blog/:id" element={<BlogDetail />} />
+      <Route path="/success-story/:id" element={<SuccessStoryDetail />} />
       <Route path="/career" element={<Career />} />
       <Route path="/payment/success" element={<PaymentSuccess />} />
       <Route path="/payment/fail" element={<PaymentFail />} />

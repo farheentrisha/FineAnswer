@@ -1,143 +1,96 @@
 import React, { useEffect, useRef, useState } from "react";
+import { Link } from "react-router-dom";
 import { FaUniversity, FaMapMarkerAlt } from "react-icons/fa";
+import { FiArrowLeft, FiArrowRight } from "react-icons/fi";
 import "./SuccessStories.css";
 import { getSuccessStories } from "../services/successStoriesApi";
 
 export default function SuccessStories() {
   const [stories, setStories] = useState([]);
   const [active, setActive] = useState(0);
-  const autoSlideRef = useRef(null);
-  const touchStartX = useRef(0);
+  const autoRef = useRef(null);
 
   useEffect(() => {
-    const fetchStories = async () => {
-      try {
-        const data = await getSuccessStories();
-        const raw = Array.isArray(data)
-          ? data
-          : data?.stories ?? data?.data ?? [];
-        setStories(raw || []);
-      } catch (err) {
-        console.error(err);
-      }
+    const fetch = async () => {
+      const data = await getSuccessStories();
+      const raw = Array.isArray(data) ? data : data?.stories ?? data?.data ?? [];
+      setStories(raw || []);
     };
-    fetchStories();
+    fetch();
   }, []);
 
-  // Auto Slide
   useEffect(() => {
-    if (stories.length === 0) return;
-
-    autoSlideRef.current = setInterval(() => {
-      setActive((prev) =>
-        prev === stories.length - 1 ? 0 : prev + 1
-      );
-    }, 3500);
-
-    return () => clearInterval(autoSlideRef.current);
-  }, [stories]);
-
-  const prevSlide = () => {
-    setActive((prev) =>
-      prev === 0 ? stories.length - 1 : prev - 1
-    );
-  };
-
-  const nextSlide = () => {
-    setActive((prev) =>
-      prev === stories.length - 1 ? 0 : prev + 1
-    );
-  };
-
-  const onTouchStart = (e) => {
-    touchStartX.current = e.touches[0].clientX;
-  };
-
-  const onTouchEnd = (e) => {
-    const diff = e.changedTouches[0].clientX - touchStartX.current;
-    if (Math.abs(diff) > 50) {
-      if (diff > 0) prevSlide();
-      else nextSlide();
+    if (stories.length > 0) {
+      autoRef.current = setInterval(() => next(), 5000);
     }
+    return () => clearInterval(autoRef.current);
+  }, [stories, active]);
+
+  const prev = () => {
+    clearInterval(autoRef.current);
+    setActive((p) => (p === 0 ? stories.length - 1 : p - 1));
   };
 
-  if (stories.length === 0) {
-    return (
-      <div className="success-wrapper">
-        <h2 className="success-title">We have stories to inspire you</h2>
-        <p className="success-sub">People who transformed their career with us</p>
-      </div>
-    );
-  }
+  const next = () => {
+    clearInterval(autoRef.current);
+    setActive((p) => (p === stories.length - 1 ? 0 : p + 1));
+  };
+
+  if (!stories.length) return null;
 
   return (
     <div className="success-wrapper">
-      <h2 className="success-title">We have stories to inspire you</h2>
-      <p className="success-sub">
-        People who transformed their career with us
-      </p>
+      <div className="success-header">
+        <h2 className="success-title">Success Stories</h2>
+        <p className="success-sub">Empowering students to achieve their global dreams</p>
+      </div>
 
       <div className="carousel-container">
-        <button className="nav-btn left" onClick={prevSlide}>
-          ←
-        </button>
+        {/* Modern Minimalist Buttons */}
+        <button className="control-btn prev" onClick={prev}><FiArrowLeft /></button>
+        <button className="control-btn next" onClick={next}><FiArrowRight /></button>
 
-        <button className="nav-btn right" onClick={nextSlide}>
-          →
-        </button>
+        <div className="carousel-track">
+          {stories.map((story, i) => {
+            let offset = i - active;
+            if (offset < -stories.length / 2) offset += stories.length;
+            if (offset > stories.length / 2) offset -= stories.length;
 
-        <div
-          className="carousel"
-          onTouchStart={onTouchStart}
-          onTouchEnd={onTouchEnd}
-        >
-          {stories.map((story, index) => {
-            const offset =
-              (index - active + stories.length) % stories.length;
-
-            let position = offset;
-            if (offset > stories.length / 2) {
-              position = offset - stories.length;
-            }
-
-            const scale = position === 0 ? 1 : 0.8;
-            const opacity = position === 0 ? 1 : 0.5;
+            // Display more cards by increasing visibility range
+            const isVisible = Math.abs(offset) <= 2.5; 
+            const isActive = offset === 0;
 
             return (
               <div
-                key={index}
-                className="card-container"
+                key={i}
+                className={`story-card-wrapper ${isActive ? "active" : ""}`}
                 style={{
-                  transform: `translateX(${position * 320}px) scale(${scale})`,
-                  opacity,
-                  zIndex: position === 0 ? 10 : 5,
+                  transform: `translateX(calc(-50% + ${offset * 320}px)) scale(${isActive ? 1 : 0.85})`,
+                  opacity: isActive ? 1 : isVisible ? 0.4 : 0,
+                  zIndex: 10 - Math.abs(offset),
+                  transition: isVisible ? "all 0.7s cubic-bezier(0.4, 0, 0.2, 1)" : "none",
+                  pointerEvents: isActive ? "all" : "none"
                 }}
               >
-                <div className="card">
-                  <div className="card-image-wrapper">
-                    <img
-                      src={story.image}
-                      alt={story.name}
-                      className="story-card-image"
-                    />
+                <div className="story-card">
+                  <div className="user-profile">
+                    <img src={story.image} alt={story.name} className="user-avatar" />
                   </div>
-
+                  
                   <div className="card-content">
-                    <h3>{story.name}</h3>
+                    <h3 className="user-name">{story.name}</h3>
+                    <span className="user-program">{story.program}</span>
 
-                    <p className="card-meta">
-                      <FaUniversity className="card-icon" />
-                      {story.university}
-                    </p>
+                    <div className="user-meta">
+                      <span><FaUniversity /> {story.university}</span>
+                      <span><FaMapMarkerAlt /> {story.country}</span>
+                    </div>
 
-                    <p className="card-meta">
-                      <FaMapMarkerAlt className="card-icon" />
-                      {story.country}
-                    </p>
+                    <p className="user-quote">"{story.story}"</p>
 
-                    <p className="card-story">
-                      {story.story}
-                    </p>
+                    <Link to={`/success-story/${story._id || i}`} className="action-link">
+                      Read Full Story
+                    </Link>
                   </div>
                 </div>
               </div>
