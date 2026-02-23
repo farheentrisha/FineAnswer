@@ -307,7 +307,6 @@ export default function Blog() {
                   required
                 />
               </div>
-
               <div className="form-group">
                 <label htmlFor="author">Author Name</label>
                 <input
