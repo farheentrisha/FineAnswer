@@ -107,9 +107,19 @@ export default function LoginPage() {
         }),
       });
 
-      const apiResult = await response.json();
+      // Defensive: only parse JSON when server returns JSON.
+      const contentType = response.headers.get("content-type") || "";
+      let apiResult = null;
+      if (contentType.includes("application/json")) {
+        apiResult = await response.json();
+      } else {
+        const text = await response.text();
+        console.error("/api/auth/google returned non-JSON response:", text);
+        throw new Error(`Server returned non-JSON response (status ${response.status})`);
+      }
+
       if (!response.ok) {
-        throw new Error(apiResult.message || "Google login failed");
+        throw new Error(apiResult?.message || "Google login failed");
       }
 
       const { token, isAdmin: adminStatus, data } = apiResult;

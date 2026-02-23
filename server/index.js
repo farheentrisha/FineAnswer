@@ -140,8 +140,31 @@ const requireAdmin = (req, res, next) => {
 
 async function run() {
   try {
-    // Connect the client to the server
-    // await client.connect();
+    // Ensure DNS servers and connect the client with retries to avoid
+    // transient DNS/SRV errors (e.g. ECONNREFUSED when resolving SRV records).
+    const dns = require('dns');
+    try {
+      dns.setServers(['8.8.8.8', '1.1.1.1']);
+    } catch (e) {
+      console.warn('Failed to set DNS servers (continuing):', e && e.message);
+    }
+
+    const connectWithRetry = async (attempts = 5, baseDelay = 1000) => {
+      for (let i = 0; i < attempts; i++) {
+        try {
+          await client.connect();
+          console.log('Connected to MongoDB');
+          return;
+        } catch (err) {
+          console.error(`MongoDB connection attempt ${i + 1} failed:`, err && err.message);
+          if (i === attempts - 1) throw err;
+          const wait = baseDelay * Math.pow(2, i);
+          await new Promise((r) => setTimeout(r, wait));
+        }
+      }
+    };
+
+    await connectWithRetry();
 
     // Collections Initialize
     usersCollection = client.db("FineAnswer").collection("usersCollection");
