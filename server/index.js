@@ -4,6 +4,9 @@ const crypto = require("crypto");
 const axios = require("axios");
 require("dotenv").config();
 
+// Programs search route (Google Sheets data source)
+const programsRouter = require("./routes/programs");
+
 const { MongoClient, ServerApiVersion, ObjectId } = require("mongodb");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
@@ -26,6 +29,9 @@ app.use(
 );
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+// Mount programs search API (Google Sheets — no DB)
+app.use("/api/programs", programsRouter);
 
 // Wraps async route handlers so rejected promises are passed to the error handler
 const asyncHandler = (fn) => (req, res, next) =>

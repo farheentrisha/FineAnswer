@@ -39,30 +39,26 @@ export default function LandingPage() {
   const [showPopup, setShowPopup] = useState(false);
   const [popupShownBefore, setPopupShownBefore] = useState(false);
 
-  // Search dropdown state
+  // Search state
+  const [programInput, setProgramInput] = useState("");
+  const [selectedIntake, setSelectedIntake] = useState("");
   const [activeDropdown, setActiveDropdown] = useState(null);
-  const [selectedProgram, setSelectedProgram] = useState(null);
-  const [selectedCountry, setSelectedCountry] = useState(null);
-  const [selectedIntake, setSelectedIntake] = useState(null);
   const searchRef = useRef(null);
 
-  const PROGRAMS = [
-    "Computer Science",
-    "Business Administration",
-    "Engineering",
-    "Data Science",
-    "Psychology",
-  ];
-  const COUNTRIES = ["Ireland", "United Kingdom", "Australia"];
-  const INTAKES = ["September", "January", "April"];
+  // Country is fixed to Ireland
+  const COUNTRY = "Ireland";
+  const INTAKES = ["Sept", "Jan", "Feb", "May"];
 
   const toggleDropdown = (name) => {
     setActiveDropdown((prev) => (prev === name ? null : name));
   };
 
-  const selectOption = (setter, value) => {
-    setter(value);
-    setActiveDropdown(null);
+  const handleSearch = () => {
+    const params = new URLSearchParams();
+    if (programInput.trim()) params.set("program", programInput.trim());
+    params.set("country", COUNTRY);
+    if (selectedIntake) params.set("intake", selectedIntake);
+    navigate(`/search-results?${params.toString()}`);
   };
 
   useEffect(() => {
@@ -215,70 +211,35 @@ export default function LandingPage() {
           {/* Search Bar Glass Box */}
           <div className="hero-search-wrapper-new" ref={searchRef}>
             <div className="hero-search-box-new">
-              <div
-                className={`search-item-wrap ${activeDropdown === "program" ? "dropdown-open" : ""}`}
-              >
-                <button
-                  type="button"
-                  className="search-item-new"
-                  onClick={() => toggleDropdown("program")}
-                >
+
+              {/* Program – free-text input */}
+              <div className="search-item-wrap">
+                <div className="search-item-new search-item-input">
                   <span className="search-label">Program</span>
-                  <span className="search-value">
-                    {selectedProgram || "Search Program"}
-                    <span className="search-chevron">▼</span>
-                  </span>
-                </button>
-                {activeDropdown === "program" && (
-                  <div className="search-dropdown">
-                    {PROGRAMS.map((p) => (
-                      <button
-                        key={p}
-                        type="button"
-                        className="search-dropdown-item"
-                        onClick={() => selectOption(setSelectedProgram, p)}
-                      >
-                        {p}
-                      </button>
-                    ))}
-                  </div>
-                )}
+                  <input
+                    type="text"
+                    className="search-text-input"
+                    placeholder="Search Program"
+                    value={programInput}
+                    onChange={(e) => setProgramInput(e.target.value)}
+                    onKeyDown={(e) => e.key === "Enter" && handleSearch()}
+                  />
+                </div>
               </div>
 
               <div className="divider"></div>
 
-              <div
-                className={`search-item-wrap ${activeDropdown === "country" ? "dropdown-open" : ""}`}
-              >
-                <button
-                  type="button"
-                  className="search-item-new"
-                  onClick={() => toggleDropdown("country")}
-                >
+              {/* Country – fixed to Ireland */}
+              <div className="search-item-wrap">
+                <div className="search-item-new">
                   <span className="search-label">Country</span>
-                  <span className="search-value">
-                    {selectedCountry || "Choose Country"}
-                    <span className="search-chevron">▼</span>
-                  </span>
-                </button>
-                {activeDropdown === "country" && (
-                  <div className="search-dropdown">
-                    {COUNTRIES.map((c) => (
-                      <button
-                        key={c}
-                        type="button"
-                        className="search-dropdown-item"
-                        onClick={() => selectOption(setSelectedCountry, c)}
-                      >
-                        {c}
-                      </button>
-                    ))}
-                  </div>
-                )}
+                  <span className="search-value">{COUNTRY}</span>
+                </div>
               </div>
 
               <div className="divider"></div>
 
+              {/* Intake – dropdown */}
               <div
                 className={`search-item-wrap ${activeDropdown === "intake" ? "dropdown-open" : ""}`}
               >
@@ -300,7 +261,10 @@ export default function LandingPage() {
                         key={i}
                         type="button"
                         className="search-dropdown-item"
-                        onClick={() => selectOption(setSelectedIntake, i)}
+                        onClick={() => {
+                          setSelectedIntake(i);
+                          setActiveDropdown(null);
+                        }}
                       >
                         {i}
                       </button>
@@ -309,7 +273,9 @@ export default function LandingPage() {
                 )}
               </div>
 
-              <button className="search-btn-new">Search</button>
+              <button className="search-btn-new" onClick={handleSearch}>
+                Search
+              </button>
             </div>
           </div>
           {/* CTA BUTTONS */}

@@ -37,6 +37,7 @@ import EnglishProficiency from "./pages/EnglishProficiency";
 import PaymentSuccess from "./pages/PaymentSuccess";
 import PaymentFail from "./pages/PaymentFail";
 import PaymentCancel from "./pages/PaymentCancel";
+import SearchResults from "./pages/SearchResults";
 
 import "./App.css";
 
@@ -75,6 +76,7 @@ function AppRoutes() {
       <Route path="/payment/success" element={<PaymentSuccess />} />
       <Route path="/payment/fail" element={<PaymentFail />} />
       <Route path="/payment/cancel" element={<PaymentCancel />} />
+      <Route path="/search-results" element={<SearchResults />} />
       {/* Login/Register - Redirect if already logged in */}
       <Route 
         path="/login" 
