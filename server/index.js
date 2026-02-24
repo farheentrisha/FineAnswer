@@ -2482,11 +2482,28 @@ async function run() {
   }
 }
 
-run().catch(console.dir);
+const ready = run().catch((err) => {
+  console.error("Backend init failed:", err && err.message ? err.message : err);
+  throw err;
+});
 
 app.get("/", (req, res) => {
   res.send("Running Bhaai Running");
 });
-app.listen(port, () => {
-  console.log(`Port Is Running On ${port}`);
-});
+
+// Vercel Serverless: export a handler (no app.listen).
+// Local dev / traditional hosting: keep app.listen.
+if (process.env.VERCEL) {
+  module.exports = async (req, res) => {
+    await ready;
+    return app(req, res);
+  };
+} else {
+  ready
+    .catch(() => {})
+    .finally(() => {
+      app.listen(port, () => {
+        console.log(`Port Is Running On ${port}`);
+      });
+    });
+}
