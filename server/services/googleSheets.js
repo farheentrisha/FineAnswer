@@ -47,26 +47,26 @@ const CACHE_TTL_MS = 5 * 60 * 1000; // 5 minutes
 // four canonical values that the frontend dropdown exposes.
 const LEVEL_CANON = {
   "master's (postgraduate)": "Master's (Postgraduate)",
-  "master's":                "Master's (Postgraduate)",
-  "masters":                 "Master's (Postgraduate)",
-  "postgraduate":            "Master's (Postgraduate)",
-  "master of":               "Master's (Postgraduate)",   // prefix match handled below
-  "msc":                     "Master's (Postgraduate)",
-  "ma ":                     "Master's (Postgraduate)",
-  "mba":                     "Master's (Postgraduate)",
+  "master's": "Master's (Postgraduate)",
+  masters: "Master's (Postgraduate)",
+  postgraduate: "Master's (Postgraduate)",
+  "master of": "Master's (Postgraduate)", // prefix match handled below
+  msc: "Master's (Postgraduate)",
+  "ma ": "Master's (Postgraduate)",
+  mba: "Master's (Postgraduate)",
 
   "bachelor's (undergraduate)": "Bachelor's (Undergraduate)",
-  "bachelor's":                 "Bachelor's (Undergraduate)",
-  "bachelors":                  "Bachelor's (Undergraduate)",
-  "undergraduate":              "Bachelor's (Undergraduate)",
-  "bachelor of":                "Bachelor's (Undergraduate)",
+  "bachelor's": "Bachelor's (Undergraduate)",
+  bachelors: "Bachelor's (Undergraduate)",
+  undergraduate: "Bachelor's (Undergraduate)",
+  "bachelor of": "Bachelor's (Undergraduate)",
 
   "postgraduate diploma": "Postgraduate Diploma",
-  "post graduate diploma":"Postgraduate Diploma",
-  "pg diploma":           "Postgraduate Diploma",
+  "post graduate diploma": "Postgraduate Diploma",
+  "pg diploma": "Postgraduate Diploma",
 
-  "higher diploma":       "Higher Diploma",
-  "hd ":                  "Higher Diploma",
+  "higher diploma": "Higher Diploma",
+  "hd ": "Higher Diploma",
 };
 
 function normalizeLevel(raw) {
@@ -144,7 +144,8 @@ function parseSheetRows(rows, sheet) {
       // Look backwards for the last pending university-name candidate
       for (let j = i - 1; j >= 0; j--) {
         const prev = rows[j];
-        if (!prev || prev.every((c) => (c || "").toString().trim() === "")) continue;
+        if (!prev || prev.every((c) => (c || "").toString().trim() === ""))
+          continue;
         if (isCategoryRow(prev)) {
           // This was a university name row, not a level
           currentUniversity = (prev[0] || "").toString().trim();
@@ -185,18 +186,18 @@ function parseSheetRows(rows, sheet) {
     if (!programName) continue;
 
     programs.push({
-      university:           currentUniversity,
-      campus:               colA,
-      referenceLink:        (row[1] || "").toString().trim(),
+      university: currentUniversity,
+      campus: colA,
+      referenceLink: (row[1] || "").toString().trim(),
       programName,
-      nfqQqi:               (row[3] || "").toString().trim(),
-      availableIntakes:     (row[4] || "").toString().trim(),
-      duration:             (row[5] || "").toString().trim(),
-      tuitionFees:          (row[6] || "").toString().trim(),
-      englishRequirements:  (row[7] || "").toString().trim(),
+      nfqQqi: (row[3] || "").toString().trim(),
+      availableIntakes: (row[4] || "").toString().trim(),
+      duration: (row[5] || "").toString().trim(),
+      tuitionFees: (row[6] || "").toString().trim(),
+      englishRequirements: (row[7] || "").toString().trim(),
       academicRequirements: (row[8] || "").toString().trim(),
-      level:                currentLevel,
-      country:              "Ireland",
+      level: currentLevel,
+      country: "Ireland",
     });
   }
 
@@ -211,11 +212,13 @@ async function getAllPrograms() {
 
   if (!credentials) {
     throw new Error(
-      "Google Sheets credentials not configured. Set GOOGLE_APPLICATION_CREDENTIALS_JSON (full JSON string) in production, or add the service account key file locally."
+      "Google Sheets credentials not configured. Set GOOGLE_APPLICATION_CREDENTIALS_JSON (full JSON string) in production, or add the service account key file locally.",
     );
   }
   if (!SPREADSHEET_ID) {
-    throw new Error("GOOGLE_SPREADSHEET_ID is not set in environment variables.");
+    throw new Error(
+      "GOOGLE_SPREADSHEET_ID is not set in environment variables.",
+    );
   }
 
   // Get all sheet (tab) names

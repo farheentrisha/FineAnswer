@@ -20,7 +20,6 @@ app.use(
     origin: [
       "http://localhost:5173",
       "https://fine-answer-wcij.vercel.app",
-      "https://fine-answer-wcij.vercel.app",
     ],
     credentials: true,
     methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
@@ -29,6 +28,11 @@ app.use(
 );
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+// Health check (useful for verifying deployment + VITE_API_URL)
+app.get("/api/health", (_req, res) => {
+  res.status(200).json({ ok: true, timestamp: new Date().toISOString() });
+});
 
 // Mount programs search API (Google Sheets — no DB)
 app.use("/api/programs", programsRouter);
