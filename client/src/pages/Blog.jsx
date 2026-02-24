@@ -38,11 +38,15 @@ export default function Blog() {
     });
   };
 
+  const stripMarkdownBold = (text) =>
+    text ? text.replace(/\*\*(.+?)\*\*/g, "$1") : "";
+
   const truncateContent = (content, maxLength = 120) => {
     if (!content) return "No preview available...";
-    return content.length > maxLength
-      ? content.substring(0, maxLength) + "..."
-      : content;
+    const plain = stripMarkdownBold(content);
+    return plain.length > maxLength
+      ? plain.substring(0, maxLength) + "..."
+      : plain;
   };
 
   if (loading) {

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
     FaEdit,
     FaFileAlt,
@@ -32,6 +32,7 @@ export default function Blog() {
   const [uploading, setUploading] = useState(false);
   const [uploadStatus, setUploadStatus] = useState(null);
   const [submitting, setSubmitting] = useState(false);
+  const contentRef = useRef(null);
 
   // Fetch all blogs
   useEffect(() => {
@@ -96,6 +97,37 @@ export default function Blog() {
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  // Wrap selected text in the content textarea with ** ** for bold
+  const handleBoldClick = () => {
+    const textarea = contentRef.current;
+    if (!textarea) return;
+
+    const { selectionStart, selectionEnd } = textarea;
+    const value = formData.content || "";
+
+    if (
+      typeof selectionStart !== "number" ||
+      typeof selectionEnd !== "number"
+    ) {
+      return;
+    }
+
+    const before = value.slice(0, selectionStart);
+    const selected = value.slice(selectionStart, selectionEnd);
+    const after = value.slice(selectionEnd);
+
+    const wrapped = `**${selected || "bold text"}**`;
+    const newValue = before + wrapped + after;
+
+    setFormData((prev) => ({ ...prev, content: newValue }));
+
+    const cursorPos = before.length + wrapped.length;
+    window.requestAnimationFrame(() => {
+      textarea.focus();
+      textarea.setSelectionRange(cursorPos, cursorPos);
+    });
   };
 
   const handleImageSelect = (e) => {
@@ -321,12 +353,23 @@ export default function Blog() {
 
               <div className="form-group">
                 <label htmlFor="content">Content *</label>
+                <div className="blog-toolbar">
+                  <button
+                    type="button"
+                    className="blog-toolbar-btn"
+                    onClick={handleBoldClick}
+                    title="Bold (wrap selection with ** **)"
+                  >
+                    <strong>B</strong>
+                  </button>
+                </div>
                 <textarea
                   id="content"
                   name="content"
+                  ref={contentRef}
                   value={formData.content}
                   onChange={handleInputChange}
-                  placeholder="Write your blog content here..."
+                  placeholder="Use **bold** around words you want to highlight"
                   required
                 />
               </div>

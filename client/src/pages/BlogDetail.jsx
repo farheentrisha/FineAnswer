@@ -3,6 +3,36 @@ import { Link, useParams } from "react-router-dom";
 import { API_BASE_URL } from "../config/api";
 import "../styles/blogdetails.css";
 
+const renderRichContent = (content) => {
+  if (!content) {
+    return { __html: "" };
+  }
+
+  // Escape basic HTML entities to avoid arbitrary HTML injection
+  let safe = content
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;");
+
+  // Convert **bold** markdown to <strong>bold</strong>
+  safe = safe.replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>");
+
+  // Split into paragraphs by blank lines, keep single newlines as <br />
+  const paragraphs = safe
+    .split(/\n{2,}/)
+    .map(
+      (block) =>
+        `<p>${block
+          .split(/\n/)
+          .map((line) => line.trim())
+          .filter(Boolean)
+          .join("<br />")}</p>`,
+    )
+    .join("");
+
+  return { __html: paragraphs };
+};
+
 export default function BlogDetail() {
   const { id } = useParams();
   const [blog, setBlog] = useState(null);
@@ -123,11 +153,10 @@ export default function BlogDetail() {
 
         {/* Content Section */}
         <div className="blog-detail-content">
-          <div className="blog-detail-body">
-            {blog.content.split('\n').map((paragraph, index) => (
-              paragraph.trim() && <p key={index}>{paragraph}</p>
-            ))}
-          </div>
+          <div
+            className="blog-detail-body"
+            dangerouslySetInnerHTML={renderRichContent(blog.content)}
+          />
         </div>
 
         {/* Footer Section */}
