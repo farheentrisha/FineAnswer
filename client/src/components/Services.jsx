@@ -1,14 +1,7 @@
 import React from "react";
 import "./Services.css";
 
-import {
-  FaFileAlt,
-  FaGlobe,
-  FaHandsHelping,
-  FaPassport,
-  FaPlaneDeparture,
-  FaUniversity
-} from "react-icons/fa";
+import { FaFileAlt, FaGlobe, FaHandsHelping, FaPassport, FaPlaneDeparture, FaUniversity, FaHeartbeat } from "react-icons/fa";
 
 
 const Services = () => {
@@ -56,6 +49,12 @@ const Services = () => {
     text: "Access to internal experts and experienced student mentors for scholarship guidance, English proficiency preparation, and academic success strategies.",
     color: "#7209B7",
   },
+  {
+  icon: <FaHeartbeat />,
+  title: "Medical Insurance Assistance",
+  text: "Guidance in selecting and processing mandatory international medical insurance plans required for student visas and university enrollment.",
+  color: "#2EC4B6",
+},
 ];
 
 

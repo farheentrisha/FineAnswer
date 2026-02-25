@@ -622,6 +622,24 @@ body {
     grid-template-columns: 1fr;
   }
 }
+@media (max-width: 480px) {
+  .about-right {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+
+  .stat-box {
+    padding: 18px 12px;
+  }
+
+  .stat-box h3 {
+    font-size: 22px;
+  }
+
+  .stat-box p {
+    font-size: 12px;
+  }
+}
 
 /* ============================================
    MODERN TIMELINE SERVICES SECTION
