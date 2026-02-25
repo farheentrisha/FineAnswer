@@ -230,7 +230,7 @@ export default function LoginPage() {
               )}
             </form>
 
-            <div className="divider">or</div>
+            <div className="login-divider">or</div>
 
             <button type="button" className="google-btn" onClick={handleGoogleSignIn}>
               <FcGoogle className="google-icon" />
