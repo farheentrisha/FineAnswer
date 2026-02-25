@@ -47,8 +47,22 @@ export default function SuccessStories() {
 
       <div className="carousel-container">
         {/* Modern Minimalist Buttons */}
-        <button className="control-btn prev" onClick={prev}><FiArrowLeft /></button>
-        <button className="control-btn next" onClick={next}><FiArrowRight /></button>
+        {/* Modern Minimalist Arrows */}
+<button 
+  className="control-btn prev" 
+  onClick={prev} 
+  aria-label="Previous Story"
+>
+  <FiArrowLeft />
+</button>
+
+<button 
+  className="control-btn next" 
+  onClick={next} 
+  aria-label="Next Story"
+>
+  <FiArrowRight />
+</button>
 
         <div className="carousel-track">
           {stories.map((story, i) => {

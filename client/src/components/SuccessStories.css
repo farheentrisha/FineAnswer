@@ -120,35 +120,61 @@
 .action-link:hover { color: #f6ad55; }
 
 /* UPGRADED CONTROL BUTTONS */
+/* MINIMALIST CONTROL BUTTONS */
 .control-btn {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-  border: 1px solid #e2e8f0;
-  background: #fff;
+  background: transparent; /* Remove background */
+  border: none;             /* Remove border */
   color: #1a202c;
-  font-size: 1.2rem;
+  font-size: 2rem;          /* Larger icon size for easier clicking */
   cursor: pointer;
   z-index: 100;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: all 0.3s ease;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  padding: 10px;
+  opacity: 0.6;
+  outline: none;           /* Removes the black border box */
+  -webkit-tap-highlight-color: transparent; /* Removes the blue flash on mobile */
+  user-select: none;
+}
+/* Only show the outline if someone is using a keyboard to navigate */
+.control-btn:focus-visible {
+  outline: 2px solid #667eea;
+  outline-offset: 4px;
+}
+
+/* Hide it for mouse clicks */
+.control-btn:focus {
+  outline: none;
 }
 
 .control-btn:hover {
-  background: #1a202c;
-  color: #fff;
-  box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+  opacity: 1;
+  color: #667eea; /* Primary color hint on hover */
+  transform: translateY(-50%) scale(1.2); /* Slight grow effect */
 }
 
-.control-btn.prev { left: 40px; }
-.control-btn.next { right: 40px; }
+/* Positioning - pulling them slightly further out or in depending on preference */
+.control-btn.prev { 
+  left: 20px; 
+}
 
+.control-btn.next { 
+  right: 20px; 
+}
+
+/* Optional: Add a subtle indicator that they are clickable on mobile 
+   if you decide to keep them visible */
 @media (max-width: 768px) {
-  .control-btn { display: none; }
-  .story-card-wrapper { width: 280px; }
+  .control-btn { 
+    display: flex; 
+    font-size: 1.5rem;
+    opacity: 0.4;
+  }
+  .control-btn.prev { left: 5px; }
+  .control-btn.next { right: 5px; }
 }

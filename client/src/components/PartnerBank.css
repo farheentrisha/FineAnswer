@@ -121,13 +121,12 @@
 ================================ */
 
 .p1 { width:140px; height:140px; top:5%;  left:45%;  animation-delay:0s; }
-.p2 { width:110px; height:110px; top:48%; left:82%;  animation-delay:1s; }
-.p3 { width:120px; height:120px; bottom:30%; left:25%; animation-delay:2s; }
-.p4 { width:140px; height:140px; top:20%; right:10%; animation-delay:.5s; }
+.p2 { width:130px; height:130px; top:25%; left:75%;  animation-delay:1s; }
+.p3 { width:120px; height:120px; bottom:20%; left:25%; animation-delay:2s; }
+.p4 { width:140px; height:140px; top:35%; right:35%; animation-delay:.5s; }
 .p5 { width:100px; height:100px; top:25%; left:30%; animation-delay:1.5s; }
-.p6 { width:120px; height:120px; bottom:10%; right:15%; animation-delay:2.5s; }
-.p7 { width:100px; height:100px; top:75%; left:45%; animation-delay:3s; }
-.p8 { width:130px; height:130px; bottom:35%; right:30%; animation-delay:1.2s; }
+.p6 { width:135px; height:135px; bottom:10%; right:20%; animation-delay:2.5s; }
+
 
 /* ===============================
    FLOAT ANIMATION
