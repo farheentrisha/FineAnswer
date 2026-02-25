@@ -1,6 +1,7 @@
 import React, { useEffect, useContext } from "react";
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import LandingPage from "./LandingPage";
+import ReadMoreInfo from "./pages/ReadMoreInfo";
 import AustraliaPage from "./AustraliaPage";
 import UKPage from "./UKPage";
 import IrelandPage from "./IrelandPage";
@@ -66,6 +67,7 @@ function AppRoutes() {
 
   return (
     <Routes>
+      <Route path="/read-more-info" element={<ReadMoreInfo />} />
       {/* Public Routes */}
       <Route path="/" element={<LandingPage />} />
       <Route path="/australia" element={<AustraliaPage />} />

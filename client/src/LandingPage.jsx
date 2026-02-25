@@ -315,8 +315,8 @@ export default function LandingPage() {
           </div>
           {/* CTA BUTTONS */}
           <div className="hero-cta-buttons">
-            <button className="cta-apply" onClick={() => navigate("/apply")}>
-              Apply Now
+            <button className="cta-apply" onClick={() => navigate("/read-more-info")}> 
+              Read More
             </button>
 
             <button
@@ -339,14 +339,11 @@ export default function LandingPage() {
         <div className="about-left">
           <h2>ABOUT US</h2>
           <p>
-            We help students discover global academic opportunities with
-            seamless guidance, expert mentoring, and complete end-to-end
-            support. From choosing a country to landing on campus — we’re with
-            you every step.
+            We help students unlock global academic opportunities through seamless guidance, expert mentoring, and complete end-to-end support. Headquartered in Ireland, we guide students from choosing the right country and institution to confidently stepping onto campus — supporting them at every stage of their journey.
           </p>
 
           <div className="about-buttons">
-            <button className="btn-primary">Learn More</button>
+            <button className="btn-primary" onClick={() => navigate("/read-more-info")}>Learn More</button>
             <a
               href="https://www.youtube.com/@FineAnswerStudyAbroad/videos"
               target="_blank"

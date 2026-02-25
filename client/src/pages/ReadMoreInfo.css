@@ -1,0 +1,179 @@
+:root {
+  --primary: #4b2e83;
+  --accent: #6c63ff;
+  --text-dark: #1a1a1a;
+}
+/* Enhanced Hero Header */
+.hero-header {
+  position: relative;
+  /* Adding a slightly darker overlay to ensure white text pops */
+  background: linear-gradient(rgba(26, 15, 61, 0.7), rgba(26, 15, 61, 0.7)), 
+              url('https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&q=80&w=1600');
+  background-size: cover;
+  background-position: center;
+  height: 250px; 
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+/* Back Button - Adding high contrast pill shape */
+.back-link {
+  cursor: pointer;
+  background: rgba(255, 255, 255, 0.15); /* Glass effect */
+  color: #ffffff !important; /* Forces white color */
+  padding: 8px 20px;
+  border-radius: 50px;
+  backdrop-filter: blur(5px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  font-weight: 600;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.back-link:hover {
+  background: #ffffff;
+  color: var(--primary) !important;
+  transform: translateX(-5px);
+}
+
+/* Breadcrumb path text */
+.breadcrumb-path {
+  color: rgba(255, 255, 255, 0.8);
+  font-weight: 400;
+}
+
+/* About Us Title - Pure White and Bold */
+.hero-header h1 {
+  font-size: 3.5rem;
+  color: #ffffff !important; 
+  margin: 10px 0 0 0;
+  font-weight: 800;
+  text-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); /* Subtle shadow for depth */
+}
+
+.read-more-container {
+  font-family: 'Inter', sans-serif;
+  background: #fff;
+}
+
+/* Updated Upper Section */
+.hero-header {
+  position: relative;
+  background: linear-gradient(rgba(45, 34, 100, 0.75), rgba(45, 34, 100, 0.75)), 
+              url('https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&q=80&w=1600');
+  background-size: cover;
+  background-position: center;
+  height: 220px; /* Reduced height for a modern banner look */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  text-align: center;
+}
+
+.breadcrumb {
+  position: absolute;
+  top: 20px;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  padding: 0 10%;
+  font-size: 0.9rem;
+  font-weight: 300;
+}
+
+.back-link {
+  cursor: pointer;
+  background: rgba(255, 255, 255, 0.2);
+  padding: 5px 15px;
+  border-radius: 20px;
+  transition: 0.3s;
+}
+
+.back-link:hover {
+  background: white;
+  color: var(--primary);
+}
+
+.hero-header h1 {
+  font-size: 2.8rem;
+  margin-top: 20px;
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+
+/* Content Sections */
+.info-section {
+  display: flex;
+  align-items: center;
+  padding: 80px 10%;
+  gap: 60px;
+}
+
+.info-section.reverse {
+  flex-direction: row-reverse;
+  background-color: #f9f9ff;
+}
+
+.info-content { flex: 1.2; }
+.info-image { flex: 1; }
+
+.info-image img {
+  width: 100%;
+  border-radius: 12px;
+  box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+}
+
+.section-label {
+  background: #e9e5ff;
+  color: var(--accent);
+  padding: 6px 14px;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  display: inline-block;
+  margin-bottom: 15px;
+}
+
+.info-content h2 {
+  font-size: 2rem;
+  color: var(--primary);
+  margin-bottom: 20px;
+}
+
+.feature-list {
+  list-style: none;
+  padding: 0;
+  margin: 25px 0;
+}
+
+.feature-list li {
+  margin-bottom: 15px;
+  padding-left: 30px;
+  position: relative;
+  color: #444;
+}
+
+.feature-list li::before {
+  content: "✓";
+  position: absolute;
+  left: 0;
+  color: var(--accent);
+  font-weight: bold;
+}
+
+.btn-modern {
+  background: var(--accent);
+  color: white;
+  border: none;
+  padding: 15px 30px;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+}
