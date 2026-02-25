@@ -147,6 +147,12 @@
   outline-offset: 2px;
 }
 
+.admin-topbar-burger.is-active {
+  background: #5b6bbf;
+  color: #ffffff;
+  box-shadow: 0 2px 8px rgba(91, 107, 191, 0.35);
+}
+
 .admin-topbar-burger {
   display: none;
 }
@@ -183,6 +189,38 @@
     z-index: 50 !important;
   }
 
+  /* Keep only one sidebar control on mobile: topbar toggle */
+  .admin-layout .sidebar .admin-sidebar-toggle {
+    display: none !important;
+  }
+
+  /* Mobile sidebar should always open in full mode */
+  .admin-layout.is-sidebar-collapsed .sidebar {
+    width: 260px !important;
+    padding: 18px !important;
+  }
+
+  .admin-layout.is-sidebar-collapsed .sidebar .sidebar-logo h3,
+  .admin-layout.is-sidebar-collapsed .sidebar .sidebar-logo span,
+  .admin-layout.is-sidebar-collapsed .sidebar .sidebar-nav a span,
+  .admin-layout.is-sidebar-collapsed .sidebar .logout-btn span {
+    display: initial !important;
+  }
+
+  .admin-layout.is-sidebar-collapsed .sidebar .sidebar-logo {
+    justify-content: space-between !important;
+  }
+
+  .admin-layout.is-sidebar-collapsed .sidebar .sidebar-nav a {
+    justify-content: flex-start !important;
+    padding: 16px 14px !important;
+  }
+
+  .admin-layout.is-sidebar-collapsed .sidebar .logout-btn {
+    justify-content: center !important;
+    padding: 12px 16px !important;
+  }
+
   .admin-topbar-burger {
     display: inline-flex;
   }
@@ -203,6 +241,8 @@
   .admin-layout .topbar {
     flex-wrap: wrap;
     gap: 12px;
+    position: relative;
+    z-index: 45;
   }
 
   .admin-layout .topbar input {
@@ -509,4 +549,3 @@
   padding: 6px 12px;
   border-radius: 20px;
 }
-

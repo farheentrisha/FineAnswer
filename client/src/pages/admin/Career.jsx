@@ -181,7 +181,7 @@ export default function AdminCareer() {
       <div className="admin-career-header">
         <h2>Career Opportunities</h2>
         <button className="career-add-btn" onClick={() => handleOpenForm()}>
-          <FaPlus /> Add Job
+          <FaPlus /> Add Job 
         </button>
       </div>
 

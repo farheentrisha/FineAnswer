@@ -1,10 +1,9 @@
 import { useContext } from "react";
-import { FaBars, FaChevronLeft, FaChevronRight } from "react-icons/fa";
+import { FaBars, FaTimes } from "react-icons/fa";
 import { AuthContext } from "../../pages/Provider/ContextProvider";
 
 export default function Topbar({
-  sidebarCollapsed = false,
-  onToggleSidebar,
+  sidebarOpenMobile = false,
   onToggleMobileSidebar,
 }) {
   const { user } = useContext(AuthContext);
@@ -30,11 +29,11 @@ export default function Topbar({
         <div className="admin-topbar-titleRow">
           <button
             type="button"
-            className="admin-topbar-burger"
+            className={`admin-topbar-burger ${sidebarOpenMobile ? "is-active" : ""}`}
             onClick={onToggleMobileSidebar}
-            aria-label="Open sidebar"
+            aria-label={sidebarOpenMobile ? "Close sidebar" : "Open sidebar"}
           >
-            <FaBars />
+            {sidebarOpenMobile ? <FaTimes /> : <FaBars />}
           </button>
         </div>
       </div>
