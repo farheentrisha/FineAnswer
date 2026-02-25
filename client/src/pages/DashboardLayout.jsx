@@ -39,6 +39,7 @@ export default function DashboardLayout() {
         collapsed={sidebarCollapsed}
         mobileOpen={sidebarOpenMobile}
         onCloseMobile={closeMobile}
+        onToggleSidebar={toggleCollapsed}
       />
 
       <div className="dashboard-main">

@@ -10,6 +10,8 @@ import {
   FaLanguage,
   FaUser,
   FaSignOutAlt,
+  FaChevronLeft,
+  FaChevronRight,
 } from "react-icons/fa";
 import { AuthContext } from "../pages/Provider/ContextProvider";
 import "./Sidebar.css";
@@ -19,6 +21,7 @@ export default function Sidebar({
   collapsed = false,
   mobileOpen = false,
   onCloseMobile,
+  onToggleSidebar,
 }) {
   const { logOut } = useContext(AuthContext);
   const navigate = useNavigate();
@@ -35,8 +38,23 @@ export default function Sidebar({
     >
       {/* Logo */}
       <div className="sidebar-logo">
-        <div className="logo-icon">✈️</div>
-        <h3> <a href="/"> FineAnswer </a></h3>
+        <div className="sidebar-logo-main">
+          <div className="logo-icon">✈️</div>
+          <h3>
+            <a href="/"> FineAnswer </a>
+          </h3>
+        </div>
+        {onToggleSidebar && (
+          <button
+            type="button"
+            className="dashboard-sidebar-toggle"
+            onClick={onToggleSidebar}
+            aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"}
+            title={collapsed ? "Expand sidebar" : "Collapse sidebar"}
+          >
+            {collapsed ? <FaChevronRight /> : <FaChevronLeft />}
+          </button>
+        )}
       </div>
 
       {/* Navigation */}

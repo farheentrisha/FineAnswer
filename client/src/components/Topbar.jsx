@@ -33,15 +33,6 @@ export default function Topbar({
         >
           <FaBars />
         </button>
-        <button
-          type="button"
-          className="dashboard-topbar-collapse"
-          onClick={onToggleSidebar}
-          aria-label={sidebarCollapsed ? "Expand sidebar" : "Collapse sidebar"}
-          title={sidebarCollapsed ? "Expand sidebar" : "Collapse sidebar"}
-        >
-          {sidebarCollapsed ? <FaChevronRight /> : <FaChevronLeft />}
-        </button>
         <input placeholder="Search universities, programs, documents..." />
       </div>
 
