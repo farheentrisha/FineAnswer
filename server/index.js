@@ -2474,7 +2474,6 @@ async function run() {
         res.redirect(302, `${FRONTEND_URL.replace(/\/$/, "")}/payment/cancel`);
       }),
     );
-
     // Send a ping to confirm a successful connection
     // await client.db("admin").command({ ping: 1 });
     console.log(
