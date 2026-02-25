@@ -26,7 +26,7 @@ html, body, #root {
   max-width: none;
   height: 100vh;
   background: #fff;
-  border-radius: 30px;
+  border-radius: 0;
   display: flex;
   overflow: hidden;
   box-shadow: 0 20px 40px rgba(0,0,0,0.15);
@@ -46,19 +46,26 @@ html, body, #root {
   display: flex;
   flex-direction: column;
   justify-content: center;
+  align-items: flex-start;
   padding: 70px;
 }
 
 .login-left h1 {
   font-size: 2.6rem;
   margin-bottom: 20px;
+  color: #ffffff;
+  max-width: 760px;
+  width: 100%;
+  text-align: left;
 }
 
 .login-left p {
-  max-width: 450px;
+  max-width: 760px;
+  width: 100%;
   font-size: 1.1rem;
   line-height: 1.6;
   opacity: 0.9;
+  text-align: left;
 }
 
 /* RIGHT PANEL */
@@ -167,8 +174,13 @@ html, body, #root {
 
 /* DIVIDER */
 .divider {
-  margin: 20px 0;
+  margin: 10px 0;
   color: #64748b;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
 }
 
 /* GOOGLE BUTTON */
