@@ -2483,7 +2483,7 @@ async function run() {
     // await client.close();
   }
 }
-
+  
 //vercel issue serverless
 const ready = run().catch((err) => {
   console.error("Backend init failed:", err && err.message ? err.message : err);

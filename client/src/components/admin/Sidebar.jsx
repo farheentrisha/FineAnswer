@@ -16,6 +16,7 @@ import {
   FaChevronRight,
 } from "react-icons/fa";
 import { AuthContext } from "../../pages/Provider/ContextProvider";
+import logo from "../../assets/logo.png";
 import "../Sidebar.css";
 
 export default function Sidebar({
@@ -41,16 +42,12 @@ export default function Sidebar({
       collapsedWidth="84px"
     >
       <div className="sidebar-shell">
-        {/* Logo - same style as user dashboard */}
+        {/* Logo - image only, links to home */}
         <div className="sidebar-logo">
           <div className="sidebar-logo-main">
-            <div className="logo-icon">🛡️</div>
-            <div>
-              <h3>
-                <a href="/">FineAnswer</a>
-              </h3>
-              <span>Admin Panel</span>
-            </div>
+            <a href="/" className="admin-logo-link" aria-label="Go to homepage">
+              <img src={logo} alt="FineAnswer" className="admin-logo-image" />
+            </a>
           </div>
           {onToggleSidebar && (
             <button

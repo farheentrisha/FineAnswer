@@ -103,21 +103,21 @@ export default function SuccessStories() {
           {stories.map((story) => {
             const storyId = story._id || story.id;
             return (
-              <div key={storyId} className="story-card">
-                <div className="story-image">
+              <div key={storyId} className="admin-story-card">
+                <div className="admin-story-image">
                   <img src={story.image} alt={story.name || "Success story"} />
                 </div>
-                <div className="story-content">
+                <div className="admin-story-content">
                   <h3>{story.name}</h3>
-                  <p className="story-university">{story.university}</p>
-                  <p className="story-country">{story.country}</p>
-                  <p className="story-program">{story.program}</p>
-                  <p className="story-text">{story.story}</p>
+                  <p className="admin-story-university">{story.university}</p>
+                  <p className="admin-story-country">{story.country}</p>
+                  <p className="admin-story-program">{story.program}</p>
+                  <p className="admin-story-text">{story.story}</p>
                 </div>
-                <div className="story-actions">
+                <div className="admin-story-actions">
                   <button
                     type="button"
-                    className="btn-edit"
+                    className="admin-btn-edit"
                     onClick={(e) => handleEdit(e, story)}
                     title="Edit"
                   >
@@ -125,7 +125,7 @@ export default function SuccessStories() {
                   </button>
                   <button
                     type="button"
-                    className="btn-delete"
+                    className="admin-btn-delete"
                     onClick={(e) => handleDelete(e, storyId)}
                     disabled={deleting === storyId}
                     title="Delete"

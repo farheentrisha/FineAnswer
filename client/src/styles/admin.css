@@ -295,6 +295,19 @@
   gap: 13px !important;
 }
 
+.admin-layout .sidebar .admin-logo-link {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+.admin-layout .sidebar .admin-logo-image {
+  height: 68px !important;
+  width: auto !important;
+  display: block !important;
+  object-fit: contain !important;
+}
+
 .admin-layout .sidebar .logo-icon {
   width: 42px !important;
   height: 42px !important;

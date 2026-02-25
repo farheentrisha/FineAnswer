@@ -79,7 +79,7 @@
   gap: 24px;
 }
 
-.story-card {
+.admin-story-card {
   background: #fff;
   border-radius: 16px;
   overflow: hidden;
@@ -91,13 +91,13 @@
   flex-direction: column;
 }
 
-.story-card:hover {
+.admin-story-card:hover {
   transform: translateY(-6px);
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
   border-color: rgba(91, 107, 191, 0.2);
 }
 
-.story-image {
+.admin-story-image {
   width: 100%;
   height: 220px;
   overflow: hidden;
@@ -105,7 +105,7 @@
   position: relative;
 }
 
-.story-image img {
+.admin-story-image img {
   width: 100%;
   height: 100%;
   display: block;
@@ -113,17 +113,17 @@
   transition: transform 0.3s ease;
 }
 
-.story-card:hover .story-image img {
+.admin-story-card:hover .admin-story-image img {
   transform: scale(1.05);
 }
 
-.story-content {
+.admin-story-content {
   padding: 24px 24px 0;
   flex: 1;
   min-height: 0;
 }
 
-.story-content h3 {
+.admin-story-content h3 {
   margin: 0 0 12px 0;
   color: #1a202c;
   font-size: 22px;
@@ -131,7 +131,7 @@
   letter-spacing: -0.02em;
 }
 
-.story-university {
+.admin-story-university {
   margin: 0 0 8px 0;
   color: #4a5568;
   font-size: 14px;
@@ -141,12 +141,12 @@
   gap: 6px;
 }
 
-.story-university::before {
+.admin-story-university::before {
   content: "🎓";
   font-size: 14px;
 }
 
-.story-country {
+.admin-story-country {
   margin: 0 0 8px 0;
   color: #4a5568;
   font-size: 14px;
@@ -156,12 +156,12 @@
   gap: 6px;
 }
 
-.story-country::before {
+.admin-story-country::before {
   content: "🌍";
   font-size: 14px;
 }
 
-.story-program {
+.admin-story-program {
   margin: 0 0 12px 0;
   color: #5b6bbf;
   font-weight: 600;
@@ -173,7 +173,7 @@
   width: fit-content;
 }
 
-.story-text {
+.admin-story-text {
   margin: 12px 0 0 0;
   color: #4a5568;
   font-size: 14px;
@@ -185,7 +185,7 @@
 }
 
 /* Edit / Delete – same design as Blog admin (edit-btn / delete-btn) */
-.story-actions {
+.admin-story-actions {
   display: flex;
   gap: 0.5rem;
   justify-content: flex-end;
@@ -196,8 +196,8 @@
   z-index: 2;
 }
 
-.btn-edit,
-.btn-delete {
+.admin-btn-edit,
+.admin-btn-delete {
   padding: 0.5rem;
   border: none;
   border-radius: 6px;
@@ -212,27 +212,27 @@
   z-index: 2;
 }
 
-.btn-edit {
+.admin-btn-edit {
   background: #edf2f7;
   color: #4299e1;
 }
 
-.btn-edit:hover {
+.admin-btn-edit:hover {
   background: #4299e1;
   color: white;
 }
 
-.btn-delete {
+.admin-btn-delete {
   background: #fed7d7;
   color: #e53e3e;
 }
 
-.btn-delete:hover:not(:disabled) {
+.admin-btn-delete:hover:not(:disabled) {
   background: #e53e3e;
   color: white;
 }
 
-.btn-delete:disabled {
+.admin-btn-delete:disabled {
   opacity: 0.6;
   cursor: not-allowed;
 }
