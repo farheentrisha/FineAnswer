@@ -49,7 +49,10 @@
 }
 
 .admin-layout.is-sidebar-collapsed .sidebar .sidebar-logo {
-  justify-content: center !important;
+  position: relative !important;
+  justify-content: flex-start !important;
+  gap: 0 !important;
+  padding-right: 0 !important;
 }
 
 .admin-layout.is-sidebar-collapsed .sidebar .logout-btn {
@@ -325,7 +328,7 @@
   height: 32px !important;
   min-width: 32px !important;
   min-height: 32px !important;
-  margin-left: 60px !important;
+  margin-left: auto !important;
   border-radius: 8px !important;
   border: none !important;
   background: #ffffff !important;
@@ -338,6 +341,7 @@
   transition: background 0.2s ease, box-shadow 0.2s ease, color 0.2s ease,
     transform 0.1s ease !important;
   flex-shrink: 0 !important;
+  z-index: 2 !important;
 }
 
 .admin-layout .sidebar .admin-sidebar-toggle svg {
@@ -362,6 +366,28 @@
 .admin-layout .sidebar .admin-sidebar-toggle:focus-visible {
   outline: 2px solid #5b6bbf !important;
   outline-offset: 2px !important;
+}
+
+.admin-layout.is-sidebar-collapsed .sidebar .admin-sidebar-toggle {
+  position: absolute !important;
+  right: -14px !important;
+  top: 50% !important;
+  margin-left: 0 !important;
+  width: 30px !important;
+  height: 30px !important;
+  min-width: 30px !important;
+  min-height: 30px !important;
+  border: 1px solid #e2e8f0 !important;
+  transform: translateY(-50%) !important;
+  box-shadow: 0 4px 12px rgba(91, 107, 191, 0.18) !important;
+}
+
+.admin-layout.is-sidebar-collapsed .sidebar .admin-sidebar-toggle:hover {
+  transform: translateY(-50%) scale(1.03) !important;
+}
+
+.admin-layout.is-sidebar-collapsed .sidebar .admin-sidebar-toggle:active {
+  transform: translateY(-50%) scale(0.98) !important;
 }
 
 /* Ensure logout button matches */

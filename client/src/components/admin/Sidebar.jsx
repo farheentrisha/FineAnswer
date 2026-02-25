@@ -1,5 +1,6 @@
 import { NavLink, useNavigate } from "react-router-dom";
 import { useContext } from "react";
+import { Sidebar as ProSidebar } from "react-pro-sidebar";
 import {
   FaTachometerAlt,
   FaChartBar,
@@ -32,74 +33,82 @@ export default function Sidebar({
   };
 
   return (
-    <aside className={`sidebar ${collapsed ? "sidebar--collapsed" : ""} ${mobileOpen ? "sidebar--mobileOpen" : ""}`}>
-      {/* Logo - same style as user dashboard */}
-      <div className="sidebar-logo">
-        <div className="sidebar-logo-main">
-          <div className="logo-icon">🛡️</div>
-          <div>
-            <h3>
-              <a href="/">FineAnswer</a>
-            </h3>
-            <span>Admin Panel</span>
+    <ProSidebar
+      className={`sidebar ${collapsed ? "sidebar--collapsed" : ""} ${mobileOpen ? "sidebar--mobileOpen" : ""}`}
+      collapsed={collapsed}
+      transitionDuration={320}
+      width="260px"
+      collapsedWidth="84px"
+    >
+      <div className="sidebar-shell">
+        {/* Logo - same style as user dashboard */}
+        <div className="sidebar-logo">
+          <div className="sidebar-logo-main">
+            <div className="logo-icon">🛡️</div>
+            <div>
+              <h3>
+                <a href="/">FineAnswer</a>
+              </h3>
+              <span>Admin Panel</span>
+            </div>
           </div>
+          {onToggleSidebar && (
+            <button
+              type="button"
+              className="admin-sidebar-toggle"
+              onClick={onToggleSidebar}
+              aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"}
+              title={collapsed ? "Expand sidebar" : "Collapse sidebar"}
+            >
+              {collapsed ? <FaChevronRight /> : <FaChevronLeft />}
+            </button>
+          )}
         </div>
-        {onToggleSidebar && (
-          <button
-            type="button"
-            className="admin-sidebar-toggle"
-            onClick={onToggleSidebar}
-            aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"}
-            title={collapsed ? "Expand sidebar" : "Collapse sidebar"}
-          >
-            {collapsed ? <FaChevronRight /> : <FaChevronLeft />}
-          </button>
-        )}
+
+        {/* Navigation - same layout as user sidebar */}
+        <nav className="sidebar-nav" onClick={() => onCloseMobile?.()}>
+          <NavLink to="/admin/dashboard" end title="Dashboard">
+            <FaTachometerAlt /> <span>Dashboard</span>
+          </NavLink>
+
+          <NavLink to="/admin/analytics" title="Analytics">
+            <FaChartBar /> <span>Analytics</span>
+          </NavLink>
+
+          <NavLink to="/admin/success-stories" title="Success Stories">
+            <FaStar /> <span>Success Stories</span>
+          </NavLink>
+
+          <NavLink to="/admin/blog" title="Blog">
+            <FaBlog /> <span>Blog</span>
+          </NavLink>
+
+          <NavLink to="/admin/career" title="Career">
+            <FaBriefcase /> <span>Career</span>
+          </NavLink>
+
+          <NavLink to="/admin/tracker-update" title="Tracker Update">
+            <FaTasks /> <span>Tracker Update</span>
+          </NavLink>
+
+          <NavLink to="/admin/sessions" title="Sessions">
+            <FaVideo /> <span>Sessions</span>
+          </NavLink>
+
+          <NavLink to="/admin/students-info" title="Students Info">
+            <FaUsers /> <span>Students Info</span>
+          </NavLink>
+
+          <NavLink to="/admin/documents" title="Documents">
+            <FaFileAlt /> <span>Documents</span>
+          </NavLink>
+        </nav>
+
+        {/* Logout - shares same styling as user sidebar */}
+        <button className="logout-btn" onClick={handleLogout} title="Logout">
+          <FaSignOutAlt /> Logout
+        </button>
       </div>
-
-      {/* Navigation - same layout as user sidebar */}
-      <nav className="sidebar-nav" onClick={() => onCloseMobile?.()}>
-        <NavLink to="/admin/dashboard" end title="Dashboard">
-          <FaTachometerAlt /> <span>Dashboard</span>
-        </NavLink>
-
-        <NavLink to="/admin/analytics" title="Analytics">
-          <FaChartBar /> <span>Analytics</span>
-        </NavLink>
-
-        <NavLink to="/admin/success-stories" title="Success Stories">
-          <FaStar /> <span>Success Stories</span>
-        </NavLink>
-
-        <NavLink to="/admin/blog" title="Blog">
-          <FaBlog /> <span>Blog</span>
-        </NavLink>
-
-        <NavLink to="/admin/career" title="Career">
-          <FaBriefcase /> <span>Career</span>
-        </NavLink>
-
-        <NavLink to="/admin/tracker-update" title="Tracker Update">
-          <FaTasks /> <span>Tracker Update</span>
-        </NavLink>
-
-        <NavLink to="/admin/sessions" title="Sessions">
-          <FaVideo /> <span>Sessions</span>
-        </NavLink>
-
-        <NavLink to="/admin/students-info" title="Students Info">
-          <FaUsers /> <span>Students Info</span>
-        </NavLink>
-
-        <NavLink to="/admin/documents" title="Documents">
-          <FaFileAlt /> <span>Documents</span>
-        </NavLink>
-      </nav>
-
-      {/* Logout - shares same styling as user sidebar */}
-      <button className="logout-btn" onClick={handleLogout} title="Logout">
-        <FaSignOutAlt /> Logout
-      </button>
-    </aside>
+    </ProSidebar>
   );
 }

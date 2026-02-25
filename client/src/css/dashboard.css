@@ -46,7 +46,10 @@ body {
 }
 
 .dashboard-layout.is-sidebar-collapsed .sidebar .sidebar-logo {
-  justify-content: center;
+  position: relative;
+  justify-content: flex-start;
+  gap: 0;
+  padding-right: 0;
 }
 
 .dashboard-layout.is-sidebar-collapsed .sidebar .logout-btn {
@@ -290,7 +293,7 @@ body {
   height: 32px;
   min-width: 32px;
   min-height: 32px;
-  margin-left: 60px;
+  margin-left: auto;
   border-radius: 8px;
   border: none;
   background: #ffffff;
@@ -303,6 +306,29 @@ body {
   transition: background 0.2s ease, box-shadow 0.2s ease, color 0.2s ease,
     transform 0.1s ease;
   flex-shrink: 0;
+  z-index: 2;
+}
+
+.dashboard-layout.is-sidebar-collapsed .sidebar .dashboard-sidebar-toggle {
+  position: absolute;
+  right: -14px;
+  top: 50%;
+  margin-left: 0;
+  width: 30px;
+  height: 30px;
+  min-width: 30px;
+  min-height: 30px;
+  border: 1px solid #e2e8f0;
+  transform: translateY(-50%);
+  box-shadow: 0 4px 12px rgba(76, 92, 158, 0.18);
+}
+
+.dashboard-layout.is-sidebar-collapsed .sidebar .dashboard-sidebar-toggle:hover {
+  transform: translateY(-50%) scale(1.03);
+}
+
+.dashboard-layout.is-sidebar-collapsed .sidebar .dashboard-sidebar-toggle:active {
+  transform: translateY(-50%) scale(0.98);
 }
 
 .dashboard-sidebar-toggle svg {
