@@ -150,35 +150,48 @@ body {
 
 .dashboard-topbar-burger,
 .dashboard-topbar-collapse {
-  border: 1px solid #d1d5db;
-  background: #fff;
-  color: #374151;
   width: 40px;
   height: 40px;
   min-width: 40px;
   min-height: 40px;
+  border: none;
   border-radius: 10px;
+  background: #ffffff;
+  color: var(--primary, #4c5c9e);
   cursor: pointer;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  font-size: 1.125rem;
-  transition: background 0.2s, border-color 0.2s;
+  font-size: 1rem;
+  box-shadow: 0 1px 3px rgba(76, 92, 158, 0.12);
+  transition: background 0.2s ease, box-shadow 0.2s ease, color 0.2s ease, transform 0.1s ease;
 }
 
 .dashboard-topbar-burger svg,
 .dashboard-topbar-collapse svg {
-  width: 1.125em;
-  height: 1.125em;
+  width: 1.1em;
+  height: 1.1em;
   flex-shrink: 0;
 }
 
 .dashboard-topbar-burger:hover,
 .dashboard-topbar-collapse:hover {
-  background: #f1f5f9;
-  border-color: #9ca3af;
-  color: #111827;
+  background: #eef2ff;
+  color: #3d4a7d;
+  box-shadow: 0 2px 8px rgba(76, 92, 158, 0.2);
+}
+
+.dashboard-topbar-burger:active,
+.dashboard-topbar-collapse:active {
+  transform: scale(0.97);
+  box-shadow: 0 1px 2px rgba(76, 92, 158, 0.15);
+}
+
+.dashboard-topbar-burger:focus-visible,
+.dashboard-topbar-collapse:focus-visible {
+  outline: 2px solid var(--primary, #4c5c9e);
+  outline-offset: 2px;
 }
 
 .dashboard-topbar-burger {

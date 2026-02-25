@@ -8,12 +8,12 @@ export default function Topbar({
   onToggleMobileSidebar,
 }) {
   const { user } = useContext(AuthContext);
-  
+
   const getUserInitials = () => {
     if (user?.name) {
       return user.name
         .split(" ")
-        .map(n => n[0])
+        .map((n) => n[0])
         .join("")
         .toUpperCase()
         .slice(0, 2);
@@ -36,29 +36,17 @@ export default function Topbar({
           >
             <FaBars />
           </button>
-          <button
-            type="button"
-            className="admin-topbar-collapse"
-            onClick={onToggleSidebar}
-            aria-label={sidebarCollapsed ? "Expand sidebar" : "Collapse sidebar"}
-            title={sidebarCollapsed ? "Expand sidebar" : "Collapse sidebar"}
-          >
-            {sidebarCollapsed ? <FaChevronRight /> : <FaChevronLeft />}
-          </button>
-          <div>
-            <h2>Admin Dashboard</h2>
-            <p>Manage and monitor your platform</p>
-          </div>
         </div>
       </div>
 
       <div className="topbar-right">
-        <input placeholder="Search anything..." />
         <div className="admin-user">
-          <div className="avatar">{getUserInitials()}</div>
-          <div>
-            <strong>{user?.name || "Admin User"}</strong>
-            <small>Administrator</small>
+          <div className="admin-user__avatar">{getUserInitials()}</div>
+          <div className="admin-user__info">
+            <span className="admin-user__name">
+              {user?.name || "Admin User"}
+            </span>
+            <span className="admin-user__role">Administrator</span>
           </div>
         </div>
       </div>

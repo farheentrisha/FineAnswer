@@ -17,10 +17,7 @@ const port = process.env.PORT || 5000;
 // Middleware
 app.use(
   cors({
-    origin: [
-      "http://localhost:5173",
-      "https://fine-answer-wcij.vercel.app",
-    ],
+    origin: ["http://localhost:5173", "https://fine-answer-wcij.vercel.app"],
     credentials: true,
     methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"],
@@ -152,21 +149,24 @@ async function run() {
   try {
     // Ensure DNS servers and connect the client with retries to avoid
     // transient DNS/SRV errors (e.g. ECONNREFUSED when resolving SRV records).
-    const dns = require('dns');
+    const dns = require("dns");
     try {
-      dns.setServers(['8.8.8.8', '1.1.1.1']);
+      dns.setServers(["8.8.8.8", "1.1.1.1"]);
     } catch (e) {
-      console.warn('Failed to set DNS servers (continuing):', e && e.message);
+      console.warn("Failed to set DNS servers (continuing):", e && e.message);
     }
 
     const connectWithRetry = async (attempts = 5, baseDelay = 1000) => {
       for (let i = 0; i < attempts; i++) {
         try {
           await client.connect();
-          console.log('Connected to MongoDB');
+          console.log("Connected to MongoDB");
           return;
         } catch (err) {
-          console.error(`MongoDB connection attempt ${i + 1} failed:`, err && err.message);
+          console.error(
+            `MongoDB connection attempt ${i + 1} failed:`,
+            err && err.message,
+          );
           if (i === attempts - 1) throw err;
           const wait = baseDelay * Math.pow(2, i);
           await new Promise((r) => setTimeout(r, wait));
@@ -190,7 +190,6 @@ async function run() {
       .db("FineAnswer")
       .collection("documentsCollection");
     paymentCollection = client.db("FineAnswer").collection("paymentCollection");
-
 
     // API's Start From Here=====>>>>>
     // ========================================================
@@ -520,7 +519,9 @@ async function run() {
     const isValidEmailFormat = (email) => {
       if (!email || typeof email !== "string") return false;
       const trimmed = email.trim().toLowerCase();
-      return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(trimmed) && trimmed.length <= 254;
+      return (
+        /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(trimmed) && trimmed.length <= 254
+      );
     };
 
     app.post(
@@ -611,7 +612,7 @@ async function run() {
           success: true,
           message: "Your message has been sent successfully.",
         });
-      })
+      }),
     );
 
     // PUT /api/users/me/profile - Update current user's profile (Protected Route)
@@ -1050,7 +1051,8 @@ async function run() {
         }
         const updateFields = { updatedAt: new Date() };
         if (name !== undefined) updateFields.name = name.trim();
-        if (university !== undefined) updateFields.university = university.trim();
+        if (university !== undefined)
+          updateFields.university = university.trim();
         if (country !== undefined) updateFields.country = country.trim();
         if (program !== undefined) updateFields.program = program.trim();
         if (story !== undefined) updateFields.story = story.trim();
@@ -1059,7 +1061,9 @@ async function run() {
             new URL(image);
             updateFields.image = image.trim();
           } catch (_e) {
-            return res.status(400).json({ message: "Invalid image URL format" });
+            return res
+              .status(400)
+              .json({ message: "Invalid image URL format" });
           }
         }
         const updatedStory = await successStoryCollection.findOneAndUpdate(
@@ -2471,9 +2475,8 @@ async function run() {
       }),
     );
 
-
     // Send a ping to confirm a successful connection
-    // await client.db("admin").command({ ping: 1 }); 
+    // await client.db("admin").command({ ping: 1 });
     console.log(
       "Pinged your deployment. You successfully connected to MongoDB!",
     );
@@ -2481,8 +2484,6 @@ async function run() {
     // await client.close();
   }
 }
-
-
 
 //vercel issue serverless
 const ready = run().catch((err) => {

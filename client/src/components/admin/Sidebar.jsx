@@ -11,11 +11,18 @@ import {
   FaUsers,
   FaFileAlt,
   FaSignOutAlt,
+  FaChevronLeft,
+  FaChevronRight,
 } from "react-icons/fa";
 import { AuthContext } from "../../pages/Provider/ContextProvider";
 import "../Sidebar.css";
 
-export default function Sidebar({ collapsed = false, mobileOpen = false, onCloseMobile }) {
+export default function Sidebar({
+  collapsed = false,
+  mobileOpen = false,
+  onCloseMobile,
+  onToggleSidebar,
+}) {
   const { logOut } = useContext(AuthContext);
   const navigate = useNavigate();
 
@@ -28,13 +35,26 @@ export default function Sidebar({ collapsed = false, mobileOpen = false, onClose
     <aside className={`sidebar ${collapsed ? "sidebar--collapsed" : ""} ${mobileOpen ? "sidebar--mobileOpen" : ""}`}>
       {/* Logo - same style as user dashboard */}
       <div className="sidebar-logo">
-        <div className="logo-icon">🛡️</div>
-        <div>
-          <h3>
-            <a href="/">FineAnswer</a>
-          </h3>
-          <span>Admin Panel</span>
+        <div className="sidebar-logo-main">
+          <div className="logo-icon">🛡️</div>
+          <div>
+            <h3>
+              <a href="/">FineAnswer</a>
+            </h3>
+            <span>Admin Panel</span>
+          </div>
         </div>
+        {onToggleSidebar && (
+          <button
+            type="button"
+            className="admin-sidebar-toggle"
+            onClick={onToggleSidebar}
+            aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"}
+            title={collapsed ? "Expand sidebar" : "Collapse sidebar"}
+          >
+            {collapsed ? <FaChevronRight /> : <FaChevronLeft />}
+          </button>
+        )}
       </div>
 
       {/* Navigation - same layout as user sidebar */}

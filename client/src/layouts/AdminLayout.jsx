@@ -41,6 +41,7 @@ export default function AdminLayout() {
         collapsed={sidebarCollapsed}
         mobileOpen={sidebarOpenMobile}
         onCloseMobile={closeMobile}
+        onToggleSidebar={toggleCollapsed}
       />
       <div className="admin-main">
         <Topbar

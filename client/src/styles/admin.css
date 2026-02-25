@@ -86,36 +86,65 @@
 }
 
 .admin-topbar-burger,
-.admin-topbar-collapse {
-  border: 1px solid #d1d5db;
-  background: #fff;
-  color: #374151;
-  width: 40px;
-  height: 40px;
-  min-width: 40px;
-  min-height: 40px;
-  border-radius: 10px;
+.admin-topbar-collapse,
+.admin-topbar-expand {
+  border: none;
+  border-radius: 8px;
+  background: #ffffff;
+  color: #5b6bbf;
   cursor: pointer;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  font-size: 1.125rem;
-  transition: background 0.2s, border-color 0.2s;
+  font-size: 0.875rem;
+  box-shadow: 0 1px 2px rgba(91, 107, 191, 0.12);
+  transition: background 0.2s ease, box-shadow 0.2s ease, color 0.2s ease, transform 0.1s ease;
+}
+
+.admin-topbar-burger {
+  width: 40px;
+  height: 40px;
+  min-width: 40px;
+  min-height: 40px;
+}
+
+.admin-topbar-collapse,
+.admin-topbar-expand {
+  width: 32px;
+  height: 32px;
+  min-width: 32px;
+  min-height: 32px;
 }
 
 .admin-topbar-burger svg,
-.admin-topbar-collapse svg {
-  width: 1.125em;
-  height: 1.125em;
+.admin-topbar-collapse svg,
+.admin-topbar-expand svg {
+  width: 1em;
+  height: 1em;
   flex-shrink: 0;
 }
 
 .admin-topbar-burger:hover,
-.admin-topbar-collapse:hover {
-  background: #f1f5f9;
-  border-color: #9ca3af;
-  color: #111827;
+.admin-topbar-collapse:hover,
+.admin-topbar-expand:hover {
+  background: #f1f4ff;
+  color: #4a5aaf;
+  box-shadow: 0 2px 6px rgba(91, 107, 191, 0.2);
+}
+
+.admin-topbar-burger:active,
+.admin-topbar-collapse:active,
+.admin-topbar-expand:active {
+  transform: scale(0.97);
+  box-shadow: 0 1px 2px rgba(91, 107, 191, 0.15);
+}
+
+.admin-topbar-burger:focus-visible,
+.admin-topbar-collapse:focus-visible,
+.admin-topbar-expand:focus-visible {
+  outline: 2px solid #5b6bbf;
+  outline-offset: 2px;
 }
 
 .admin-topbar-burger {
@@ -158,7 +187,8 @@
     display: inline-flex;
   }
 
-  .admin-topbar-collapse {
+  .admin-topbar-collapse,
+  .admin-topbar-expand {
     display: none;
   }
 
@@ -211,8 +241,15 @@
 .admin-layout .sidebar .sidebar-logo {
   display: flex !important;
   align-items: center !important;
-  gap: 13px !important;
+  justify-content: space-between !important;
+  gap: 12px !important;
   margin-bottom: 30px !important;
+}
+
+.admin-layout .sidebar .sidebar-logo-main {
+  display: flex !important;
+  align-items: center !important;
+  gap: 13px !important;
 }
 
 .admin-layout .sidebar .logo-icon {
@@ -241,6 +278,50 @@
 .admin-layout .sidebar .sidebar-logo span {
   font-size: 12px !important;
   color: #8a8fa3 !important;
+}
+
+.admin-layout .sidebar .admin-sidebar-toggle {
+  width: 32px !important;
+  height: 32px !important;
+  min-width: 32px !important;
+  min-height: 32px !important;
+  margin-left: 60px !important;
+  border-radius: 8px !important;
+  border: none !important;
+  background: #ffffff !important;
+  color: #5b6bbf !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  box-shadow: 0 1px 3px rgba(91, 107, 191, 0.12) !important;
+  cursor: pointer !important;
+  transition: background 0.2s ease, box-shadow 0.2s ease, color 0.2s ease,
+    transform 0.1s ease !important;
+  flex-shrink: 0 !important;
+}
+
+.admin-layout .sidebar .admin-sidebar-toggle svg {
+  width: 1em !important;
+  height: 1em !important;
+  flex-shrink: 0 !important;
+  fill: currentColor !important;
+}
+
+.admin-layout .sidebar .admin-sidebar-toggle:hover {
+  background: #f1f4ff !important;
+  color: #4a5aaf !important;
+  box-shadow: 0 2px 8px rgba(91, 107, 191, 0.2) !important;
+  transform: scale(1.02) !important;
+}
+
+.admin-layout .sidebar .admin-sidebar-toggle:active {
+  transform: scale(0.97) !important;
+  box-shadow: 0 1px 2px rgba(91, 107, 191, 0.15) !important;
+}
+
+.admin-layout .sidebar .admin-sidebar-toggle:focus-visible {
+  outline: 2px solid #5b6bbf !important;
+  outline-offset: 2px !important;
 }
 
 /* Ensure logout button matches */
@@ -302,6 +383,55 @@
   color: white !important;
   padding: 8px !important;
   border-radius: 50% !important;
+}
+
+/* Admin topbar user block: name + role, organized */
+.admin-user {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+}
+
+.admin-user__avatar {
+  width: 40px;
+  height: 40px;
+  min-width: 40px;
+  border-radius: 50%;
+  background: var(--primary, #5b6bbf);
+  color: #fff;
+  font-size: 13px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.admin-user__info {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+  min-width: 0;
+}
+
+.admin-user__name {
+  font-size: 14px;
+  font-weight: 600;
+  color: #111827;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 140px;
+}
+
+.admin-user__role {
+  font-size: 11px;
+  font-weight: 600;
+  color: #6b7280;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
 }
 
 .admin-content {
