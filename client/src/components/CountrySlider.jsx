@@ -40,7 +40,7 @@ const countries = [
             <div className="card-content">
               <h3>{c.name}</h3>
               <p>{c.desc}</p>
-              <button onClick={() => navigate(c.link)}>
+            <button onClick={() => navigate(c.link)}>
                 Read More <span>+</span>
               </button>
             </div>

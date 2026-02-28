@@ -315,8 +315,17 @@ export default function LandingPage() {
           </div>
           {/* CTA BUTTONS */}
           <div className="hero-cta-buttons">
-            <button className="cta-apply" onClick={() => navigate("/read-more-info")}> 
-              Read More
+            <button
+              className="cta-apply"
+              onClick={() =>
+                window.open(
+                  "https://docs.google.com/spreadsheets/d/1e_YOl7EykAO4OV_qn_ZoHzZ_lb9Oynu-yJznU1m2Hfs/edit?usp=sharing",
+                  "_blank",
+                  "noopener,noreferrer",
+                )
+              }
+            >
+              Chek Visa Success
             </button>
 
             <button
