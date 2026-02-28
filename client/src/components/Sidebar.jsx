@@ -15,6 +15,7 @@ import {
   FaChevronRight,
 } from "react-icons/fa";
 import { AuthContext } from "../pages/Provider/ContextProvider";
+import logo from "../assets/logo.png";
 import "./Sidebar.css";
 
 
@@ -42,13 +43,20 @@ export default function Sidebar({
       collapsedWidth="84px"
     >
       <div className="sidebar-shell">
-        {/* Logo */}
+        {/* Logo – image only, links to home */}
         <div className="sidebar-logo">
           <div className="sidebar-logo-main">
-            <div className="logo-icon">✈️</div>
-            <h3>
-              <a href="/"> FineAnswer </a>
-            </h3>
+            <a
+              href="/"
+              className="dashboard-logo-link"
+              aria-label="Go to homepage"
+            >
+              <img
+                src={logo}
+                alt="FineAnswer"
+                className="dashboard-logo-image"
+              />
+            </a>
           </div>
           {onToggleSidebar && (
             <button

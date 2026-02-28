@@ -4,13 +4,11 @@ import ukImg from "../images/uk.jpg";
 import irelandImg from "../images/ireland.jpg";
 import ausImg from "../images/aus.jpg";
 
-
-
 import { useNavigate } from "react-router-dom";
 
 const CountrySlider = () => {
   const navigate = useNavigate();
-
+  
 const countries = [
     {
       name: "United Kingdom",
