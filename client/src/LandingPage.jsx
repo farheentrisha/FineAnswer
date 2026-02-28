@@ -325,7 +325,7 @@ export default function LandingPage() {
                 )
               }
             >
-              Chek Visa Success
+              Check Visa Success
             </button>
 
             <button
