@@ -12,7 +12,6 @@ import ForgotPassword from "./ForgotPassword";
 import ResetPassword from "./ResetPassword";
 import DashboardLayout from "./pages/DashboardLayout";
 import DashboardHome from "./pages/DashboardHome";
-import Universities from "./pages/Universities";
 import DocumentChecklist from "./pages/DocumentChecklist";
 import Sessions from "./pages/Sessions";
 import Profile from "./pages/Profile";
@@ -119,7 +118,6 @@ function AppRoutes() {
         }
       >
         <Route index element={<DashboardHome />} />
-        <Route path="universities" element={<Universities />} />
         <Route path="documentchecklist" element={<DocumentChecklist />} />
         <Route path="sessions" element={<Sessions />} />
         <Route path="career" element={<Navigate to="/career" replace />} />

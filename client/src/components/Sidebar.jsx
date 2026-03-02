@@ -3,7 +3,6 @@ import { useContext } from "react";
 import { Sidebar as ProSidebar } from "react-pro-sidebar";
 import {
   FaHome,
-  FaUniversity,
   FaFolderOpen,
   FaVideo,
   FaEnvelope,
@@ -75,10 +74,6 @@ export default function Sidebar({
         <nav className="sidebar-nav" onClick={() => onCloseMobile?.()}>
           <NavLink to="/dashboard" end title="Dashboard">
             <FaHome /> <span>Dashboard</span>
-          </NavLink>
-
-          <NavLink to="/dashboard/universities" title="Universities">
-            <FaUniversity /> <span>Universities</span>
           </NavLink>
 
           <NavLink to="/dashboard/documentchecklist" title="Documents">

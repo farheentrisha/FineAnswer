@@ -5,7 +5,7 @@ import SuccessStories from "./components/SuccessStories";
 import ContactSection from "./components/ContactSection";
 import Services from "./components/Services";
 import CountrySlider from "./components/CountrySlider";
-import Navbar3 from "./components/navbar3"; 
+import Navbar3 from "./components/navbar3";
 import CEOQuote from "./components/CEOQuote";
 import useFadeIn from "./hooks/useFadeIn";
 import PartnerLogos from "./components/PartnerLogos";
@@ -49,15 +49,15 @@ export default function LandingPage() {
   const COUNTRY = "Ireland";
   // label shown in dropdown → value sent to backend (must partially match sheet category row)
   const LEVELS = [
-    { label: "Post Graduate",         value: "Master's (Postgraduate)" },
-    { label: "Undergraduate",         value: "Bachelor's (Undergraduate)" },
-    { label: "Postgraduate Diploma",  value: "Postgraduate Diploma" },
-    { label: "Higher Diploma",        value: "Higher Diploma" },
+    { label: "Post Graduate", value: "Master's (Postgraduate)" },
+    { label: "Undergraduate", value: "Bachelor's (Undergraduate)" },
+    { label: "Postgraduate Diploma", value: "Postgraduate Diploma" },
+    { label: "Higher Diploma", value: "Higher Diploma" },
   ];
   const INTAKES = [
-    { label: "September",         value: "September" },
+    { label: "September", value: "September" },
     { label: "January / February", value: "January/February" },
-    { label: "April",             value: "April" },
+    { label: "April", value: "April" },
   ];
 
   const toggleDropdown = (name) => {
@@ -174,18 +174,18 @@ export default function LandingPage() {
   // Show popup after 10 seconds only when user is not logged in and popup hasn't been shown before
   useEffect(() => {
     if (loading || user) return;
-    
+
     // Check if popup has been shown before
-    const hasShownPopup = localStorage.getItem('popupShown');
+    const hasShownPopup = localStorage.getItem("popupShown");
     setPopupShownBefore(!!hasShownPopup);
-    
+
     if (hasShownPopup) return;
-    
+
     const timer = setTimeout(() => {
       setShowPopup(true);
-      localStorage.setItem('popupShown', 'true');
+      localStorage.setItem("popupShown", "true");
     }, 10000);
-    
+
     return () => clearTimeout(timer);
   }, [loading, user]);
 
@@ -227,7 +227,6 @@ export default function LandingPage() {
           {/* Search Bar Glass Box */}
           <div className="hero-search-wrapper-new" ref={searchRef}>
             <div className="hero-search-box-new">
-
               {/* Level – dropdown */}
               <div
                 className={`search-item-wrap ${activeDropdown === "level" ? "dropdown-open" : ""}`}
@@ -239,7 +238,8 @@ export default function LandingPage() {
                 >
                   <span className="search-label">Level</span>
                   <span className="search-value">
-                    {LEVELS.find((l) => l.value === selectedLevel)?.label || "Select Level"}
+                    {LEVELS.find((l) => l.value === selectedLevel)?.label ||
+                      "Select Level"}
                     <span className="search-chevron">▼</span>
                   </span>
                 </button>
@@ -285,7 +285,8 @@ export default function LandingPage() {
                 >
                   <span className="search-label">Intake</span>
                   <span className="search-value">
-                    {INTAKES.find((i) => i.value === selectedIntake)?.label || "Select Intake"}
+                    {INTAKES.find((i) => i.value === selectedIntake)?.label ||
+                      "Select Intake"}
                     <span className="search-chevron">▼</span>
                   </span>
                 </button>
@@ -331,9 +332,9 @@ export default function LandingPage() {
             <button
               className="cta-consult"
               onClick={() => {
-                const contactSection = document.getElementById('contact');
+                const contactSection = document.getElementById("contact");
                 if (contactSection) {
-                  contactSection.scrollIntoView({ behavior: 'smooth' });
+                  contactSection.scrollIntoView({ behavior: "smooth" });
                 }
               }}
             >
@@ -348,11 +349,20 @@ export default function LandingPage() {
         <div className="about-left">
           <h2>ABOUT US</h2>
           <p>
-            We help students unlock global academic opportunities through seamless guidance, expert mentoring, and complete end-to-end support. Headquartered in Ireland, we guide students from choosing the right country and institution to confidently stepping onto campus — supporting them at every stage of their journey.
+            We help students unlock global academic opportunities through
+            seamless guidance, expert mentoring, and complete end-to-end
+            support. Headquartered in Ireland, we guide students from choosing
+            the right country and institution to confidently stepping onto
+            campus — supporting them at every stage of their journey.
           </p>
 
           <div className="about-buttons">
-            <button className="btn-primary" onClick={() => navigate("/read-more-info")}>Learn More</button>
+            <button
+              className="btn-primary"
+              onClick={() => navigate("/read-more-info")}
+            >
+              Learn More
+            </button>
             <a
               href="https://www.youtube.com/@FineAnswerStudyAbroad/videos"
               target="_blank"
@@ -418,17 +428,12 @@ export default function LandingPage() {
       </div>
 
       <div className={`fade-section ${partnerLogosVisible ? "show" : ""}`}>
-  <PartnerBank />
-</div>
-
-      <div
-        ref={ceoRef}
-        className={`fade-section ${ceoVisible ? "show" : ""}`}
-      >
-        <CEOQuote />
+        <PartnerBank />
       </div>
 
-
+      <div ref={ceoRef} className={`fade-section ${ceoVisible ? "show" : ""}`}>
+        <CEOQuote />
+      </div>
 
       <div
         id="contact"
@@ -446,10 +451,13 @@ export default function LandingPage() {
       {showPopup && !loading && !user && (
         <div className="popup-overlay">
           <div className="modern-popup">
-            <button className="popup-close" onClick={() => {
-              setShowPopup(false);
-              localStorage.setItem('popupShown', 'true');
-            }}>
+            <button
+              className="popup-close"
+              onClick={() => {
+                setShowPopup(false);
+                localStorage.setItem("popupShown", "true");
+              }}
+            >
               ×
             </button>
             <h2>Unlock More Opportunities!</h2>
