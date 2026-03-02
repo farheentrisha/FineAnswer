@@ -1,6 +1,5 @@
 import { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import ProgressTracker from "../components/ProgressTracker.jsx";
 import DocumentChecklist from "./DocumentChecklist";
 import { AuthContext } from "./Provider/ContextProvider";
 
@@ -47,7 +46,7 @@ export default function DashboardHome() {
 
   return (
     <>
-      <h2 className="welcome-text">Welcome back, {userName}! 👋</h2>
+      <h2 className="welcome-text">Welcome back, {userName}</h2>
       <p className="sub-text">
         Track your study abroad journey and manage your applications
       </p>
@@ -97,7 +96,6 @@ export default function DashboardHome() {
       )}
 
       <div className="dashboard-grid">
-        <ProgressTracker />
         <DocumentChecklist />
       </div>
     </>

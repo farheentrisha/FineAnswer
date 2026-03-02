@@ -34,6 +34,7 @@ import BlogDetail from "./pages/BlogDetail";
 import Career from "./pages/Career";
 import Payment from "./pages/Payment";
 import EnglishProficiency from "./pages/EnglishProficiency";
+import ProgressTrackerPage from "./pages/ProgressTrackerPage";
 import PaymentSuccess from "./pages/PaymentSuccess";
 import PaymentFail from "./pages/PaymentFail";
 import PaymentCancel from "./pages/PaymentCancel";
@@ -118,6 +119,7 @@ function AppRoutes() {
         }
       >
         <Route index element={<DashboardHome />} />
+        <Route path="progress-tracker" element={<ProgressTrackerPage />} />
         <Route path="documentchecklist" element={<DocumentChecklist />} />
         <Route path="sessions" element={<Sessions />} />
         <Route path="career" element={<Navigate to="/career" replace />} />
