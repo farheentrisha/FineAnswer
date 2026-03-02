@@ -171,10 +171,26 @@ body {
   font-weight: 500;
 }
 
-.search-item-new .search-chevron {
-  font-size: 10px;
-  opacity: 0.85;
-  transition: transform 0.2s ease;
+/* 1. Remove the default browser outline */
+.search-item-new:focus,
+.search-dropdown-item:focus {
+  outline: none;
+
+}
+
+
+/* 2. Add a professional, subtle focus indicator for the main buttons */
+.search-item-new:focus-visible {
+  /* Adds a soft, semi-transparent white ring that fits the glass theme */
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.4);
+  border-radius: 8px;
+}
+
+/* 3. Refine the dropdown item focus to look intentional */
+.search-dropdown-item:focus {
+  /* Keep the existing background change, but ensure no harsh border */
+  background: rgba(76, 92, 159, 0.12);
+  color: #13253F;
 }
 
 .search-item-wrap.dropdown-open .search-chevron {
@@ -222,18 +238,27 @@ body {
   box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.04);
 }
 
+
 .search-dropdown-item {
   display: block;
   width: 100%;
   padding: 12px 20px;
   border: none;
+  outline: none;
   background: none;
   font-size: 15px;
   font-weight: 500;
   color: #1e293b;
   text-align: left;
   cursor: pointer;
-  transition: background 0.15s ease, color 0.15s ease;
+  transition: background 0.15s ease, color 0.15s ease, box-shadow 0.15s;
+}
+
+.search-dropdown-item:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px #4c5c9f33, 0 2px 8px rgba(76,92,159,0.08);
+  background: linear-gradient(90deg, rgba(76, 92, 159, 0.08), rgba(76, 92, 159, 0.04));
+  color: #13253F;
 }
 
 .search-dropdown-item:hover {
@@ -244,6 +269,7 @@ body {
 .search-dropdown-item:active {
   background: rgba(76, 92, 159, 0.1);
 }
+
 
 .search-label {
   font-size: 13px;

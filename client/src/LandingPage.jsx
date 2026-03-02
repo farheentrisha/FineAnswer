@@ -15,6 +15,7 @@ import "./LandingPage.css";
 import uni1 from "./assets/DCU.jpg";
 import uni2 from "./assets/UL.jpg";
 import uni3 from "./assets/setu.jpg";
+import uni4 from "./assets/Trinity1.jpg";
 export default function LandingPage() {
   const navigate = useNavigate();
   const { user, loading } = useContext(AuthContext);
@@ -24,7 +25,7 @@ export default function LandingPage() {
   const [countryRef, countryVisible] = useFadeIn();
   const [ceoRef, ceoVisible] = useFadeIn();
   const [contactRef, contactVisible] = useFadeIn();
-  const images = [uni1, uni2, uni3];
+  const images = [uni1, uni2, uni3, uni4];
   const [currentImage, setCurrentImage] = useState(0);
 
   // Stats animation states
@@ -245,14 +246,18 @@ export default function LandingPage() {
                 </button>
                 {activeDropdown === "level" && (
                   <div className="search-dropdown">
-                    {LEVELS.map((l) => (
+                    {LEVELS.map((l, idx) => (
                       <button
                         key={l.value}
                         type="button"
                         className="search-dropdown-item"
-                        onClick={() => {
+                        ref={el => {
+                          if (activeDropdown === "level" && idx === 0 && el) el.focus();
+                        }}
+                        onClick={e => {
                           setSelectedLevel(l.value);
                           setActiveDropdown(null);
+                          e.currentTarget.focus();
                         }}
                       >
                         {l.label}
@@ -292,14 +297,18 @@ export default function LandingPage() {
                 </button>
                 {activeDropdown === "intake" && (
                   <div className="search-dropdown">
-                    {INTAKES.map((i) => (
+                    {INTAKES.map((i, idx) => (
                       <button
                         key={i.value}
                         type="button"
                         className="search-dropdown-item"
-                        onClick={() => {
+                        ref={el => {
+                          if (activeDropdown === "intake" && idx === 0 && el) el.focus();
+                        }}
+                        onClick={e => {
                           setSelectedIntake(i.value);
                           setActiveDropdown(null);
+                          e.currentTarget.focus();
                         }}
                       >
                         {i.label}
@@ -326,7 +335,7 @@ export default function LandingPage() {
                 )
               }
             >
-              Check Visa Success
+              Check Visa Decision
             </button>
 
             <button
