@@ -103,7 +103,7 @@ body {
 .sidebar-logo {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: center;
   gap: 12px;
   margin-bottom: 30px;
 }
@@ -295,7 +295,7 @@ body {
 
   .dashboard-layout.is-sidebar-collapsed .sidebar .sidebar-logo {
     flex-direction: row !important;
-    justify-content: space-between !important;
+    justify-content: center !important;
     align-items: center !important;
     gap: 12px !important;
   }
@@ -354,7 +354,8 @@ body {
   border: none;
   background: #ffffff;
   color: var(--primary, #4c5c9e);
-  display: flex;
+  /* Hide collapse toggle button when sidebar is extended */
+  display: none;
   align-items: center;
   justify-content: center;
   box-shadow: 0 1px 3px rgba(76, 92, 158, 0.12);

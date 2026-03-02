@@ -290,7 +290,7 @@
 .admin-layout .sidebar .sidebar-logo {
   display: flex !important;
   align-items: center !important;
-  justify-content: space-between !important;
+  justify-content: center !important;
   gap: 12px !important;
   margin-bottom: 30px !important;
 }
@@ -352,7 +352,8 @@
   border: none !important;
   background: #ffffff !important;
   color: #5b6bbf !important;
-  display: flex !important;
+  /* Hide collapse toggle button when sidebar is extended */
+  display: none !important;
   align-items: center !important;
   justify-content: center !important;
   box-shadow: 0 1px 3px rgba(91, 107, 191, 0.12) !important;
