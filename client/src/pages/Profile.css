@@ -143,3 +143,38 @@ input.readonly {
   margin-bottom: 10px;
   color: #333;
 }
+
+@media (max-width: 992px) {
+  .profile-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+  }
+
+  .save-btn {
+    align-self: flex-start;
+    margin-top: 12px;
+  }
+
+  .profile-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .profile-page {
+    padding: 16px 12px;
+  }
+
+  .profile-card {
+    padding: 16px;
+  }
+
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .form-grid .full {
+    grid-column: auto;
+  }
+}

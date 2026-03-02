@@ -237,3 +237,29 @@
   .portal-container { flex-direction: column; }
   .doc-sidebar { width: 100%; }
 }
+
+@media (max-width: 768px) {
+  .portal-container {
+    flex-direction: column;
+    padding: 16px 12px;
+    gap: 16px;
+  }
+
+  .main-bg-card {
+    padding: 16px;
+  }
+
+  .doc-card {
+    padding: 16px;
+  }
+
+  .card-top-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .action-button-group {
+    justify-content: flex-start;
+  }
+}

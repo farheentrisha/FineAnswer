@@ -93,8 +93,6 @@ body {
 /* Sidebar base styles are handled by `.dashboard-layout .sidebar` above */
 
 
-
-
 .logo {
   color: var(--primary);
   margin-bottom: 30px;
@@ -458,6 +456,17 @@ body {
   display: grid;
   grid-template-columns: 2fr 1fr;
   gap: 20px;
+}
+
+@media (max-width: 768px) {
+  .dashboard-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .dashboard-main {
+    padding: 16px;
+  }
 }
 
 /* Eligibility */
