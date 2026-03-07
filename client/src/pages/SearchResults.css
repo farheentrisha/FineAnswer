@@ -50,84 +50,104 @@
 /* Search bar */
 .sr-search-bar {
   display: flex;
-  align-items: center;
-  background: rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  align-items: stretch;
+  background: #ffffff;
   border-radius: 16px;
-  padding: 8px 10px;
-  gap: 0;
-  flex-wrap: wrap;
+  box-shadow:
+    0 0 0 1.5px rgba(255, 255, 255, 0.18),
+    0 12px 40px rgba(0, 0, 0, 0.25);
+  overflow: visible;
+  min-height: 72px;
 }
 
 .sr-field {
   display: flex;
   flex-direction: column;
+  justify-content: center;
   flex: 1;
-  min-width: 140px;
-  padding: 10px 18px;
+  min-width: 0;
+  padding: 12px 18px;
+}
+
+/* Give category field extra width for longer option text */
+.sr-field--category {
+  flex: 1.4;
+}
+
+/* Give the fixed country field slightly less space */
+.sr-field--country {
+  flex: 0.8;
 }
 
 .sr-field-label {
-  font-size: 11px;
-  color: rgba(255, 255, 255, 0.6);
-  font-weight: 700;
-  letter-spacing: 0.8px;
+  font-size: 10px;
+  color: #8a8fa8;
+  font-weight: 800;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
   margin-bottom: 5px;
+  white-space: nowrap;
 }
 
 .sr-field-select {
   background: none;
   border: none;
   outline: none;
-  color: #fff;
-  font-size: 15px;
-  font-weight: 500;
+  color: #1a1a2e;
+  font-size: 14px;
+  font-weight: 600;
   font-family: inherit;
   cursor: pointer;
   width: 100%;
   -webkit-appearance: none;
 }
 
+.sr-field-select:focus {
+  outline: none;
+}
+
 .sr-field-select option {
   color: #111;
   background: #fff;
+  font-weight: 500;
 }
 
 .sr-field-fixed {
-  color: #fff;
-  font-size: 15px;
-  font-weight: 500;
+  color: #1a1a2e;
+  font-size: 14px;
+  font-weight: 600;
 }
 
 .sr-divider {
   width: 1px;
-  height: 40px;
-  background: rgba(255, 255, 255, 0.2);
+  background: #e8e8f2;
+  align-self: stretch;
+  margin: 14px 0;
   flex-shrink: 0;
 }
 
 .sr-search-btn {
-  background: #f59e0b;
-  color: #1e1a5e;
+  background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+  color: #ffffff;
   border: none;
-  border-radius: 12px;
-  padding: 13px 30px;
+  border-radius: 0 16px 16px 0;
+  padding: 0 30px;
   font-weight: 800;
-  font-size: 15px;
+  font-size: 14px;
   cursor: pointer;
   transition: all 0.2s ease;
   white-space: nowrap;
   flex-shrink: 0;
-  margin-left: 10px;
-  letter-spacing: 0.2px;
+  letter-spacing: 0.3px;
 }
 
 .sr-search-btn:hover {
-  background: #fbbf24;
-  transform: translateY(-1px);
-  box-shadow: 0 4px 14px rgba(245, 158, 11, 0.4);
+  background: linear-gradient(135deg, #d97706 0%, #b45309 100%);
+  box-shadow: inset 0 -3px 0 rgba(0, 0, 0, 0.15);
+}
+
+.sr-search-btn:active {
+  box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.2);
 }
 
 /* =========================================
@@ -431,6 +451,39 @@
 /* =========================================
    RESPONSIVE
 ========================================= */
+@media (max-width: 900px) {
+  .sr-search-bar {
+    flex-wrap: wrap;
+    border-radius: 14px;
+    min-height: auto;
+    padding: 8px;
+    gap: 4px;
+    box-shadow:
+      0 0 0 1.5px rgba(255, 255, 255, 0.18),
+      0 8px 28px rgba(0, 0, 0, 0.2);
+  }
+
+  .sr-field,
+  .sr-field--country,
+  .sr-field--category {
+    flex: 1 1 calc(50% - 10px);
+    min-width: 130px;
+    padding: 10px 14px;
+    border-radius: 10px;
+  }
+
+  .sr-divider {
+    display: none;
+  }
+
+  .sr-search-btn {
+    flex: 1 1 100%;
+    border-radius: 10px;
+    padding: 13px;
+    margin-top: 4px;
+  }
+}
+
 @media (max-width: 768px) {
   .sr-page {
     padding-top: 100px;
@@ -442,22 +495,6 @@
 
   .sr-hero-title {
     font-size: 1.5rem;
-  }
-
-  .sr-search-bar {
-    flex-direction: column;
-    align-items: stretch;
-    gap: 0;
-  }
-
-  .sr-divider {
-    width: 100%;
-    height: 1px;
-  }
-
-  .sr-search-btn {
-    margin: 12px 0 0;
-    width: 100%;
   }
 
   .sr-grid {
@@ -472,6 +509,24 @@
 }
 
 @media (max-width: 480px) {
+  .sr-search-bar {
+    flex-direction: column;
+    gap: 2px;
+    padding: 6px;
+  }
+
+  .sr-field,
+  .sr-field--country,
+  .sr-field--category {
+    flex: none;
+    width: 100%;
+    border-radius: 8px;
+  }
+
+  .sr-search-btn {
+    border-radius: 8px;
+  }
+
   .sr-meta-grid {
     grid-template-columns: 1fr;
   }

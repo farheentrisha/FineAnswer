@@ -250,7 +250,7 @@ export default function LandingPage() {
                   onClick={() => toggleDropdown("level")}
                 >
                   <span className="search-label">Level</span>
-                  <span className="search-value">
+                  <span className={`search-value${!selectedLevel ? " search-value--placeholder" : ""}`}>
                     {LEVELS.find((l) => l.value === selectedLevel)?.label ||
                       "Select Level"}
                     <span className="search-chevron">▼</span>
@@ -283,7 +283,7 @@ export default function LandingPage() {
 
               {/* Category – dropdown */}
               <div
-                className={`search-item-wrap ${activeDropdown === "category" ? "dropdown-open" : ""}`}
+                className={`search-item-wrap search-item-wrap--category ${activeDropdown === "category" ? "dropdown-open" : ""}`}
               >
                 <button
                   type="button"
@@ -291,7 +291,7 @@ export default function LandingPage() {
                   onClick={() => toggleDropdown("category")}
                 >
                   <span className="search-label">Category</span>
-                  <span className="search-value">
+                  <span className={`search-value${!selectedCategory ? " search-value--placeholder" : ""}`}>
                     {CATEGORIES.find((c) => c.value === selectedCategory)?.label ||
                       "All Categories"}
                     <span className="search-chevron">▼</span>
@@ -332,7 +332,7 @@ export default function LandingPage() {
                   onClick={() => toggleDropdown("intake")}
                 >
                   <span className="search-label">Intake</span>
-                  <span className="search-value">
+                  <span className={`search-value${!selectedIntake ? " search-value--placeholder" : ""}`}>
                     {INTAKES.find((i) => i.value === selectedIntake)?.label ||
                       "Select Intake"}
                     <span className="search-chevron">▼</span>

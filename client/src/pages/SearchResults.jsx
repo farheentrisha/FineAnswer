@@ -122,7 +122,7 @@ export default function SearchResults() {
 
           <div className="sr-search-bar">
             {/* Country – fixed */}
-            <div className="sr-field">
+            <div className="sr-field sr-field--country">
               <label className="sr-field-label">Country</label>
               <span className="sr-field-fixed">{COUNTRY}</span>
             </div>
@@ -147,7 +147,7 @@ export default function SearchResults() {
             <div className="sr-divider" />
 
             {/* Category */}
-            <div className="sr-field">
+            <div className="sr-field sr-field--category">
               <label className="sr-field-label">Category</label>
               <select
                 className="sr-field-select"
