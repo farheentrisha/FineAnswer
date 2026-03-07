@@ -56,10 +56,12 @@ export default function LandingPage() {
     { label: "Higher Diploma", value: "Higher Diploma" },
   ];
   const CATEGORIES = [
-    { label: "Business, Management & Law",         value: "Business, Management & Law" },
-    { label: "Computing, IT & Engineering",        value: "Computing, IT & Engineering" },
-    { label: "Life Sciences & Health",             value: "Life Sciences & Health" },
-    { label: "Social Sciences, Education & Media", value: "Social Sciences, Education & Media" },
+    { label: "Business, Management & Law",  value: "Business, Management & Law" },
+    { label: "Computing, IT & Engineering", value: "Computing, IT & Engineering" },
+    { label: "Life Sciences & Health",      value: "Life Sciences & Health" },
+    { label: "Social Sciences",             value: "Social Sciences" },
+    { label: "Education & Media",           value: "Education & Media" },
+    { label: "Others",                      value: "Others" },
   ];
   const INTAKES = [
     { label: "September", value: "September" },
