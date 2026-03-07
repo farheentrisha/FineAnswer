@@ -38,19 +38,20 @@ function extractSpreadsheetId(raw) {
 
 const SPREADSHEET_ID = extractSpreadsheetId(process.env.GOOGLE_SPREADSHEET_ID);
 
+// The single sheet tab to read data from
+const FINAL_SHEET_NAME = "Final Sheet";
+
 // In-memory cache
 let cache = null;
 const CACHE_TTL_MS = 5 * 60 * 1000; // 5 minutes
 
 // ─── Level Normalisation ──────────────────────────────────────────────────────
-// The sheet uses many label variants for the same level. Map them all to the
-// four canonical values that the frontend dropdown exposes.
 const LEVEL_CANON = {
   "master's (postgraduate)": "Master's (Postgraduate)",
   "master's": "Master's (Postgraduate)",
   masters: "Master's (Postgraduate)",
   postgraduate: "Master's (Postgraduate)",
-  "master of": "Master's (Postgraduate)", // prefix match handled below
+  "master of": "Master's (Postgraduate)",
   msc: "Master's (Postgraduate)",
   "ma ": "Master's (Postgraduate)",
   mba: "Master's (Postgraduate)",
@@ -69,32 +70,36 @@ const LEVEL_CANON = {
   "hd ": "Higher Diploma",
 };
 
+// The four canonical level values the frontend exposes
+const CANONICAL_LEVELS = new Set([
+  "Master's (Postgraduate)",
+  "Bachelor's (Undergraduate)",
+  "Postgraduate Diploma",
+  "Higher Diploma",
+]);
+
 function normalizeLevel(raw) {
   if (!raw) return "";
   const lower = raw.toLowerCase().trim();
-  // Exact match first
   if (LEVEL_CANON[lower]) return LEVEL_CANON[lower];
-  // Prefix / contains match
   for (const [key, canon] of Object.entries(LEVEL_CANON)) {
     if (lower.startsWith(key) || lower === key.trim()) return canon;
   }
   return raw.trim();
 }
 
-// ─── Tab Structure Detection ──────────────────────────────────────────────────
-// A valid tab has:
-//   Row 1 (index 0): University / college name (non-empty, not a column header)
-//   Row 2 (index 1): Column headers with "Campus" at A and something at C
-// We detect this by checking that rows[1][0].trim().toLowerCase() === "campus"
+// ─── Sheet Structure Detection ────────────────────────────────────────────────
+// Valid structure: row 0 = university name, row 1 = headers with "Campus" at A
 function hasExpectedStructure(rows) {
   if (!rows || rows.length < 3) return false;
   const headerCell = (rows[1][0] || "").toString().trim().toLowerCase();
   return headerCell === "campus";
 }
 
-// ─── Category Row Detection ───────────────────────────────────────────────────
-// A category row has a value only in column A; all other columns are blank.
-function isCategoryRow(row) {
+// ─── Single-Column Row Detection ─────────────────────────────────────────────
+// Returns true when only column A has a value (used for university, level, and
+// category header rows in the sheet).
+function isSingleColumnRow(row) {
   if (!row || row.length === 0) return false;
   const first = (row[0] || "").toString().trim();
   if (!first) return false;
@@ -104,18 +109,20 @@ function isCategoryRow(row) {
   return true;
 }
 
-// ─── Tab Parser ───────────────────────────────────────────────────────────────
+// ─── Final Sheet Parser ───────────────────────────────────────────────────────
 /**
- * The "For Dublin 4IR" tab (and similar) repeats the following block for every
- * university:
+ * The "Final Sheet" tab repeats the following block for every university:
  *
- *   Row A: University name  (only column A has a value)
- *   Row B: Column headers   (column A = "Campus")
- *   Row C+: Category rows / data rows
+ *   Row A : University name          (only column A has a value)
+ *   Row B : Column headers           (column A = "Campus")
+ *   Row C : Level header             (e.g. "Master's (Postgraduate)")
+ *   Row D : Category header          (e.g. "Business, Management & Law")
+ *   Row E+: Data rows
  *
- * We detect the header row by checking whether column A equals "campus".
- * When we see a header row, the previous non-blank "only-col-A" row was a
- * university name, not a level label.
+ * Single-column rows are classified as:
+ *   • University name  – when the NEXT non-blank row has col A = "campus"
+ *   • Level header     – when the value normalises to a canonical level
+ *   • Category header  – everything else (the four subject area strings)
  */
 function parseSheetRows(rows, sheet) {
   if (!hasExpectedStructure(rows)) return [];
@@ -123,44 +130,36 @@ function parseSheetRows(rows, sheet) {
   const programs = [];
   let currentUniversity = (rows[0][0] || "").toString().trim() || sheet;
   let currentLevel = "";
+  let currentCategory = "";
 
-  // i=0: university name (already captured)
-  // i=1: headers (skip)
-  // i=2+: data
   for (let i = 2; i < rows.length; i++) {
     const row = rows[i];
 
-    // Skip entirely blank rows
     if (!row || row.every((cell) => (cell || "").toString().trim() === "")) {
       continue;
     }
 
     const colA = (row[0] || "").toString().trim();
 
-    // ── Header row ─────────────────────────────────────────────────────────
-    // Column A = "Campus" means this is a repeated column-header row.
-    // The previous non-blank single-column row was a university name.
+    // ── Repeated column-header row ("Campus" in col A) ─────────────────────
     if (colA.toLowerCase() === "campus") {
-      // Look backwards for the last pending university-name candidate
       for (let j = i - 1; j >= 0; j--) {
         const prev = rows[j];
         if (!prev || prev.every((c) => (c || "").toString().trim() === ""))
           continue;
-        if (isCategoryRow(prev)) {
-          // This was a university name row, not a level
+        if (isSingleColumnRow(prev)) {
           currentUniversity = (prev[0] || "").toString().trim();
-          currentLevel = ""; // reset level for new university block
+          currentLevel = "";
+          currentCategory = "";
         }
         break;
       }
-      continue; // skip the header row itself
+      continue;
     }
 
-    // ── Category or university-name row ────────────────────────────────────
-    // A row where only column A has a value. We don't know yet whether it is
-    // a level label or a university name — we decide when we see the next row.
-    if (isCategoryRow(row)) {
-      // Peek at the next non-blank row to decide
+    // ── Single-column row: university name / level / category ───────────────
+    if (isSingleColumnRow(row)) {
+      // Peek at the next non-blank row
       let nextRow = null;
       for (let j = i + 1; j < rows.length; j++) {
         const r = rows[j];
@@ -170,13 +169,22 @@ function parseSheetRows(rows, sheet) {
         }
       }
       const nextColA = (nextRow?.[0] || "").toString().trim().toLowerCase();
+
       if (nextColA === "campus") {
-        // Next is a header row → current row is a university name
+        // University name row
         currentUniversity = colA;
         currentLevel = "";
+        currentCategory = "";
       } else {
-        // It's a level/category label
-        currentLevel = normalizeLevel(colA);
+        const asLevel = normalizeLevel(colA);
+        if (CANONICAL_LEVELS.has(asLevel)) {
+          // Level header (e.g. "Master's (Postgraduate)")
+          currentLevel = asLevel;
+          currentCategory = "";
+        } else {
+          // Category header (e.g. "Business, Management & Law")
+          currentCategory = colA;
+        }
       }
       continue;
     }
@@ -197,6 +205,7 @@ function parseSheetRows(rows, sheet) {
       englishRequirements: (row[7] || "").toString().trim(),
       academicRequirements: (row[8] || "").toString().trim(),
       level: currentLevel,
+      category: currentCategory,
       country: "Ireland",
     });
   }
@@ -221,26 +230,15 @@ async function getAllPrograms() {
     );
   }
 
-  // Get all sheet (tab) names
-  const metaRes = await sheets.spreadsheets.get({
+  // Fetch only the "Final Sheet" tab
+  const res = await sheets.spreadsheets.values.get({
     spreadsheetId: SPREADSHEET_ID,
-  });
-  const sheetNames = metaRes.data.sheets.map((s) => s.properties.title);
-
-  // Fetch all tabs in one batch request
-  const ranges = sheetNames.map((name) => `'${name}'`);
-  const batchRes = await sheets.spreadsheets.values.batchGet({
-    spreadsheetId: SPREADSHEET_ID,
-    ranges,
+    range: `'${FINAL_SHEET_NAME}'`,
     valueRenderOption: "FORMATTED_VALUE",
   });
 
-  const allPrograms = [];
-  (batchRes.data.valueRanges || []).forEach((valueRange, idx) => {
-    const rows = valueRange.values || [];
-    const parsed = parseSheetRows(rows, sheetNames[idx]);
-    allPrograms.push(...parsed);
-  });
+  const rows = res.data.values || [];
+  const allPrograms = parseSheetRows(rows, FINAL_SHEET_NAME);
 
   cache = { data: allPrograms, expiresAt: Date.now() + CACHE_TTL_MS };
   return allPrograms;

@@ -39,16 +39,18 @@ function intakeNeedles(raw) {
  * Query params:
  *   level    – partial, case-insensitive match against the program's level field
  *   country  – exact match (currently "Ireland" only)
+ *   category – partial, case-insensitive match against the program's category field
+ *              e.g. "Business, Management & Law"
  *   intake   – "September" | "January/February" | "April" (or any abbreviation)
  *
  * Returns [] when no params are provided.
  * Returns { error } with status 500 on failure.
  */
 router.get("/search", async (req, res) => {
-  const { level = "", country = "", intake = "" } = req.query;
+  const { level = "", country = "", category = "", intake = "" } = req.query;
 
   // Nothing to search
-  if (!level.trim() && !country.trim() && !intake.trim()) {
+  if (!level.trim() && !country.trim() && !category.trim() && !intake.trim()) {
     return res.json([]);
   }
 
@@ -56,13 +58,12 @@ router.get("/search", async (req, res) => {
     const all = await getAllPrograms();
 
     const results = all.filter((item) => {
-      const itemLevel   = (item.level            || "").toLowerCase().trim();
-      const itemIntakes = (item.availableIntakes  || "").toLowerCase().trim();
-      const itemCountry = (item.country           || "").toLowerCase().trim();
+      const itemLevel    = (item.level           || "").toLowerCase().trim();
+      const itemCategory = (item.category        || "").toLowerCase().trim();
+      const itemIntakes  = (item.availableIntakes || "").toLowerCase().trim();
+      const itemCountry  = (item.country         || "").toLowerCase().trim();
 
       // ── Level ──────────────────────────────────────────────────────────────
-      // The sheet category rows contain text like "Master's (Postgraduate)".
-      // We do a partial match so the frontend can pass the exact label.
       if (level.trim()) {
         const needle = level.trim().toLowerCase();
         if (!itemLevel.includes(needle)) return false;
@@ -73,9 +74,13 @@ router.get("/search", async (req, res) => {
         if (itemCountry !== country.trim().toLowerCase()) return false;
       }
 
+      // ── Category ───────────────────────────────────────────────────────────
+      if (category.trim()) {
+        const needle = category.trim().toLowerCase();
+        if (!itemCategory.includes(needle)) return false;
+      }
+
       // ── Intake ─────────────────────────────────────────────────────────────
-      // The sheet uses abbreviated month names ("Sept", "Jan", "Feb", "Apr").
-      // Convert the frontend value to those abbreviations before matching.
       if (intake.trim()) {
         const needles = intakeNeedles(intake);
         const matched = needles.some((n) => itemIntakes.includes(n));

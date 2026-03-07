@@ -4,12 +4,12 @@ import { API_BASE_URL } from "../config/api";
 /**
  * Search programs from the Google Sheets data source via the backend.
  *
- * @param {{ level?: string, country?: string, intake?: string }} params
+ * @param {{ level?: string, country?: string, category?: string, intake?: string }} params
  * @returns {Promise<object[]>}
  */
-export const searchPrograms = ({ level = "", country = "", intake = "" }) =>
+export const searchPrograms = ({ level = "", country = "", category = "", intake = "" }) =>
   axios
     .get(`${API_BASE_URL}/programs/search`, {
-      params: { level, country, intake },
+      params: { level, country, category, intake },
     })
     .then((res) => res.data);
