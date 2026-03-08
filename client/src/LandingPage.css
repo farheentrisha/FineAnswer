@@ -16,6 +16,7 @@ body {
   background-color: #f7f9fc;
   color: #1c1c1c;
   overflow-x: hidden;
+  scroll-behavior: smooth;
 }
 
 /* =========================================================

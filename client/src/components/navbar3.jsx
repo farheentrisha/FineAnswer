@@ -43,12 +43,26 @@ export default function Navbar() {
       className="minimal-navbar"
     >
       <div className="nav-inner">
-        <div className="nav-logo" onClick={() => navigate("/")}>
+        <div
+          className="nav-logo"
+          onClick={() => {
+            navigate("/");
+            window.scrollTo({ top: 0, behavior: "smooth" });
+          }}
+        >
           <img src={logo} alt="Logo" />
         </div>
 
         <nav className={`nav-menu ${menuOpen ? "open" : ""}`}>
-          <NavLink to="/" onClick={() => setMenuOpen(false)}>Home</NavLink>
+          <NavLink
+            to="/"
+            onClick={() => {
+              setMenuOpen(false);
+              window.scrollTo({ top: 0, behavior: "smooth" });
+            }}
+          >
+            Home
+          </NavLink>
           <a href="/#about" onClick={() => setMenuOpen(false)}>About</a>
           <a href="/#services" onClick={() => setMenuOpen(false)}>Services</a>
           <a href="/#countries" onClick={() => setMenuOpen(false)}>Countries</a>

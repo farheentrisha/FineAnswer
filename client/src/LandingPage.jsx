@@ -162,20 +162,6 @@ export default function LandingPage() {
     return () => observer.disconnect();
   }, []);
 
-  // Input focus effect
-  useEffect(() => {
-    const inputs = document.querySelectorAll(
-      ".search-bar input, .search-bar select",
-    );
-    inputs.forEach((el) => {
-      el.addEventListener(
-        "focus",
-        () => (el.style.boxShadow = "0 0 10px rgba(0,119,255,0.5)"),
-      );
-      el.addEventListener("blur", () => (el.style.boxShadow = "none"));
-    });
-  }, []);
-
   // Show popup after 10 seconds only when user is not logged in and popup hasn't been shown before
   useEffect(() => {
     if (loading || user) return;
