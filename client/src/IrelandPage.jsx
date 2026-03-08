@@ -38,7 +38,7 @@ export default function IrelandPage() {
         <div className="points-grid">
           <div className="point"><strong>IELTS:</strong> 6.0 – 6.5</div>
           <div className="point"><strong>Intakes:</strong> Jan, Sept</div>
-          <div className="point"><strong>Tuition Fees:</strong> 6–8 Lakhs</div>
+          <div className="point"><strong>Tuition Fees:</strong> 6–8 Lac</div>
           <div className="point"><strong>MOI:</strong> Accepted (Some Universities)</div>
           <div className="point"><strong>Language:</strong> English</div>
         </div>
