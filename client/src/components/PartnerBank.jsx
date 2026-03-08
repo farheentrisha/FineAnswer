@@ -5,7 +5,7 @@ import "./PartnerBank.css";
 import cityBank from "../assets/city-bank-logo.webp";
 import nrbcBank from "../assets/nrbc.webp";
 import premierBank from "../assets/pp.webp";
-import tcl from "../assets/tcl.png";
+import tcl from "../assets/british.png";
 import bylc from "../assets/bylc.png";
 import studyGlobal from "../assets/studyp.png";
 
