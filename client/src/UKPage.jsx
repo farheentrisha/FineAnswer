@@ -38,7 +38,7 @@ export default function UKPage() {
         <div className="points-grid">
           <div className="point"><strong>IELTS:</strong> 6.0 - 6.5</div>
           <div className="point"><strong>Intakes:</strong> Jan, Sept</div>
-          <div className="point"><strong>Tuition Fees:</strong> 5-6 Lakhs</div>
+          <div className="point"><strong>Tuition Fees:</strong> 5-6 Lac</div>
           <div className="point"><strong>MOI:</strong> Not Accepted</div>
           <div className="point"><strong>Language:</strong> English</div>
         </div>

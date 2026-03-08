@@ -523,6 +523,7 @@ body {
   align-items: flex-start;
   padding: 100px 70px;
   gap: 60px;
+  background-color: #f7f9fc;
 }
 
 .about-left {
