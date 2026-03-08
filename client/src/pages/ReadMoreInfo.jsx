@@ -1,5 +1,6 @@
 import React from "react";
-import { useNavigate } from "react-router-dom"; // Assumes you are using react-router
+import { useNavigate } from "react-router-dom";
+import BrochureFlipBook from "../components/BrochureFlipBook";
 import "./ReadMoreInfo.css";
 import fineImg from "../assets/fine.jpg";
 
@@ -39,6 +40,11 @@ export default function ReadMoreInfo() {
         <div className="info-image">
   <img src={fineImg} alt="Students" />
 </div>
+      </section>
+
+      {/* Brochure flip book */}
+      <section className="info-section brochure-section">
+        <BrochureFlipBook />
       </section>
 
       {/* Section 2: Services (Alternating) */}

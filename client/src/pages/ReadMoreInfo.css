@@ -121,6 +121,12 @@
   background-color: #f9f9ff;
 }
 
+.info-section.brochure-section {
+  padding: 0;
+  display: block;
+  max-width: 100%;
+}
+
 .info-content { flex: 1.2; }
 .info-image { flex: 1; }
 
