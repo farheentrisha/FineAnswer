@@ -19,27 +19,25 @@ import ucd from '../assets/ucd.jpg';
 const LogoRow = ({ logos, direction, speed = '30s' }) => {
   return (
     <div className="logo-row">
-      {/* Container duplicated for seamless looping */}
-      <div 
-        className={`logo-track ${direction === 'left' ? 'animate-left' : 'animate-right'}`}
+      {/* Single wrapper so both copies move together = seamless loop, no pop-in */}
+      <div
+        className={`logo-track-wrapper ${direction === 'left' ? 'animate-left' : 'animate-right'}`}
         style={{ animationDuration: speed }}
       >
-        {logos.map((logo, index) => (
-          <div className="logo-card" key={index}>
-            <img src={logo.url} alt={logo.name} />
-          </div>
-        ))}
-      </div>
-      {/* Second copy for the infinite effect */}
-      <div 
-        className={`logo-track ${direction === 'left' ? 'animate-left' : 'animate-right'}`}
-        style={{ animationDuration: speed }}
-      >
-        {logos.map((logo, index) => (
-          <div className="logo-card" key={`dup-${index}`}>
-            <img src={logo.url} alt={logo.name} />
-          </div>
-        ))}
+        <div className="logo-track">
+          {logos.map((logo, index) => (
+            <div className="logo-card" key={index}>
+              <img src={logo.url} alt={logo.name} />
+            </div>
+          ))}
+        </div>
+        <div className="logo-track" aria-hidden="true">
+          {logos.map((logo, index) => (
+            <div className="logo-card" key={`dup-${index}`}>
+              <img src={logo.url} alt={logo.name} />
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );

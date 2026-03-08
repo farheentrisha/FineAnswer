@@ -1,7 +1,7 @@
 .brochure-flip-book-wrapper {
   width: 100%;
-  min-height: 100vh;
-  background-color: #1a1a1a;
+  min-height: 60vh;
+  background-color: #f7f9fc;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -25,9 +25,9 @@
 
 .brochure-flip-book-inner {
   box-shadow:
-    0 8px 24px rgba(0, 0, 0, 0.35),
-    0 2px 8px rgba(0, 0, 0, 0.2);
-  border-radius: 2px;
+    0 4px 20px rgba(0, 0, 0, 0.08),
+    0 12px 40px rgba(0, 0, 0, 0.12);
+  border-radius: 4px;
 }
 
 .brochure-flip-book-controls {
@@ -42,22 +42,23 @@
   padding: 0.6rem 1.4rem;
   font-size: 0.95rem;
   font-weight: 500;
-  color: #e5e5e5;
-  background: transparent;
-  border: 1px solid rgba(255, 255, 255, 0.25);
+  color: #4b2e83;
+  background: #fff;
+  border: 1px solid rgba(75, 46, 131, 0.2);
   border-radius: 8px;
   cursor: pointer;
   transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
 }
 
 .brochure-btn:hover {
-  background: rgba(255, 255, 255, 0.08);
-  border-color: rgba(255, 255, 255, 0.4);
-  color: #fff;
+  background: #f0edf5;
+  border-color: rgba(75, 46, 131, 0.35);
+  color: #3d2670;
 }
 
 .brochure-btn:active {
-  background: rgba(255, 255, 255, 0.12);
+  background: #e8e4ef;
 }
 
 @media (max-width: 768px) {

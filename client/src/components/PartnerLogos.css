@@ -60,12 +60,29 @@
 .logo-row {
   display: flex;
   user-select: none;
+  overflow: hidden;
+  width: 100%;
 }
 
+/* Wrapper holds both tracks; we animate this so the loop resets seamlessly */
+.logo-track-wrapper {
+  display: flex;
+  flex-shrink: 0;
+  width: max-content;
+  gap: 0;
+}
+
+/* First copy: no right padding. Second copy: 30px left margin (same as gap between logos) + 30px right padding.
+   So repeat unit = track + 30px; total width = 2*(track + 30px); 50% = one unit = seamless loop with no attaching logos. */
 .logo-track {
   display: flex;
   flex-shrink: 0;
   gap: 30px;
+  padding-right: 0;
+}
+
+.logo-track:last-of-type {
+  margin-left: 30px;
   padding-right: 30px;
 }
 
@@ -87,14 +104,14 @@
   object-fit: contain;
 }
 
-/* Animations */
+/* Animations: move wrapper by 50% so one full set of logos scrolls = seamless loop */
 @keyframes scroll-left {
   from { transform: translateX(0); }
-  to { transform: translateX(-100%); }
+  to { transform: translateX(-50%); }
 }
 
 @keyframes scroll-right {
-  from { transform: translateX(-100%); }
+  from { transform: translateX(-50%); }
   to { transform: translateX(0); }
 }
 
@@ -107,6 +124,6 @@
 }
 
 /* Pause on hover for better UX */
-.logo-row:hover .logo-track {
+.logo-row:hover .logo-track-wrapper {
   animation-play-state: paused;
 }
