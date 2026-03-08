@@ -5,10 +5,19 @@ import Navbar3 from "../components/navbar3";
 import "./SearchResults.css";
 
 const LEVELS = [
-  { label: "Post Graduate",        value: "Master's (Postgraduate)" },
+  { label: "Postgraduate",        value: "Master's (Postgraduate)" },
   { label: "Undergraduate",        value: "Bachelor's (Undergraduate)" },
   { label: "Postgraduate Diploma", value: "Postgraduate Diploma" },
   { label: "Higher Diploma",       value: "Higher Diploma" },
+];
+
+const CATEGORIES = [
+  { label: "Business, Management & Law",  value: "Business, Management & Law" },
+  { label: "Computing, IT & Engineering", value: "Computing, IT & Engineering" },
+  { label: "Life Sciences & Health",      value: "Life Sciences & Health" },
+  { label: "Social Sciences",             value: "Social Sciences" },
+  { label: "Education & Media",           value: "Education & Media" },
+  { label: "Others",                      value: "Others" },
 ];
 
 const INTAKES = [
@@ -34,9 +43,12 @@ function getLevelLabel(value) {
 export default function SearchResults() {
   const [searchParams, setSearchParams] = useSearchParams();
 
-  // Read initial values from URL (value = what we filter by; label = what we display)
+  // Read initial values from URL
   const [selectedLevel, setSelectedLevel] = useState(
     searchParams.get("level") || ""
+  );
+  const [selectedCategory, setSelectedCategory] = useState(
+    searchParams.get("category") || ""
   );
   const [selectedIntake, setSelectedIntake] = useState(
     searchParams.get("intake") || ""
@@ -49,15 +61,17 @@ export default function SearchResults() {
 
   // Run search whenever URL query params change
   useEffect(() => {
-    const level = searchParams.get("level") || "";
-    const country = searchParams.get("country") || "";
-    const intake = searchParams.get("intake") || "";
+    const level    = searchParams.get("level")    || "";
+    const country  = searchParams.get("country")  || "";
+    const category = searchParams.get("category") || "";
+    const intake   = searchParams.get("intake")   || "";
 
     // Sync local state with URL
     setSelectedLevel(level);
+    setSelectedCategory(category);
     setSelectedIntake(intake);
 
-    if (!level && !country && !intake) {
+    if (!level && !country && !category && !intake) {
       setResults([]);
       setSearched(false);
       return;
@@ -67,7 +81,7 @@ export default function SearchResults() {
     setError(null);
     setSearched(true);
 
-    searchPrograms({ level, country, intake })
+    searchPrograms({ level, country, category, intake })
       .then((data) => setResults(Array.isArray(data) ? data : []))
       .catch(() => {
         setError("Something went wrong. Please try again.");
@@ -78,15 +92,20 @@ export default function SearchResults() {
 
   const handleSearch = () => {
     const params = new URLSearchParams();
-    if (selectedLevel) params.set("level", selectedLevel);
+    if (selectedLevel)    params.set("level",    selectedLevel);
     params.set("country", COUNTRY);
-    if (selectedIntake) params.set("intake", selectedIntake);
+    if (selectedCategory) params.set("category", selectedCategory);
+    if (selectedIntake)   params.set("intake",   selectedIntake);
     setSearchParams(params);
   };
 
   const activeFilters = [
-    selectedLevel && { key: "Level", value: getLevelLabel(selectedLevel) },
     { key: "Country", value: COUNTRY },
+    selectedLevel && { key: "Level", value: getLevelLabel(selectedLevel) },
+    selectedCategory && {
+      key: "Category",
+      value: CATEGORIES.find((c) => c.value === selectedCategory)?.label || selectedCategory,
+    },
     selectedIntake && {
       key: "Intake",
       value: INTAKES.find((i) => i.value === selectedIntake)?.label || selectedIntake,
@@ -104,6 +123,14 @@ export default function SearchResults() {
           <p className="sr-hero-sub">Browse partner university programs in Ireland</p>
 
           <div className="sr-search-bar">
+            {/* Country – fixed */}
+            <div className="sr-field sr-field--country">
+              <label className="sr-field-label">Country</label>
+              <span className="sr-field-fixed">{COUNTRY}</span>
+            </div>
+
+            <div className="sr-divider" />
+
             {/* Level */}
             <div className="sr-field">
               <label className="sr-field-label">Level</label>
@@ -121,10 +148,19 @@ export default function SearchResults() {
 
             <div className="sr-divider" />
 
-            {/* Country – fixed */}
-            <div className="sr-field">
-              <label className="sr-field-label">Country</label>
-              <span className="sr-field-fixed">{COUNTRY}</span>
+            {/* Category */}
+            <div className="sr-field sr-field--category">
+              <label className="sr-field-label">Category</label>
+              <select
+                className="sr-field-select"
+                value={selectedCategory}
+                onChange={(e) => setSelectedCategory(e.target.value)}
+              >
+                <option value="">All Categories</option>
+                {CATEGORIES.map((c) => (
+                  <option key={c.value} value={c.value}>{c.label}</option>
+                ))}
+              </select>
             </div>
 
             <div className="sr-divider" />
@@ -195,7 +231,7 @@ export default function SearchResults() {
               <line x1="21" y1="21" x2="16.65" y2="16.65" />
             </svg>
             <h3>No programs found</h3>
-            <p>Try a different level or intake period.</p>
+            <p>Try adjusting your filters.</p>
           </div>
         )}
 
@@ -297,7 +333,7 @@ export default function SearchResults() {
         {!loading && !searched && (
           <div className="sr-prompt">
             <div className="sr-prompt-icon">🎓</div>
-            <h3>Select a level and intake above</h3>
+            <h3>Select your filters above</h3>
             <p>We'll show you all matching programs across our partner universities.</p>
           </div>
         )}

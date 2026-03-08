@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import "./ireland.css";
 import irelandBg from "./images/ireland.jpg";
 import Navbar from "./components/navbar2";
@@ -15,6 +16,9 @@ export default function IrelandPage() {
         style={{ backgroundImage: `url(${irelandBg})` }}
       >
         <div className="overlay">
+          <Link to="/" className="hero-back-link">
+            ← Return to Home
+          </Link>
           <div className="hero-content">
             <h1>Study in Ireland</h1>
             <p>

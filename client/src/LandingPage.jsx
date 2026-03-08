@@ -1,21 +1,21 @@
-import React, { useEffect, useState, useRef, useContext } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { AuthContext } from "./pages/Provider/ContextProvider";
-import SuccessStories from "./components/SuccessStories";
-import ContactSection from "./components/ContactSection";
-import Services from "./components/Services";
-import CountrySlider from "./components/CountrySlider";
-import Navbar3 from "./components/navbar3";
 import CEOQuote from "./components/CEOQuote";
-import useFadeIn from "./hooks/useFadeIn";
-import PartnerLogos from "./components/PartnerLogos";
+import ContactSection from "./components/ContactSection";
+import CountrySlider from "./components/CountrySlider";
 import PartnerBank from "./components/PartnerBank";
+import PartnerLogos from "./components/PartnerLogos";
+import Services from "./components/Services";
+import SuccessStories from "./components/SuccessStories";
+import Navbar3 from "./components/navbar3";
+import useFadeIn from "./hooks/useFadeIn";
+import { AuthContext } from "./pages/Provider/ContextProvider";
 
 import "./LandingPage.css";
 import uni1 from "./assets/DCU.jpg";
+import uni4 from "./assets/Trinity1.jpg";
 import uni2 from "./assets/UL.jpg";
 import uni3 from "./assets/setu.jpg";
-import uni4 from "./assets/Trinity1.jpg";
 export default function LandingPage() {
   const navigate = useNavigate();
   const { user, loading } = useContext(AuthContext);
@@ -42,18 +42,26 @@ export default function LandingPage() {
 
   // Search state
   const [selectedLevel, setSelectedLevel] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState("");
   const [selectedIntake, setSelectedIntake] = useState("");
   const [activeDropdown, setActiveDropdown] = useState(null);
   const searchRef = useRef(null);
 
   // Country is fixed to Ireland
   const COUNTRY = "Ireland";
-  // label shown in dropdown → value sent to backend (must partially match sheet category row)
   const LEVELS = [
-    { label: "Post Graduate", value: "Master's (Postgraduate)" },
+    { label: "Postgraduate", value: "Master's (Postgraduate)" },
     { label: "Undergraduate", value: "Bachelor's (Undergraduate)" },
     { label: "Postgraduate Diploma", value: "Postgraduate Diploma" },
     { label: "Higher Diploma", value: "Higher Diploma" },
+  ];
+  const CATEGORIES = [
+    { label: "Business, Management & Law",  value: "Business, Management & Law" },
+    { label: "Computing, IT & Engineering", value: "Computing, IT & Engineering" },
+    { label: "Life Sciences & Health",      value: "Life Sciences & Health" },
+    { label: "Social Sciences",             value: "Social Sciences" },
+    { label: "Education & Media",           value: "Education & Media" },
+    { label: "Others",                      value: "Others" },
   ];
   const INTAKES = [
     { label: "September", value: "September" },
@@ -67,14 +75,10 @@ export default function LandingPage() {
 
   const handleSearch = () => {
     const params = new URLSearchParams();
-    if (selectedLevel) params.set("level", selectedLevel);
+    if (selectedLevel)    params.set("level",    selectedLevel);
     params.set("country", COUNTRY);
-    if (selectedIntake) params.set("intake", selectedIntake);
-    // Also pass display labels for the results page to show in its search bar
-    const levelObj = LEVELS.find((l) => l.value === selectedLevel);
-    if (levelObj) params.set("levelLabel", levelObj.label);
-    const intakeObj = INTAKES.find((i) => i.value === selectedIntake);
-    if (intakeObj) params.set("intakeLabel", intakeObj.label);
+    if (selectedCategory) params.set("category", selectedCategory);
+    if (selectedIntake)   params.set("intake",   selectedIntake);
     navigate(`/search-results?${params.toString()}`);
   };
 
@@ -125,10 +129,10 @@ export default function LandingPage() {
     const duration = 2000;
     const start = Date.now();
     const target = {
-      students: 500,
+      students: 100,
       countries: 4,
       partners: 16,
-      satisfaction: 98,
+      satisfaction: 100,
     };
 
     const animate = () => {
@@ -228,6 +232,16 @@ export default function LandingPage() {
           {/* Search Bar Glass Box */}
           <div className="hero-search-wrapper-new" ref={searchRef}>
             <div className="hero-search-box-new">
+              {/* Country – fixed to Ireland */}
+              <div className="search-item-wrap">
+                <div className="search-item-new">
+                  <span className="search-label">Country</span>
+                  <span className="search-value">{COUNTRY}</span>
+                </div>
+              </div>
+
+              <div className="divider"></div>
+
               {/* Level – dropdown */}
               <div
                 className={`search-item-wrap ${activeDropdown === "level" ? "dropdown-open" : ""}`}
@@ -238,7 +252,7 @@ export default function LandingPage() {
                   onClick={() => toggleDropdown("level")}
                 >
                   <span className="search-label">Level</span>
-                  <span className="search-value">
+                  <span className={`search-value${!selectedLevel ? " search-value--placeholder" : ""}`}>
                     {LEVELS.find((l) => l.value === selectedLevel)?.label ||
                       "Select Level"}
                     <span className="search-chevron">▼</span>
@@ -269,12 +283,43 @@ export default function LandingPage() {
 
               <div className="divider"></div>
 
-              {/* Country – fixed to Ireland */}
-              <div className="search-item-wrap">
-                <div className="search-item-new">
-                  <span className="search-label">Country</span>
-                  <span className="search-value">{COUNTRY}</span>
-                </div>
+              {/* Category – dropdown */}
+              <div
+                className={`search-item-wrap search-item-wrap--category ${activeDropdown === "category" ? "dropdown-open" : ""}`}
+              >
+                <button
+                  type="button"
+                  className="search-item-new"
+                  onClick={() => toggleDropdown("category")}
+                >
+                  <span className="search-label">Category</span>
+                  <span className={`search-value${!selectedCategory ? " search-value--placeholder" : ""}`}>
+                    {CATEGORIES.find((c) => c.value === selectedCategory)?.label ||
+                      "All Categories"}
+                    <span className="search-chevron">▼</span>
+                  </span>
+                </button>
+                {activeDropdown === "category" && (
+                  <div className="search-dropdown">
+                    {CATEGORIES.map((c, idx) => (
+                      <button
+                        key={c.value}
+                        type="button"
+                        className="search-dropdown-item"
+                        ref={el => {
+                          if (activeDropdown === "category" && idx === 0 && el) el.focus();
+                        }}
+                        onClick={e => {
+                          setSelectedCategory(c.value);
+                          setActiveDropdown(null);
+                          e.currentTarget.focus();
+                        }}
+                      >
+                        {c.label}
+                      </button>
+                    ))}
+                  </div>
+                )}
               </div>
 
               <div className="divider"></div>
@@ -289,7 +334,7 @@ export default function LandingPage() {
                   onClick={() => toggleDropdown("intake")}
                 >
                   <span className="search-label">Intake</span>
-                  <span className="search-value">
+                  <span className={`search-value${!selectedIntake ? " search-value--placeholder" : ""}`}>
                     {INTAKES.find((i) => i.value === selectedIntake)?.label ||
                       "Select Intake"}
                     <span className="search-chevron">▼</span>

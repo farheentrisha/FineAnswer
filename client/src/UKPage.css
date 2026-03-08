@@ -11,11 +11,37 @@
 }
 
 .overlay {
+  position: relative;
   background: rgba(0, 0, 0, 0.5);
   height: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+/* Back link: top-left of hero, breadcrumb-style */
+.hero-back-link {
+  position: absolute;
+  top: 24px;
+  left: 24px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: #fff;
+  text-decoration: none;
+  font-size: 0.9rem;
+  font-weight: 500;
+  padding: 8px 14px;
+  background: rgba(0, 0, 0, 0.35);
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  transition: background 0.2s ease, color 0.2s ease;
+  z-index: 2;
+}
+
+.hero-back-link:hover {
+  background: rgba(0, 0, 0, 0.5);
+  color: #fff;
 }
 
 .hero-content {
@@ -32,6 +58,12 @@
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 1px;
+  color: #fff;
+  text-shadow:
+    0 1px 2px rgba(0, 0, 0, 0.9),
+    0 2px 8px rgba(0, 0, 0, 0.8),
+    0 4px 16px rgba(0, 0, 0, 0.6),
+    0 0 32px rgba(0, 0, 0, 0.5);
 }
 
 .hero-content p {
