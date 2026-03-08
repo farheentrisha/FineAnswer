@@ -7,11 +7,26 @@ export default function Navbar() {
 
   return (
     <header className="navbar">
-      <div className="logo" onClick={() => navigate("/")}>
+      <div
+        className="logo"
+        onClick={() => {
+          navigate("/");
+          window.scrollTo({ top: 0, behavior: "smooth" });
+        }}
+      >
         FineAnswer
       </div>
       <nav>
-        <a href="/">Home</a>
+        <a
+          href="/"
+          onClick={(e) => {
+            e.preventDefault();
+            navigate("/");
+            window.scrollTo({ top: 0, behavior: "smooth" });
+          }}
+        >
+          Home
+        </a>
         <a href="#">About</a>
         <a href="#">Services</a>
         <a href="#">Countries</a>

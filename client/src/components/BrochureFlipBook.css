@@ -1,0 +1,78 @@
+.brochure-flip-book-wrapper {
+  width: 100%;
+  min-height: 60vh;
+  background-color: #f7f9fc;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem 1rem 3rem;
+  box-sizing: border-box;
+}
+
+.brochure-flip-book-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  border-radius: 4px;
+  overflow: visible;
+}
+
+.brochure-flip-book-container:focus {
+  outline: none;
+}
+
+.brochure-flip-book-inner {
+  box-shadow:
+    0 4px 20px rgba(0, 0, 0, 0.08),
+    0 12px 40px rgba(0, 0, 0, 0.12);
+  border-radius: 4px;
+}
+
+.brochure-flip-book-controls {
+  display: flex;
+  gap: 1.5rem;
+  margin-top: 2rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.brochure-btn {
+  padding: 0.6rem 1.4rem;
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: #4b2e83;
+  background: #fff;
+  border: 1px solid rgba(75, 46, 131, 0.2);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+}
+
+.brochure-btn:hover {
+  background: #f0edf5;
+  border-color: rgba(75, 46, 131, 0.35);
+  color: #3d2670;
+}
+
+.brochure-btn:active {
+  background: #e8e4ef;
+}
+
+@media (max-width: 768px) {
+  .brochure-flip-book-wrapper {
+    padding: 1.5rem 0.75rem 2rem;
+  }
+
+  .brochure-flip-book-controls {
+    margin-top: 1.5rem;
+    gap: 1rem;
+  }
+
+  .brochure-btn {
+    padding: 0.5rem 1.2rem;
+    font-size: 0.9rem;
+  }
+}

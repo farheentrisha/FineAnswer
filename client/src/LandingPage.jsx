@@ -122,29 +122,30 @@ export default function LandingPage() {
     return () => clearInterval(interval);
   }, [images.length]);
 
-  // Count-up animation
+  // Count-up animation: update only when value changes to reduce re-renders
   useEffect(() => {
     if (!statsVisible) return;
 
-    const duration = 2000;
+    const duration = 1500;
     const start = Date.now();
-    const target = {
-      students: 100,
-      countries: 4,
-      partners: 16,
-      satisfaction: 100,
-    };
+    const target = { students: 100, countries: 4, partners: 16, satisfaction: 100 };
+    let lastStudents = -1, lastCountries = -1, lastPartners = -1, lastSatisfaction = -1;
 
     const animate = () => {
       const now = Date.now();
       const progress = Math.min((now - start) / duration, 1);
-      setStudents(Math.floor(target.students * progress));
-      setCountries(Math.floor(target.countries * progress));
-      setPartners(Math.floor(target.partners * progress));
-      setSatisfaction(Math.floor(target.satisfaction * progress));
+      const easeProgress = 1 - (1 - progress) * (1 - progress); // easeOutQuad
+      const s = Math.floor(target.students * easeProgress);
+      const c = Math.floor(target.countries * easeProgress);
+      const p = Math.floor(target.partners * easeProgress);
+      const sat = Math.floor(target.satisfaction * easeProgress);
+      if (s !== lastStudents) { lastStudents = s; setStudents(s); }
+      if (c !== lastCountries) { lastCountries = c; setCountries(c); }
+      if (p !== lastPartners) { lastPartners = p; setPartners(p); }
+      if (sat !== lastSatisfaction) { lastSatisfaction = sat; setSatisfaction(sat); }
       if (progress < 1) requestAnimationFrame(animate);
     };
-    animate();
+    requestAnimationFrame(animate);
   }, [statsVisible]);
 
   // Detect stats section visibility
@@ -160,20 +161,6 @@ export default function LandingPage() {
     );
     if (statsRef.current) observer.observe(statsRef.current);
     return () => observer.disconnect();
-  }, []);
-
-  // Input focus effect
-  useEffect(() => {
-    const inputs = document.querySelectorAll(
-      ".search-bar input, .search-bar select",
-    );
-    inputs.forEach((el) => {
-      el.addEventListener(
-        "focus",
-        () => (el.style.boxShadow = "0 0 10px rgba(0,119,255,0.5)"),
-      );
-      el.addEventListener("blur", () => (el.style.boxShadow = "none"));
-    });
   }, []);
 
   // Show popup after 10 seconds only when user is not logged in and popup hasn't been shown before
