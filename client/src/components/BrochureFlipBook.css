@@ -10,13 +10,24 @@
   box-sizing: border-box;
 }
 
+.brochure-flip-book-zoom-wrapper {
+  width: 100%;
+  overflow-x: auto;
+  overflow-y: auto;
+  max-height: 75vh;
+  display: flex;
+  justify-content: center;
+  padding: 0.5rem;
+}
+
 .brochure-flip-book-container {
   display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: flex-start;
   cursor: pointer;
   border-radius: 4px;
   overflow: visible;
+  transition: transform 0.2s ease;
 }
 
 .brochure-flip-book-container:focus {
@@ -33,9 +44,52 @@
 .brochure-flip-book-controls {
   display: flex;
   gap: 1.5rem;
-  margin-top: 2rem;
+  margin-top: 1.5rem;
   flex-wrap: wrap;
   justify-content: center;
+  align-items: center;
+}
+
+.brochure-zoom-controls {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.brochure-btn-zoom {
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  font-size: 1.25rem;
+  font-weight: 600;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.brochure-btn-zoom:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.brochure-zoom-value {
+  min-width: 3.5rem;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #4b2e83;
+  text-align: center;
+}
+
+.brochure-btn-reset {
+  margin-left: 0.25rem;
+  font-size: 0.85rem;
+  padding: 0.4rem 0.8rem;
+}
+
+.brochure-page-controls {
+  display: flex;
+  gap: 0.75rem;
 }
 
 .brochure-btn {

@@ -7,10 +7,15 @@ const BROCHURE_IMAGES = ["/1.png", "/2.png", "/3.png", "/4.png"];
 const PAGE_WIDTH = 500;
 const PAGE_HEIGHT = 700;
 
+const ZOOM_MIN = 0.75;
+const ZOOM_MAX = 2;
+const ZOOM_STEP = 0.25;
+
 export default function BrochureFlipBook() {
   const containerRef = useRef(null);
   const pageFlipRef = useRef(null);
   const [usePortrait, setUsePortrait] = useState(() => window.innerWidth < 768);
+  const [zoom, setZoom] = useState(1);
 
   const initBook = useCallback((portrait) => {
     if (!containerRef.current) return null;
@@ -73,12 +78,18 @@ export default function BrochureFlipBook() {
     else handleNext();
   };
 
+  const handleZoomIn = () => setZoom((z) => Math.min(z + ZOOM_STEP, ZOOM_MAX));
+  const handleZoomOut = () => setZoom((z) => Math.max(z - ZOOM_STEP, ZOOM_MIN));
+  const handleZoomReset = () => setZoom(1);
+
   return (
     <div className="brochure-flip-book-wrapper">
-      <div
-        ref={containerRef}
-        className="brochure-flip-book-container"
-        onClick={handleBookClick}
+      <div className="brochure-flip-book-zoom-wrapper">
+        <div
+          ref={containerRef}
+          className="brochure-flip-book-container"
+          style={{ transform: `scale(${zoom})`, transformOrigin: "center top" }}
+          onClick={handleBookClick}
         role="button"
         tabIndex={0}
         onKeyDown={(e) => {
@@ -86,14 +97,50 @@ export default function BrochureFlipBook() {
           if (e.key === "ArrowRight") handleNext();
         }}
         aria-label="Brochure flip book – click left to go back, right to go forward"
-      />
+        />
+      </div>
       <div className="brochure-flip-book-controls">
-        <button type="button" className="brochure-btn brochure-btn-prev" onClick={handlePrev}>
-          ← Prev
-        </button>
-        <button type="button" className="brochure-btn brochure-btn-next" onClick={handleNext}>
-          Next →
-        </button>
+        <div className="brochure-zoom-controls">
+          <button
+            type="button"
+            className="brochure-btn brochure-btn-zoom"
+            onClick={handleZoomOut}
+            disabled={zoom <= ZOOM_MIN}
+            title="Zoom out"
+            aria-label="Zoom out"
+          >
+            −
+          </button>
+          <span className="brochure-zoom-value">{Math.round(zoom * 100)}%</span>
+          <button
+            type="button"
+            className="brochure-btn brochure-btn-zoom"
+            onClick={handleZoomIn}
+            disabled={zoom >= ZOOM_MAX}
+            title="Zoom in"
+            aria-label="Zoom in"
+          >
+            +
+          </button>
+          {zoom !== 1 && (
+            <button
+              type="button"
+              className="brochure-btn brochure-btn-reset"
+              onClick={handleZoomReset}
+              title="Reset zoom"
+            >
+              Reset
+            </button>
+          )}
+        </div>
+        <div className="brochure-page-controls">
+          <button type="button" className="brochure-btn brochure-btn-prev" onClick={handlePrev}>
+            ← Prev
+          </button>
+          <button type="button" className="brochure-btn brochure-btn-next" onClick={handleNext}>
+            Next →
+          </button>
+        </div>
       </div>
     </div>
   );
