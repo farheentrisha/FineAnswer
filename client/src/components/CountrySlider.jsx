@@ -11,16 +11,16 @@ const CountrySlider = () => {
   
 const countries = [
     {
+      name: "Ireland",
+      desc: "Comprehensive counseling for Irish universities and study visa processing.",
+      img: irelandImg,
+      link: "/ireland",
+    },
+    {
       name: "United Kingdom",
       desc: "Expert guidance for UK universities, applications, and student visa support.",
       img: ukImg,
       link: "/uk",
-    },
-    {
-      name: "Ireland",
-      desc: "Comprehensive counseling for Irish universities and study visa processing.",
-      img: irelandImg,
-      link: "/ireland", // ⚠️ only works if route exists
     },
     {
       name: "Australia",

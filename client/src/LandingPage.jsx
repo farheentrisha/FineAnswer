@@ -1,21 +1,21 @@
-import React, { useEffect, useState, useRef, useContext } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { AuthContext } from "./pages/Provider/ContextProvider";
-import SuccessStories from "./components/SuccessStories";
-import ContactSection from "./components/ContactSection";
-import Services from "./components/Services";
-import CountrySlider from "./components/CountrySlider";
-import Navbar3 from "./components/navbar3";
 import CEOQuote from "./components/CEOQuote";
-import useFadeIn from "./hooks/useFadeIn";
-import PartnerLogos from "./components/PartnerLogos";
+import ContactSection from "./components/ContactSection";
+import CountrySlider from "./components/CountrySlider";
 import PartnerBank from "./components/PartnerBank";
+import PartnerLogos from "./components/PartnerLogos";
+import Services from "./components/Services";
+import SuccessStories from "./components/SuccessStories";
+import Navbar3 from "./components/navbar3";
+import useFadeIn from "./hooks/useFadeIn";
+import { AuthContext } from "./pages/Provider/ContextProvider";
 
 import "./LandingPage.css";
 import uni1 from "./assets/DCU.jpg";
+import uni4 from "./assets/Trinity1.jpg";
 import uni2 from "./assets/UL.jpg";
 import uni3 from "./assets/setu.jpg";
-import uni4 from "./assets/Trinity1.jpg";
 export default function LandingPage() {
   const navigate = useNavigate();
   const { user, loading } = useContext(AuthContext);
@@ -129,10 +129,10 @@ export default function LandingPage() {
     const duration = 2000;
     const start = Date.now();
     const target = {
-      students: 500,
+      students: 100,
       countries: 4,
       partners: 16,
-      satisfaction: 98,
+      satisfaction: 100,
     };
 
     const animate = () => {

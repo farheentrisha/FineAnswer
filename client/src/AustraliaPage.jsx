@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import "./australia.css";
 import australiaBg from "./images/aus.jpg";
 import Navbar from "./components/navbar2"; // import your navbar component
@@ -15,6 +16,9 @@ export default function AustraliaPage() {
         style={{ backgroundImage: `url(${australiaBg})` }}
       >
         <div className="overlay">
+          <Link to="/" className="hero-back-link">
+            ← Return to Home
+          </Link>
           <div className="hero-content">
             <h1>Study in Australia</h1>
             <p>
