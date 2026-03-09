@@ -11,25 +11,25 @@ export default function Payment() {
       id: "english",
       label: "English Proficiency Fee",
       description: "Pay for English proficiency tests or related assessments.",
-      amount: 1000,
+      amount: 20000,
     },
     {
       id: "medical",
       label: "Medical Insurance Fee",
       description: "Secure your medical insurance coverage for study abroad.",
-      amount: 2000,
+      amount: 25000,
     },
     {
       id: "logistics",
       label: "Logistics Fee",
       description: "Covers logistics, courier, and document handling costs.",
-      amount: 1500,
+      amount: 42000,
     },
     {
       id: "courses",
       label: "Course Fee",
       description: "Pay for course-related fees and training programs.",
-      amount: 5000,
+      amount: 12000,
     },
   ];
 
