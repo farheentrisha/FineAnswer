@@ -24,7 +24,7 @@ const Services = () => {
   const cards = [
   {
   icon: <FaGlobe />,
-  title: "Study Abroad Counseling",
+  title: "Free Expert Counseling",
   text: "Get expert guidance to choose the right country, university, and course aligned with your academic profile and career goals. Enjoy free counseling with no file opening charge, ensuring a smooth and stress-free start to your study abroad journey.",
   color: "#6C63FF",
 },

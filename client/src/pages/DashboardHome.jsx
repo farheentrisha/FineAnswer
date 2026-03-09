@@ -34,7 +34,7 @@ export default function DashboardHome() {
   // Show loading state
   if (loading) {
     return (
-      <div style={{ textAlign: "center", padding: "2rem" }}>
+      <div className="dashboard-loading">
         <p>Loading...</p>
       </div>
     );
@@ -52,80 +52,49 @@ export default function DashboardHome() {
     "User";
 
   return (
-    <>
-      <h2 className="welcome-text">Welcome back, {userName}</h2>
-      <p className="sub-text">
-        Track your study abroad journey and manage your applications
-      </p>
+    <div className="dashboard-home">
+      <div className="dashboard-home__header">
+        <h2 className="welcome-text">Welcome back, {userName}</h2>
+        <p className="sub-text">
+          Track your study abroad journey and manage your applications
+        </p>
+      </div>
 
-      {/* User Details Section */}
       {(userData || user) && (
-        <div
-          className="user-details-card"
-          style={{
-            background: "white",
-            padding: "20px",
-            borderRadius: "12px",
-            marginBottom: "24px",
-            boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
-          }}
-        >
-          <h3 style={{ marginBottom: "12px", color: "#0369a1" }}>
-            Your Profile
-          </h3>
-          <div
-            style={{
-              display: "grid",
-              gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))",
-              gap: "16px",
-            }}
-          >
+        <section className="user-details-card">
+          <h3 className="user-details-card__title">Your Profile</h3>
+          <div className="user-details-grid">
             {(userData?.email || user?.email) && (
-              <div>
-                <strong style={{ color: "#64748b", fontSize: "0.9rem" }}>
-                  Email:
-                </strong>
-                <p style={{ margin: "4px 0 0 0", color: "#1e293b" }}>
-                  {userData?.email || user?.email}
-                </p>
+              <div className="user-details-item">
+                <strong className="user-details-label">Email</strong>
+                <p className="user-details-value">{userData?.email || user?.email}</p>
               </div>
             )}
             {(userData?.phone || user?.phone) && (
-              <div>
-                <strong style={{ color: "#64748b", fontSize: "0.9rem" }}>
-                  Phone:
-                </strong>
-                <p style={{ margin: "4px 0 0 0", color: "#1e293b" }}>
-                  {userData?.phone || user?.phone}
-                </p>
+              <div className="user-details-item">
+                <strong className="user-details-label">Phone</strong>
+                <p className="user-details-value">{userData?.phone || user?.phone}</p>
               </div>
             )}
             {(userData?.picture || user?.picture) && (
-              <div>
-                <strong style={{ color: "#64748b", fontSize: "0.9rem" }}>
-                  Profile Picture:
-                </strong>
-                <div style={{ marginTop: "8px" }}>
+              <div className="user-details-item">
+                <strong className="user-details-label">Profile Picture</strong>
+                <div className="user-details-image-wrap">
                   <img
                     src={userData?.picture || user?.picture}
                     alt="Profile"
-                    style={{
-                      width: "60px",
-                      height: "60px",
-                      borderRadius: "50%",
-                      objectFit: "cover",
-                    }}
+                    className="user-details-image"
                   />
                 </div>
               </div>
             )}
           </div>
-        </div>
+        </section>
       )}
 
-      <div className="dashboard-grid">
+      <section className="dashboard-grid">
         <DocumentChecklist />
-      </div>
-    </>
+      </section>
+    </div>
   );
 }
