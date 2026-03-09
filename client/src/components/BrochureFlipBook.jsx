@@ -20,6 +20,7 @@ export default function BrochureFlipBook() {
   const pageFlipRef = useRef(null);
   const [usePortrait, setUsePortrait] = useState(() => window.innerWidth < 768);
   const [zoom, setZoom] = useState(1);
+  const [bookHeight, setBookHeight] = useState(0);
 
   const initBook = useCallback((portrait) => {
     if (!containerRef.current) return null;
@@ -48,7 +49,15 @@ export default function BrochureFlipBook() {
     const pageFlip = initBook(usePortrait);
     pageFlipRef.current = pageFlip;
 
+    const rafId = requestAnimationFrame(() => {
+      if (containerRef.current) {
+        const h = containerRef.current.offsetHeight;
+        if (h > 0) setBookHeight(h);
+      }
+    });
+
     return () => {
+      cancelAnimationFrame(rafId);
       if (pageFlipRef.current && typeof pageFlipRef.current.destroy === "function") {
         pageFlipRef.current.destroy();
       }
@@ -88,11 +97,17 @@ export default function BrochureFlipBook() {
 
   return (
     <div className="brochure-flip-book-wrapper">
-      <div className="brochure-flip-book-zoom-wrapper">
+      <div
+        className="brochure-flip-book-zoom-wrapper"
+        style={{
+          minHeight: bookHeight > 0 ? `${Math.ceil(bookHeight * zoom)}px` : undefined,
+          overflow: "visible",
+        }}
+      >
         <div
           ref={containerRef}
           className="brochure-flip-book-container"
-          style={{ transform: `scale(${zoom})`, transformOrigin: "center top" }}
+          style={{ transform: `scale(${zoom})`, transformOrigin: "center top", willChange: "transform" }}
           onClick={handleBookClick}
           role="button"
           tabIndex={0}
