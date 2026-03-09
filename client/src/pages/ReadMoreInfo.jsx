@@ -9,16 +9,22 @@ export default function ReadMoreInfo() {
 
   return (
     <div className="read-more-container">
-      {/* Upper Hero Section with Back Navigation */}
-      <div className="hero-header">
-  <div className="breadcrumb">
-    <button className="back-link" onClick={() => navigate(-1)}>
-      <span>←</span> Back
-    </button>
-    <span className="breadcrumb-path">Home &gt; About Us</span>
-  </div>
-  <h1>About Us</h1>
-</div>
+      {/* Compact top bar: back + breadcrumb + title */}
+      <header className="read-more-header">
+        <div className="read-more-header-inner">
+          <button className="back-link" onClick={() => navigate(-1)}>
+            <span>←</span> Back
+          </button>
+          <span className="breadcrumb-path">Home &gt; About Us</span>
+        </div>
+        <h1 className="read-more-title">About Us</h1>
+      </header>
+
+      {/* Brochure first – at the top for immediate access */}
+      <section className="read-more-brochure-section">
+        <h2 className="read-more-brochure-caption">Our Brochure</h2>
+        <BrochureFlipBook />
+      </section>
 
       {/* Section 1: Visa Success */}
       <section className="info-section">
@@ -26,8 +32,8 @@ export default function ReadMoreInfo() {
           <span className="section-label">Visa Success</span>
           <h2>Experience the highest visa success rate in Bangladesh.</h2>
           <p>
-            Navigating international borders requires precision and expert strategy. 
-            We specialize in turning complex applications into success stories, 
+            Navigating international borders requires precision and expert strategy.
+            We specialize in turning complex applications into success stories,
             boasting a 100% success rate for female applicants and specific universities.
           </p>
           <ul className="feature-list">
@@ -35,16 +41,13 @@ export default function ReadMoreInfo() {
             <li>Unmatched success for TUD, SETU, ATU, TUS, and UCC</li>
             <li>Specialized support for difficult visa situations</li>
           </ul>
-          <button className="btn-modern" onClick={() => navigate("/#success-stories")}>View Our Success Stories →</button>
+          <button className="btn-modern" onClick={() => navigate("/#success-stories")}>
+            View Our Success Stories →
+          </button>
         </div>
         <div className="info-image">
-  <img src={fineImg} alt="Students" />
-</div>
-      </section>
-
-      {/* Brochure flip book */}
-      <section className="info-section brochure-section">
-        <BrochureFlipBook />
+          <img src={fineImg} alt="Students" />
+        </div>
       </section>
 
       {/* Section 2: Services (Alternating) */}

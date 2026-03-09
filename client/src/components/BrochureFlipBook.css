@@ -41,6 +41,12 @@
   border-radius: 4px;
 }
 
+/* Sharper text rendering (Chrome/Safari) */
+.brochure-flip-book-inner canvas,
+.brochure-flip-book-inner .stf__canvas {
+  image-rendering: -webkit-optimize-contrast;
+}
+
 .brochure-flip-book-controls {
   display: flex;
   gap: 1.5rem;

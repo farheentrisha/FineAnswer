@@ -1,11 +1,15 @@
-import React, { useRef, useEffect, useState, useCallback } from "react";
 import { PageFlip } from "page-flip";
+import React, { useCallback, useEffect, useRef, useState } from "react";
+import page1 from "../assets/1.png";
+import page2 from "../assets/2.png";
+import page3 from "../assets/3.png";
+import page4 from "../assets/4.png";
 import "./BrochureFlipBook.css";
 
-const BROCHURE_IMAGES = ["/1.png", "/2.png", "/3.png", "/4.png"];
-
-const PAGE_WIDTH = 500;
-const PAGE_HEIGHT = 700;
+const BROCHURE_IMAGES = [page1, page2, page3, page4];
+/* Larger dimensions = sharper text (source PNGs are ~3091×4000) */
+const PAGE_WIDTH = 700;
+const PAGE_HEIGHT = 1000;
 
 const ZOOM_MIN = 0.75;
 const ZOOM_MAX = 2;
@@ -90,13 +94,13 @@ export default function BrochureFlipBook() {
           className="brochure-flip-book-container"
           style={{ transform: `scale(${zoom})`, transformOrigin: "center top" }}
           onClick={handleBookClick}
-        role="button"
-        tabIndex={0}
-        onKeyDown={(e) => {
-          if (e.key === "ArrowLeft") handlePrev();
-          if (e.key === "ArrowRight") handleNext();
-        }}
-        aria-label="Brochure flip book – click left to go back, right to go forward"
+          role="button"
+          tabIndex={0}
+          onKeyDown={(e) => {
+            if (e.key === "ArrowLeft") handlePrev();
+            if (e.key === "ArrowRight") handleNext();
+          }}
+          aria-label="Brochure flip book – click left to go back, right to go forward"
         />
       </div>
       <div className="brochure-flip-book-controls">

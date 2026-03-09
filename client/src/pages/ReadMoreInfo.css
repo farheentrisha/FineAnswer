@@ -3,167 +3,155 @@
   --accent: #6c63ff;
   --text-dark: #1a1a1a;
 }
-/* Enhanced Hero Header */
-.hero-header {
-  position: relative;
-  /* Adding a slightly darker overlay to ensure white text pops */
-  background: linear-gradient(rgba(26, 15, 61, 0.7), rgba(26, 15, 61, 0.7)), 
-              url('https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&q=80&w=1600');
-  background-size: cover;
-  background-position: center;
-  height: 250px; 
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-}
-
-/* Back Button - Adding high contrast pill shape */
-.back-link {
-  cursor: pointer;
-  background: rgba(255, 255, 255, 0.15); /* Glass effect */
-  color: #ffffff !important; /* Forces white color */
-  padding: 8px 20px;
-  border-radius: 50px;
-  backdrop-filter: blur(5px);
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  font-weight: 600;
-  transition: all 0.3s ease;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.back-link:hover {
-  background: #ffffff;
-  color: var(--primary) !important;
-  transform: translateX(-5px);
-}
-
-/* Breadcrumb path text */
-.breadcrumb-path {
-  color: rgba(255, 255, 255, 0.8);
-  font-weight: 400;
-}
-
-/* About Us Title - Pure White and Bold */
-.hero-header h1 {
-  font-size: 3.5rem;
-  color: #ffffff !important; 
-  margin: 10px 0 0 0;
-  font-weight: 800;
-  text-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); /* Subtle shadow for depth */
-}
 
 .read-more-container {
-  font-family: 'Inter', sans-serif;
+  font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   background: #fff;
+  color: var(--text-dark);
 }
 
-/* Updated Upper Section */
-.hero-header {
-  position: relative;
-  background: linear-gradient(rgba(45, 34, 100, 0.75), rgba(45, 34, 100, 0.75)), 
-              url('https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&q=80&w=1600');
-  background-size: cover;
-  background-position: center;
-  height: 220px; /* Reduced height for a modern banner look */
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  color: white;
+/* Compact top bar – brochure is the focus below */
+.read-more-header {
+  background: linear-gradient(135deg, #4b2e83 0%, #5c3d9e 100%);
+  padding: 1.25rem 1.5rem 1.5rem;
   text-align: center;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
 }
 
-.breadcrumb {
-  position: absolute;
-  top: 20px;
-  width: 100%;
+.read-more-header-inner {
   display: flex;
   justify-content: space-between;
-  padding: 0 10%;
-  font-size: 0.9rem;
-  font-weight: 300;
+  align-items: center;
+  max-width: 1200px;
+  margin: 0 auto 0.75rem;
 }
 
 .back-link {
   cursor: pointer;
-  background: rgba(255, 255, 255, 0.2);
-  padding: 5px 15px;
-  border-radius: 20px;
-  transition: 0.3s;
+  background: rgba(255, 255, 255, 0.15);
+  color: #fff;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  font-weight: 600;
+  font-size: 0.9rem;
+  transition: background 0.2s, color 0.2s;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
 }
 
 .back-link:hover {
-  background: white;
+  background: #fff;
   color: var(--primary);
 }
 
-.hero-header h1 {
-  font-size: 2.8rem;
-  margin-top: 20px;
-  font-weight: 700;
-  letter-spacing: 1px;
+.breadcrumb-path {
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 0.875rem;
+  font-weight: 400;
 }
 
-/* Content Sections */
+.read-more-title {
+  margin: 0;
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: #fff;
+  letter-spacing: -0.02em;
+}
+
+/* Brochure section – first content block */
+.read-more-brochure-section {
+  padding: 2rem 1rem 0;
+  max-width: 100%;
+}
+
+.read-more-brochure-caption {
+  margin: 0 0 1.25rem;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--primary);
+  text-align: center;
+  letter-spacing: -0.02em;
+}
+
+.read-more-brochure-caption::after {
+  content: "";
+  display: block;
+  width: 48px;
+  height: 3px;
+  margin: 0.5rem auto 0;
+  background: linear-gradient(90deg, var(--accent), #06b6d4);
+  border-radius: 2px;
+}
+
+/* Content sections */
 .info-section {
   display: flex;
   align-items: center;
-  padding: 80px 10%;
-  gap: 60px;
+  padding: 4rem 10%;
+  gap: 3.5rem;
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
 .info-section.reverse {
   flex-direction: row-reverse;
-  background-color: #f9f9ff;
+  background-color: #f8f9fc;
 }
 
-.info-section.brochure-section {
-  padding: 0;
-  display: block;
-  max-width: 100%;
+.info-content {
+  flex: 1.2;
 }
 
-.info-content { flex: 1.2; }
-.info-image { flex: 1; }
+.info-image {
+  flex: 1;
+}
 
 .info-image img {
   width: 100%;
   border-radius: 12px;
-  box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
 }
 
 .section-label {
   background: #e9e5ff;
   color: var(--accent);
-  padding: 6px 14px;
-  border-radius: 4px;
-  font-size: 0.8rem;
+  padding: 0.35rem 0.75rem;
+  border-radius: 6px;
+  font-size: 0.75rem;
   font-weight: 700;
+  letter-spacing: 0.02em;
   display: inline-block;
-  margin-bottom: 15px;
+  margin-bottom: 1rem;
 }
 
 .info-content h2 {
-  font-size: 2rem;
+  font-size: 1.75rem;
+  font-weight: 700;
   color: var(--primary);
-  margin-bottom: 20px;
+  margin: 0 0 1rem;
+  line-height: 1.3;
+}
+
+.info-content p {
+  color: #4b5563;
+  line-height: 1.65;
+  margin: 0 0 1rem;
 }
 
 .feature-list {
   list-style: none;
   padding: 0;
-  margin: 25px 0;
+  margin: 1.5rem 0;
 }
 
 .feature-list li {
-  margin-bottom: 15px;
-  padding-left: 30px;
+  margin-bottom: 0.75rem;
+  padding-left: 1.75rem;
   position: relative;
-  color: #444;
+  color: #374151;
+  font-size: 0.95rem;
 }
 
 .feature-list li::before {
@@ -176,10 +164,36 @@
 
 .btn-modern {
   background: var(--accent);
-  color: white;
+  color: #fff;
   border: none;
-  padding: 15px 30px;
+  padding: 0.75rem 1.5rem;
   border-radius: 8px;
   font-weight: 600;
+  font-size: 0.95rem;
   cursor: pointer;
+  transition: background 0.2s, transform 0.1s;
+}
+
+.btn-modern:hover {
+  background: #5a52e0;
+}
+
+@media (max-width: 900px) {
+  .info-section {
+    flex-direction: column;
+    padding: 2.5rem 1.25rem;
+    gap: 2rem;
+  }
+
+  .info-section.reverse {
+    flex-direction: column;
+  }
+
+  .read-more-header {
+    padding: 1rem 1rem 1.25rem;
+  }
+
+  .read-more-title {
+    font-size: 1.5rem;
+  }
 }

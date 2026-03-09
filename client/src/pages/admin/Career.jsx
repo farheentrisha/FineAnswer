@@ -1,5 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { FaPlus, FaEdit, FaTrash, FaSpinner, FaExternalLinkAlt } from "react-icons/fa";
+import {
+  FaPlus,
+  FaEdit,
+  FaTrash,
+  FaSpinner,
+  FaExternalLinkAlt,
+} from "react-icons/fa";
 import { API_BASE_URL } from "../../config/api";
 import { IRELAND_JOB_LINKS } from "../../constants/irelandJobLinks";
 import "./Career.css";
@@ -10,8 +16,8 @@ export default function AdminCareer() {
   const [showForm, setShowForm] = useState(false);
   const [editingJob, setEditingJob] = useState(null);
   const [submitting, setSubmitting] = useState(false);
-   const [applicants, setApplicants] = useState([]);
-   const [showApplicantsFor, setShowApplicantsFor] = useState(null);
+  const [applicants, setApplicants] = useState([]);
+  const [showApplicantsFor, setShowApplicantsFor] = useState(null);
 
   const [formData, setFormData] = useState({
     title: "",
@@ -190,7 +196,9 @@ export default function AdminCareer() {
           </button>
         </div>
         <p className="career-section-desc">
-          Post and manage job openings for joining the FineAnswer team. These appear on the user Career page where candidates can view details and apply.
+          Post and manage job openings for joining the FineAnswer team. These
+          appear on the user Career page where candidates can view details and
+          apply.
         </p>
 
         {loading && (
@@ -214,7 +222,8 @@ export default function AdminCareer() {
               <div key={job._id} className="career-job-card">
                 <h3>{job.title}</h3>
                 <p className="career-job-meta">
-                  {job.company} • {job.location} • {job.employmentType || "Full-time"}
+                  {job.company} • {job.location} •{" "}
+                  {job.employmentType || "Full-time"}
                 </p>
                 <p className="career-job-deadline">
                   Deadline: {formatDate(job.deadline)}
@@ -258,10 +267,9 @@ export default function AdminCareer() {
 
       {/* Section 2: Explore Other jobs in Ireland */}
       <section className="career-section career-section-ireland">
-        <h2 className="career-section-heading">Explore Other jobs in Ireland</h2>
-        <p className="career-section-desc">
-          Quick links to external job portals in Ireland. Users can browse graduate, experienced, corporate, and healthcare roles.
-        </p>
+        <h2 className="career-section-heading">
+          Explore Other jobs in Ireland
+        </h2>
         <div className="ireland-links-grid">
           {IRELAND_JOB_LINKS.map((item, index) => (
             <a
@@ -414,8 +422,8 @@ export default function AdminCareer() {
                   {submitting
                     ? "Saving..."
                     : editingJob
-                    ? "Update Job"
-                    : "Create Job"}
+                      ? "Update Job"
+                      : "Create Job"}
                 </button>
               </div>
             </form>
@@ -428,7 +436,10 @@ export default function AdminCareer() {
           <div className="career-modal">
             <div className="career-modal-header">
               <h3>Applicants for {showApplicantsFor.title}</h3>
-              <button className="career-close-btn" onClick={closeApplicantsModal}>
+              <button
+                className="career-close-btn"
+                onClick={closeApplicantsModal}
+              >
                 ×
               </button>
             </div>
@@ -443,7 +454,8 @@ export default function AdminCareer() {
                   <div key={a._id} className="career-applicant-card">
                     <p>
                       <strong>
-                        {a.user?.name || "Unknown Candidate"} ({a.user?.email || "No email"})
+                        {a.user?.name || "Unknown Candidate"} (
+                        {a.user?.email || "No email"})
                       </strong>
                     </p>
                     <p className="career-job-meta">

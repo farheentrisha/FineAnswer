@@ -1,12 +1,5 @@
 import React, { useEffect, useState } from "react";
-import {
-  FaArrowLeft,
-  FaHeartbeat,
-  FaUtensils,
-  FaClock,
-  FaChevronRight,
-  FaExternalLinkAlt,
-} from "react-icons/fa";
+import { FaArrowLeft, FaChevronRight, FaExternalLinkAlt } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { API_BASE_URL } from "../config/api";
 import { IRELAND_JOB_LINKS } from "../constants/irelandJobLinks";
@@ -39,52 +32,22 @@ export default function Career() {
 
   return (
     <div className="career-container">
-      {/* 1. BACK TO HOME BUTTON */}
       <nav className="career-nav">
         <button onClick={() => navigate("/")} className="back-home-btn">
           <FaArrowLeft /> Back to Home
         </button>
       </nav>
 
-      {/* 2. HERO SECTION (Why Work With Us) */}
-      <header className="career-hero">
-        <h1 className="hero-title2">Careers</h1>
-        <p className="hero-subtitle33">
-          Join our mission to transform education and career building. 
-          We’re looking for passionate individuals to join our growing team.
+      <header className="career-hero career-hero-compact">
+        <h1 className="career-page-title">Careers</h1>
+        <p className="career-page-subtitle">
+          Find your next role at FineAnswer or explore opportunities across Ireland.
         </p>
-
-        <div className="value-props-section">
-          <h2 className="section-title">Why work with us?</h2>
-          <div className="values-grid">
-            <div className="value-item">
-              <div className="value-icon green"><FaUtensils /></div>
-              <div className="value-text">
-                <h3>Global Impact </h3>
-                <p>Change lives by facilitating access to world-class universities across the UK, USA, and Canada.</p>
-              </div>
-            </div>
-            <div className="value-item">
-              <div className="value-icon blue"><FaHeartbeat /></div>
-              <div className="value-text">
-                <h3>Student Success</h3>
-                <p>Be part of a culture that celebrates every student visa approval and successful enrollment.</p>
-              </div>
-            </div>
-            <div className="value-item">
-              <div className="value-icon purple"><FaClock /></div>
-              <div className="value-text">
-                <h3>Exposure & Travel</h3>
-                <p>Opportunities for international training and university networking events across the globe</p>
-              </div>
-            </div>
-          </div>
-        </div>
       </header>
 
-      {/* Section 1: Career in FineAnswer */}
-      <section className="openings-section career-section career-section-fineanswer">
-        <h2 className="section-title center">Career in FineAnswer</h2>
+      {/* Join FineAnswer */}
+      <section className="career-section career-section-fineanswer user-career-section">
+        <h2 className="career-section-title">Join FineAnswer</h2>
         <p className="career-section-desc center-desc">
           Open positions at FineAnswer. View details and apply for the role that fits you.
         </p>
@@ -124,11 +87,11 @@ export default function Career() {
         )}
       </section>
 
-      {/* Section 2: Explore Other jobs in Ireland */}
-      <section className="career-section career-section-ireland user-career-ireland">
-        <h2 className="section-title center">Explore Other jobs in Ireland</h2>
+      {/* Explore Other jobs in Ireland */}
+      <section className="career-section career-section-ireland user-career-section user-career-ireland">
+        <h2 className="career-section-title">Explore Other Jobs in Ireland</h2>
         <p className="career-section-desc center-desc">
-          Browse graduate, experienced, corporate, and healthcare roles on these trusted Irish job portals.
+          Browse graduate, experienced, corporate, and healthcare roles on trusted Irish job portals.
         </p>
         <div className="ireland-links-grid">
           {IRELAND_JOB_LINKS.map((item, index) => (
