@@ -23,29 +23,29 @@ const Services = () => {
 
   const cards = [
   {
-    icon: <FaGlobe />,
-    title: "Study Abroad Counseling",
-    text: "Personalized guidance to help students choose the right country, university, and course aligned with their academic profile and long-term career goals.",
-    color: "#6C63FF",
-  },
+  icon: <FaGlobe />,
+  title: "Study Abroad Counseling",
+  text: "Get expert guidance to choose the right country, university, and course aligned with your academic profile and career goals. Enjoy free counseling with no file opening charge, ensuring a smooth and stress-free start to your study abroad journey.",
+  color: "#6C63FF",
+},
+ {
+  icon: <FaUniversity />,
+  title: "University & Course Selection",
+  text: "Personalized support in selecting the best universities and programs that match your academic background, career goals, and budget across Ireland, the UK, Australia, and other top study destinations.",
+  color: "#4CC9F0",
+},
   {
-    icon: <FaUniversity />,
-    title: "University & Course Selection",
-    text: "Expert support in shortlisting globally recognized universities and programs across Ireland, the UK, Australia, and other destinations.",
-    color: "#4CC9F0",
-  },
+  icon: <FaFileAlt />,
+  title: "Application & Documentation",
+  text: "End-to-end support with university applications and document preparation, including SOPs, LORs, transcripts, and all required academic paperwork to ensure a strong and complete submission.",
+  color: "#FF6B6B",
+},
   {
-    icon: <FaFileAlt />,
-    title: "Application & Documentation",
-    text: "Complete assistance with applications, SOPs, LORs, transcripts, and all academic documentation required by universities.",
-    color: "#FF6B6B",
-  },
-  {
-    icon: <FaPassport />,
-    title: "Visa Processing & Interview Preparation",
-    text: "Accurate visa processing support including document review, application submission guidance, and interview preparation to maximize approval success.",
-    color: "#FFD93D",
-  },
+  icon: <FaPassport />,
+  title: "Visa Processing & Interview Preparation",
+  text: "Accurate visa processing support including document review, application submission guidance, visa interview preparation and mock interview sessions to help applicants feel confident and maximize approval success.",
+  color: "#FFD93D",
+},
   {
     icon: <FaPlaneDeparture />,
     title: "Visa Logistics & Document Handling",
@@ -55,13 +55,13 @@ const Services = () => {
   {
     icon: <FaHandsHelping />,
     title: "International Mentorship & Student Guidance",
-    text: "Access to internal experts and experienced student mentors for scholarship guidance, English proficiency preparation, and academic success strategies.",
+    text: "Access to international experts and experienced student mentors for scholarship guidance, English proficiency preparation, and academic success strategies.",
     color: "#7209B7",
   },
   {
   icon: <FaHeartbeat />,
   title: "Medical Insurance Assistance",
-  text: "Guidance in selecting and processing mandatory international medical insurance plans required for student visas and university enrollment.",
+  text: "Get expert support in selecting and purchasing the right international medical insurance plan required for your student visa and university enrollment, ensuring you stay protected and fully compliant while studying abroad.",
   color: "#2EC4B6",
 },
 {

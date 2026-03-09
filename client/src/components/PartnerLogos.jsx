@@ -22,6 +22,12 @@ import six from "../assets/uk/portsm.jpg";
 import seven from "../assets/uk/NTU.png";
 import eight from "../assets/uk/conven.png";
 
+import nine from "../assets/aus/monash.png";
+import ten from "../assets/aus/unsw.png";
+import eleven from "../assets/aus/ade.png";
+import twelve from "../assets/aus/mac.png";
+import thirteen from "../assets/aus/tas.png";
+import fourteen from "../assets/aus/Curtin.png";
 
 
 
@@ -76,10 +82,19 @@ const PartnerLogos = () => {
     { name: "eight", url: eight },
   ];
 
+  const row4 = [
+    { name: "nine", url: nine },
+    { name: "ten", url: ten },
+    { name: "eleven", url: eleven },
+    { name: "twelve", url: twelve },
+    { name: "thirteen", url: thirteen },
+    { name: "fourteen", url: fourteen },
+  ];
+
   return (
     <section className="partners-section">
       <div className="partners-caption">
-        <h2 className="animated-caption">Our Partner Universities</h2>
+        <h2 className="animated-caption">Some of Our Partner Universities</h2>
       </div>
 
       <div className="logos-container">
@@ -87,10 +102,11 @@ const PartnerLogos = () => {
         <LogoRow logos={row1} direction="left" speed={50} />
 
         {/* Row 2: left to right */}
-        <LogoRow logos={row2} direction="right" speed={45} />
+        <LogoRow logos={row2} direction="right" speed={50} />
 
         {/* Row 3: left to right */}
         <LogoRow logos={row3} direction="left" speed={50} />
+        <LogoRow logos={row4} direction="right" speed={50} />
       </div>
     </section>
   );
