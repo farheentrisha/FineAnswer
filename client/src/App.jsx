@@ -40,6 +40,7 @@ import PaymentFail from "./pages/PaymentFail";
 import PaymentCancel from "./pages/PaymentCancel";
 import SuccessStoryDetail from "./pages/SuccessStoryDetail";
 import SearchResults from "./pages/SearchResults";
+import JobDetail from "./pages/JobDetail";
 
 import "./App.css";
 
@@ -77,6 +78,7 @@ function AppRoutes() {
       <Route path="/blog/:id" element={<BlogDetail />} />
       <Route path="/success-story/:id" element={<SuccessStoryDetail />} />
       <Route path="/career" element={<Career />} />
+      <Route path="/jobs/:id" element={<JobDetail />} />
       <Route path="/payment/success" element={<PaymentSuccess />} />
       <Route path="/payment/fail" element={<PaymentFail />} />
       <Route path="/payment/cancel" element={<PaymentCancel />} />

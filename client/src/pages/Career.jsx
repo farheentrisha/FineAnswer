@@ -1,10 +1,15 @@
 import React, { useEffect, useState } from "react";
-import { 
-  FaArrowLeft, FaBriefcase, FaHeartbeat, 
-  FaUtensils, FaClock, FaChevronRight 
+import {
+  FaArrowLeft,
+  FaHeartbeat,
+  FaUtensils,
+  FaClock,
+  FaChevronRight,
+  FaExternalLinkAlt,
 } from "react-icons/fa";
-import { useNavigate } from "react-router-dom"; // Assuming you use react-router
+import { useNavigate } from "react-router-dom";
 import { API_BASE_URL } from "../config/api";
+import { IRELAND_JOB_LINKS } from "../constants/irelandJobLinks";
 import "./admin/Career.css";
 
 export default function Career() {
@@ -77,14 +82,23 @@ export default function Career() {
         </div>
       </header>
 
-      {/* 3. JOB OPENINGS SECTION */}
-      <section className="openings-section">
-        <h2 className="section-title center">Currently Open Positions</h2>
-        
+      {/* Section 1: Career in FineAnswer */}
+      <section className="openings-section career-section career-section-fineanswer">
+        <h2 className="section-title center">Career in FineAnswer</h2>
+        <p className="career-section-desc center-desc">
+          Open positions at FineAnswer. View details and apply for the role that fits you.
+        </p>
+
         {loading ? (
           <div className="career-loading">
             <div className="spinner" />
             <p>Scanning for opportunities...</p>
+          </div>
+        ) : error ? (
+          <div className="career-error">{error}</div>
+        ) : jobs.length === 0 ? (
+          <div className="career-empty">
+            <p>No open positions at the moment. Check back later or explore other jobs in Ireland below.</p>
           </div>
         ) : (
           <div className="career-job-grid">
@@ -93,21 +107,51 @@ export default function Career() {
                 <div className="job-card-header">
                   <div>
                     <h3>{job.title}</h3>
-                    <p>{job.location} • {job.employmentType || "Remote"}</p>
+                    <p>{job.location} • {job.employmentType || "Full-time"}</p>
                   </div>
                   <span className="job-badge">NEW</span>
                 </div>
-                
-                <button 
+
+                <button
                   className="job-action-link"
                   onClick={() => navigate(`/jobs/${job._id}`)}
                 >
-                  Free to Apply <FaChevronRight />
+                  View details &amp; Apply <FaChevronRight />
                 </button>
               </div>
             ))}
           </div>
         )}
+      </section>
+
+      {/* Section 2: Explore Other jobs in Ireland */}
+      <section className="career-section career-section-ireland user-career-ireland">
+        <h2 className="section-title center">Explore Other jobs in Ireland</h2>
+        <p className="career-section-desc center-desc">
+          Browse graduate, experienced, corporate, and healthcare roles on these trusted Irish job portals.
+        </p>
+        <div className="ireland-links-grid">
+          {IRELAND_JOB_LINKS.map((item, index) => (
+            <a
+              key={index}
+              href={item.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="ireland-link-card"
+            >
+              <div className="ireland-link-logo-wrap">
+                <img src={item.logo} alt="" className="ireland-link-logo" />
+              </div>
+              <div className="ireland-link-content">
+                <span className="ireland-link-label">{item.label}</span>
+                {item.description && (
+                  <span className="ireland-link-desc">{item.description}</span>
+                )}
+              </div>
+              <FaExternalLinkAlt className="ireland-link-icon" />
+            </a>
+          ))}
+        </div>
       </section>
     </div>
   );

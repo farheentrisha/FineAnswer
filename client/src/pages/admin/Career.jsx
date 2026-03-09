@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { FaPlus, FaEdit, FaTrash, FaSpinner } from "react-icons/fa";
+import { FaPlus, FaEdit, FaTrash, FaSpinner, FaExternalLinkAlt } from "react-icons/fa";
 import { API_BASE_URL } from "../../config/api";
+import { IRELAND_JOB_LINKS } from "../../constants/irelandJobLinks";
 import "./Career.css";
 export default function AdminCareer() {
   const [jobs, setJobs] = useState([]);
@@ -178,74 +179,112 @@ export default function AdminCareer() {
 
   return (
     <div className="admin-career-page">
-      <div className="admin-career-header">
-        <h2>Career Opportunities</h2>
-        <button className="career-add-btn" onClick={() => handleOpenForm()}>
-          <FaPlus /> Add Job 
-        </button>
-      </div>
+      <h1 className="admin-career-page-title">Career Opportunities</h1>
 
-      {loading && (
-        <div className="career-loading">
-          <FaSpinner className="spinner" />
-          <p>Loading jobs...</p>
+      {/* Section 1: Career in FineAnswer */}
+      <section className="career-section career-section-fineanswer">
+        <div className="admin-career-header">
+          <h2>Career in FineAnswer</h2>
+          <button className="career-add-btn" onClick={() => handleOpenForm()}>
+            <FaPlus /> Add Job
+          </button>
         </div>
-      )}
+        <p className="career-section-desc">
+          Post and manage job openings for joining the FineAnswer team. These appear on the user Career page where candidates can view details and apply.
+        </p>
 
-      {error && !loading && <div className="career-error">{error}</div>}
+        {loading && (
+          <div className="career-loading">
+            <FaSpinner className="spinner" />
+            <p>Loading jobs...</p>
+          </div>
+        )}
 
-      {!loading && !error && jobs.length === 0 && (
-        <div className="career-empty">
-          <p>No job posts yet. Click "Add Job" to create one.</p>
-        </div>
-      )}
+        {error && !loading && <div className="career-error">{error}</div>}
 
-      {!loading && !error && jobs.length > 0 && (
-        <div className="career-job-grid">
-          {jobs.map((job) => (
-            <div key={job._id} className="career-job-card">
-              <h3>{job.title}</h3>
-              <p className="career-job-meta">
-                {job.company} • {job.location} • {job.employmentType || "Full-time"}
-              </p>
-              <p className="career-job-deadline">
-                Deadline: {formatDate(job.deadline)}
-              </p>
-              <p className="career-job-desc">{job.description}</p>
-              {job.applicationUrl && (
-                <a
-                  href={job.applicationUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="career-apply-link"
-                >
-                  View / Apply
-                </a>
-              )}
-              <div className="career-card-actions">
-                <button
-                  className="career-edit-btn"
-                  onClick={() => loadApplicants(job)}
-                >
-                  View Applicants
-                </button>
-                <button
-                  className="career-edit-btn"
-                  onClick={() => handleOpenForm(job)}
-                >
-                  <FaEdit /> Edit
-                </button>
-                <button
-                  className="career-delete-btn"
-                  onClick={() => handleDelete(job._id)}
-                >
-                  <FaTrash /> Delete
-                </button>
+        {!loading && !error && jobs.length === 0 && (
+          <div className="career-empty">
+            <p>No job posts yet. Click "Add Job" to create one.</p>
+          </div>
+        )}
+
+        {!loading && !error && jobs.length > 0 && (
+          <div className="career-job-grid">
+            {jobs.map((job) => (
+              <div key={job._id} className="career-job-card">
+                <h3>{job.title}</h3>
+                <p className="career-job-meta">
+                  {job.company} • {job.location} • {job.employmentType || "Full-time"}
+                </p>
+                <p className="career-job-deadline">
+                  Deadline: {formatDate(job.deadline)}
+                </p>
+                <p className="career-job-desc">{job.description}</p>
+                {job.applicationUrl && (
+                  <a
+                    href={job.applicationUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="career-apply-link"
+                  >
+                    View / Apply
+                  </a>
+                )}
+                <div className="career-card-actions">
+                  <button
+                    className="career-edit-btn"
+                    onClick={() => loadApplicants(job)}
+                  >
+                    View Applicants
+                  </button>
+                  <button
+                    className="career-edit-btn"
+                    onClick={() => handleOpenForm(job)}
+                  >
+                    <FaEdit /> Edit
+                  </button>
+                  <button
+                    className="career-delete-btn"
+                    onClick={() => handleDelete(job._id)}
+                  >
+                    <FaTrash /> Delete
+                  </button>
+                </div>
               </div>
-            </div>
+            ))}
+          </div>
+        )}
+      </section>
+
+      {/* Section 2: Explore Other jobs in Ireland */}
+      <section className="career-section career-section-ireland">
+        <h2 className="career-section-heading">Explore Other jobs in Ireland</h2>
+        <p className="career-section-desc">
+          Quick links to external job portals in Ireland. Users can browse graduate, experienced, corporate, and healthcare roles.
+        </p>
+        <div className="ireland-links-grid">
+          {IRELAND_JOB_LINKS.map((item, index) => (
+            <a
+              key={index}
+              href={item.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="ireland-link-card"
+            >
+              <div className="ireland-link-logo-wrap">
+                <img src={item.logo} alt="" className="ireland-link-logo" />
+              </div>
+              <div className="ireland-link-content">
+                <span className="ireland-link-label">{item.label}</span>
+                {item.description && (
+                  <span className="ireland-link-desc">{item.description}</span>
+                )}
+              </div>
+              <FaExternalLinkAlt className="ireland-link-icon" />
+            </a>
           ))}
         </div>
-      )}
+      </section>
 
       {showForm && (
         <div className="career-modal-overlay">
