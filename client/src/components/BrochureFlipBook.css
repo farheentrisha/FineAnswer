@@ -1,6 +1,6 @@
 .brochure-flip-book-wrapper {
   width: 100%;
-  background-color: #f7f9fc;
+  background-color: transparent;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -16,7 +16,17 @@
   padding: 0.5rem;
 }
 
+.brochure-flip-book-stage {
+  position: relative;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
 .brochure-flip-book-container {
+  position: absolute;
+  top: 0;
+  left: 50%;
   display: flex;
   justify-content: center;
   align-items: flex-start;

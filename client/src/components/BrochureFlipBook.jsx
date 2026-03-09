@@ -7,19 +7,45 @@ import page4 from "../assets/4.png";
 import "./BrochureFlipBook.css";
 
 const BROCHURE_IMAGES = [page1, page2, page3, page4];
-const PAGE_WIDTH  = 420;
-const PAGE_HEIGHT = 560;
+// Render at a higher base resolution for sharper text.
+// We then scale-to-fit the available container width so it doesn't become huge.
+const PAGE_WIDTH = 700;
+const PAGE_HEIGHT = 1000;
 
 const ZOOM_MIN  = 0.75;
 const ZOOM_MAX  = 2;
 const ZOOM_STEP = 0.25;
 
 export default function BrochureFlipBook() {
+  const wrapperRef = useRef(null);
   const containerRef = useRef(null);
   const pageFlipRef  = useRef(null);
   const [usePortrait, setUsePortrait] = useState(() => window.innerWidth < 768);
   const [zoom, setZoom]               = useState(1);
-  const [bookHeight, setBookHeight]   = useState(0);
+  const [bookHeight, setBookHeight] = useState(0);
+  const [fitScale, setFitScale] = useState(1);
+
+  const calcFitScale = useCallback(() => {
+    if (!wrapperRef.current) return 1;
+
+    // Available content width (avoid padding spill)
+    const available = Math.max(0, wrapperRef.current.clientWidth - 32);
+    const spreadWidth = usePortrait ? PAGE_WIDTH : PAGE_WIDTH * 2;
+
+    if (!spreadWidth) return 1;
+    return Math.min(1, available / spreadWidth);
+  }, [usePortrait]);
+
+  useEffect(() => {
+    const update = () => setFitScale(calcFitScale());
+    update();
+
+    if (!wrapperRef.current) return;
+    const ro = new ResizeObserver(update);
+    ro.observe(wrapperRef.current);
+
+    return () => ro.disconnect();
+  }, [calcFitScale]);
 
   const initBook = useCallback((portrait) => {
     if (!containerRef.current) return null;
@@ -49,10 +75,8 @@ export default function BrochureFlipBook() {
     pageFlipRef.current = pageFlip;
 
     const rafId = requestAnimationFrame(() => {
-      if (containerRef.current) {
-        const h = containerRef.current.offsetHeight;
-        if (h > 0) setBookHeight(h);
-      }
+      const rect = pageFlip?.getBoundsRect?.();
+      if (rect?.height && rect.height > 0) setBookHeight(rect.height);
     });
 
     return () => {
@@ -94,28 +118,35 @@ export default function BrochureFlipBook() {
   const handleZoomOut   = () => setZoom((z) => Math.max(z - ZOOM_STEP, ZOOM_MIN));
   const handleZoomReset = () => setZoom(1);
 
+  const effectiveScale = fitScale * zoom;
+  const stageHeight =
+    bookHeight > 0 ? `${Math.ceil(bookHeight * effectiveScale)}px` : undefined;
+
   return (
-    <div className="brochure-flip-book-wrapper">
+    <div className="brochure-flip-book-wrapper" ref={wrapperRef}>
       <div
         className="brochure-flip-book-zoom-wrapper"
-        style={{
-          minHeight: bookHeight > 0 ? `${Math.ceil(bookHeight * zoom)}px` : undefined,
-          overflow: "visible",
-        }}
+        style={{ overflow: "visible" }}
       >
-        <div
-          ref={containerRef}
-          className="brochure-flip-book-container"
-          style={{ transform: `scale(${zoom})`, transformOrigin: "center top", willChange: "transform" }}
-          onClick={handleBookClick}
-          role="button"
-          tabIndex={0}
-          onKeyDown={(e) => {
-            if (e.key === "ArrowLeft") handlePrev();
-            if (e.key === "ArrowRight") handleNext();
-          }}
-          aria-label="Brochure flip book – click left to go back, right to go forward"
-        />
+        <div className="brochure-flip-book-stage" style={{ height: stageHeight }}>
+          <div
+            ref={containerRef}
+            className="brochure-flip-book-container"
+            style={{
+              transform: `translateX(-50%) scale(${effectiveScale})`,
+              transformOrigin: "center top",
+              willChange: "transform",
+            }}
+            onClick={handleBookClick}
+            role="button"
+            tabIndex={0}
+            onKeyDown={(e) => {
+              if (e.key === "ArrowLeft") handlePrev();
+              if (e.key === "ArrowRight") handleNext();
+            }}
+            aria-label="Brochure flip book – click left to go back, right to go forward"
+          />
+        </div>
       </div>
       <div className="brochure-flip-book-controls">
         <div className="brochure-zoom-controls">
