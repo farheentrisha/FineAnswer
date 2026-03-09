@@ -15,6 +15,17 @@ import dcuLogo from "../assets/dcu logo.png";
 import tud from "../assets/TUD.png";
 import ucd from "../assets/ucd.jpg";
 
+import three from "../assets/uk/bangor.png";
+import four from "../assets/uk/aston.jpg";
+import five from "../assets/uk/green.png";
+import six from "../assets/uk/portsm.jpg";
+import seven from "../assets/uk/NTU.png";
+import eight from "../assets/uk/conven.png";
+
+
+
+
+
 const LogoRow = ({ logos, direction, speed = 40 }) => (
   <div className="partner-logo-row">
     <Marquee
@@ -57,12 +68,12 @@ const PartnerLogos = () => {
   ];
 
   const row3 = [
-    { name: "UL", url: ul },
-    { name: "DBS", url: dbs },
-    { name: "Griffith College", url: gc },
-    { name: "DKIT", url: dkit },
-    { name: "Galway", url: galway },
-    { name: "UCC", url: ucc },
+    { name: "three", url: three },
+    { name: "four", url: four },
+    { name: "five", url: five },
+    { name: "six", url: six },
+    { name: "seven", url: seven },
+    { name: "eight", url: eight },
   ];
 
   return (
@@ -73,13 +84,13 @@ const PartnerLogos = () => {
 
       <div className="logos-container">
         {/* Row 1: right to left */}
-        <LogoRow logos={row1} direction="left" speed={40} />
+        <LogoRow logos={row1} direction="left" speed={50} />
 
         {/* Row 2: left to right */}
         <LogoRow logos={row2} direction="right" speed={45} />
 
         {/* Row 3: left to right */}
-        <LogoRow logos={row3} direction="right" speed={50} />
+        <LogoRow logos={row3} direction="left" speed={50} />
       </div>
     </section>
   );
