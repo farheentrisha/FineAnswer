@@ -7,20 +7,19 @@ import page4 from "../assets/4.png";
 import "./BrochureFlipBook.css";
 
 const BROCHURE_IMAGES = [page1, page2, page3, page4];
-/* Larger dimensions = sharper text (source PNGs are ~3091×4000) */
-const PAGE_WIDTH = 700;
-const PAGE_HEIGHT = 1000;
+const PAGE_WIDTH  = 420;
+const PAGE_HEIGHT = 560;
 
-const ZOOM_MIN = 0.75;
-const ZOOM_MAX = 2;
+const ZOOM_MIN  = 0.75;
+const ZOOM_MAX  = 2;
 const ZOOM_STEP = 0.25;
 
 export default function BrochureFlipBook() {
   const containerRef = useRef(null);
-  const pageFlipRef = useRef(null);
+  const pageFlipRef  = useRef(null);
   const [usePortrait, setUsePortrait] = useState(() => window.innerWidth < 768);
-  const [zoom, setZoom] = useState(1);
-  const [bookHeight, setBookHeight] = useState(0);
+  const [zoom, setZoom]               = useState(1);
+  const [bookHeight, setBookHeight]   = useState(0);
 
   const initBook = useCallback((portrait) => {
     if (!containerRef.current) return null;
@@ -85,14 +84,14 @@ export default function BrochureFlipBook() {
   const handleBookClick = (e) => {
     if (!pageFlipRef.current) return;
     const rect = e.currentTarget.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const mid = rect.width / 2;
+    const x    = e.clientX - rect.left;
+    const mid  = rect.width / 2;
     if (x < mid) handlePrev();
     else handleNext();
   };
 
-  const handleZoomIn = () => setZoom((z) => Math.min(z + ZOOM_STEP, ZOOM_MAX));
-  const handleZoomOut = () => setZoom((z) => Math.max(z - ZOOM_STEP, ZOOM_MIN));
+  const handleZoomIn    = () => setZoom((z) => Math.min(z + ZOOM_STEP, ZOOM_MAX));
+  const handleZoomOut   = () => setZoom((z) => Math.max(z - ZOOM_STEP, ZOOM_MIN));
   const handleZoomReset = () => setZoom(1);
 
   return (
