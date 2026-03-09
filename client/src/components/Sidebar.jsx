@@ -9,6 +9,7 @@ import {
   FaEnvelope,
   FaCreditCard,
   FaLanguage,
+  FaMobileAlt,
   FaUser,
   FaSignOutAlt,
   FaChevronLeft,
@@ -99,6 +100,10 @@ export default function Sidebar({
 
           <NavLink to="/dashboard/english-proficiency" title="English Proficiency">
             <FaLanguage /> <span>English Proficiency</span>
+          </NavLink>
+
+          <NavLink to="/dashboard/app" title="App">
+            <FaMobileAlt /> <span>App</span>
           </NavLink>
 
           <NavLink to="/dashboard/profile" title="Profile">
