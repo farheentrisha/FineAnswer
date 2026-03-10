@@ -51,7 +51,7 @@ export default function CEOQuote() {
         <p className="ceo-desg">
           Finance Manager - US Big Tech Multinational; Ex-Apple, Meta, Bank of
           Ireland, Citi, Deloitte; Former Part-Time Faculty - Trinity College
-          Dublin. Founder & CEO, FineAnswer
+          Dublin. Founder, FineAnswer
         </p>
       </div>
     </section>

@@ -31,20 +31,38 @@ export default function Payment() {
       description: "Pay for course-related fees and training programs.",
       amount: 12000,
     },
+    {
+      id: "other",
+      label: "Other",
+      description: "Pay a custom amount for any other service or fee.",
+      amount: 0,
+    },
   ];
 
   const { user } = useContext(AuthContext);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-   const [selectedOption, setSelectedOption] = useState(PAYMENT_OPTIONS[0]);
+  const [selectedOption, setSelectedOption] = useState(PAYMENT_OPTIONS[0]);
+  const [otherAmount, setOtherAmount] = useState("");
 
   const handleCreatePayment = async () => {
     try {
       setLoading(true);
       setError(null);
       const token = localStorage.getItem("token");
+      const computedAmount =
+        selectedOption.id === "other"
+          ? Number.parseInt(otherAmount, 10)
+          : selectedOption.amount;
+
+      if (!Number.isFinite(computedAmount) || computedAmount <= 0) {
+        setError("Please enter a valid amount.");
+        setLoading(false);
+        return;
+      }
+
       const payload = {
-        amount: selectedOption.amount,
+        amount: computedAmount,
         currency: "BDT",
         purpose: selectedOption.label,
       };
@@ -94,9 +112,6 @@ export default function Payment() {
                 >
                   <div className="payment-option-header">
                     <span className="payment-option-title">{option.label}</span>
-                    <span className="payment-option-amount">
-                      {option.amount.toLocaleString("en-BD")} BDT
-                    </span>
                   </div>
                   <p className="payment-option-description">
                     {option.description}
@@ -105,12 +120,28 @@ export default function Payment() {
               ))}
             </div>
 
+            {selectedOption.id === "other" && (
+              <div className="payment-other-input-wrap">
+                <label className="payment-other-label" htmlFor="payment-other-amount">
+                  Enter amount (BDT)
+                </label>
+                <input
+                  id="payment-other-amount"
+                  className="payment-other-input"
+                  type="number"
+                  inputMode="numeric"
+                  min="1"
+                  step="1"
+                  placeholder="e.g. 5000"
+                  value={otherAmount}
+                  onChange={(e) => setOtherAmount(e.target.value)}
+                  disabled={loading}
+                />
+              </div>
+            )}
+
             <p className="payment-selected-summary">
-              You are about to pay{" "}
-              <strong>
-                {selectedOption.amount.toLocaleString("en-BD")} BDT
-              </strong>{" "}
-              for <strong>{selectedOption.label}</strong> via SSLCommerz.
+              You are about to pay for <strong>{selectedOption.label}</strong> via SSLCommerz.
             </p>
             {error && <p className="payment-error">{error}</p>}
             <button
