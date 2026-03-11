@@ -4,6 +4,8 @@ import {
   FaLinkedinIn,
   FaInstagram,
   FaYoutube,
+  FaWhatsapp,
+  FaPhone,
 } from "react-icons/fa";
 
 const FORMSUBMIT_URL = "https://formsubmit.co/fineanswer2025@gmail.com";
@@ -30,7 +32,29 @@ export default function ContactSection() {
 
           <div className="contact-info">
             <p>📍 House 76/A, Road 11, Banani, Dhaka 1213, Bangladesh</p>
-            <p>📞 +353 (89) 951 9986, +880 1725-980472, +880 1725-971833 </p>
+
+            <div className="contact-phone-row contact-whatsapp-row">
+              <a
+                href="https://wa.me/353899519986"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="contact-whatsapp-link"
+                aria-label="Ireland & Abroad Hotline on WhatsApp"
+              >
+                <span className="contact-whatsapp-icon">
+                  <FaWhatsapp />
+                </span>
+                <span className="contact-whatsapp-text">
+                  <strong>Ireland & Abroad Hotline</strong>
+                  +353 (89) 951 9986
+                </span>
+              </a>
+            </div>
+
+            <p className="contact-phone-row">
+              <FaPhone className="contact-phone-icon" />
+              +880 1725-980472, +880 1725-971833
+            </p>
             <p>📧 studyabroad@fineanswer.net</p>
           </div>
 

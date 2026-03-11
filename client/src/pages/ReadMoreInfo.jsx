@@ -65,7 +65,7 @@ export default function ReadMoreInfo() {
               applicants and specific universities.
             </p>
             <ul className="feature-list">
-              <li>Mock visa interviews for Sept 2024 &amp; Jan 2025 intakes</li>
+              <li>Mock visa interviews for Sept 2026 &amp; Jan 2027 intakes</li>
               <li>Unmatched success for TUD, SETU, ATU, TUS, and UCC</li>
               <li>Specialised support for difficult visa situations</li>
             </ul>
