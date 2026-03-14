@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+
+  <url>
+    <loc>https://www.fineanswer.net/</loc>
+    <priority>1.0</priority>
+  </url>
+
+  <url>
+    <loc>https://www.fineanswer.net/about</loc>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://www.fineanswer.net/services</loc>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://www.fineanswer.net/countries</loc>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://www.fineanswer.net/contact</loc>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://www.fineanswer.net/career</loc>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://www.fineanswer.net/blog</loc>
+    <priority>0.8</priority>
+  </url>
+
+</urlset>
