@@ -41,7 +41,7 @@ export default function ReadMoreInfo() {
           <div className="stat-label">Students Successfully Placed Abroad</div>
         </div>
         <div className="stat-item">
-          <div className="stat-number">A–Z</div>
+          <div className="stat-number">A-Z</div>
           <div className="stat-label">Complete End-to-End Service</div>
         </div>
       </div>
